@@ -1,0 +1,544 @@
+.page {
+  padding-top: 5rem;
+  background-color: var(--background);
+  min-height: 100vh;
+}
+
+.pageHero {
+  background: linear-gradient(135deg, var(--pond-800) 0%, var(--pond-600) 100%);
+  padding: 4rem 1.5rem 3rem;
+  text-align: center;
+}
+
+.pageHeroTag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 2rem;
+  padding: 0.375rem 1rem;
+  font-family: var(--font-body);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--pond-100);
+  letter-spacing: 0.04em;
+  margin-bottom: 1rem;
+}
+
+.pageHeroTitle {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 700;
+  color: white;
+  margin: 0 0 1rem;
+  line-height: 1.15;
+}
+
+.pageHeroDesc {
+  font-family: var(--font-body);
+  font-size: 1.0625rem;
+  color: var(--pond-100);
+  max-width: 580px;
+  margin: 0 auto;
+  line-height: 1.7;
+}
+
+/* Tab Nav */
+.tabNav {
+  display: flex;
+  gap: 0;
+  border-bottom: 2px solid var(--border);
+  background-color: white;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.tabNav::-webkit-scrollbar {
+  display: none;
+}
+
+.tabNavInner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  display: flex;
+  gap: 0;
+}
+
+.tabBtn {
+  padding: 1rem 1.5rem;
+  font-family: var(--font-body);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--muted-foreground);
+  border: none;
+  background: none;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  transition:
+    color 0.15s ease,
+    border-color 0.15s ease;
+  white-space: nowrap;
+}
+
+.tabBtn:hover {
+  color: var(--primary);
+}
+
+.tabBtn.activeTab {
+  color: var(--primary);
+  border-bottom-color: var(--primary);
+  font-weight: 600;
+}
+
+/* Content */
+.content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem 5rem;
+}
+
+/* ── Projects ── */
+.sectionTitle {
+  font-family: var(--font-display);
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--foreground);
+  margin: 0 0 0.5rem;
+}
+
+.sectionDesc {
+  font-family: var(--font-body);
+  font-size: 0.9375rem;
+  color: var(--muted-foreground);
+  margin: 0 0 2.5rem;
+}
+
+.projects {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.projectCard {
+  background-color: white;
+  border-radius: 1rem;
+  padding: 1.5rem 1.75rem;
+  border: 1px solid var(--border);
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 1rem;
+  align-items: start;
+}
+
+.projectHead {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.projectIcon {
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 0.75rem;
+  background-color: var(--pond-50);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  flex-shrink: 0;
+}
+
+.projectInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.projectName {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--foreground);
+  margin: 0 0 0.25rem;
+}
+
+.projectMeta {
+  font-size: 0.8125rem;
+  color: var(--muted-foreground);
+  margin: 0 0 0.875rem;
+}
+
+.progressBar {
+  height: 8px;
+  background-color: var(--pond-100);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  background-color: var(--primary);
+  border-radius: 4px;
+  transition: width 0.8s ease;
+}
+
+.progressFill.done {
+  background-color: var(--pond-400);
+}
+
+.progressInfo {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.375rem;
+}
+
+.progressPct,
+.progressAmount {
+  font-size: 0.8125rem;
+  color: var(--muted-foreground);
+}
+
+.projectRight {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.5rem;
+}
+
+.statusBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 2rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.statusBadge.done {
+  background-color: var(--pond-100);
+  color: var(--pond-700);
+}
+
+.statusBadge.active {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.statusBadge.planned {
+  background-color: var(--muted);
+  color: var(--muted-foreground);
+}
+
+.projectBudget {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--primary);
+  white-space: nowrap;
+}
+
+/* ── Voting ── */
+.votingGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.voteCard {
+  background-color: white;
+  border-radius: 1rem;
+  padding: 1.25rem 1.5rem;
+  border: 1.5px solid var(--border);
+  cursor: pointer;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.voteCard:hover {
+  border-color: var(--accent);
+  box-shadow: 0 2px 16px rgba(82, 183, 136, 0.12);
+}
+
+.voteCard.voted {
+  border-color: var(--primary);
+  background-color: var(--pond-50);
+}
+
+.voteHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 0.875rem;
+}
+
+.voteTitle {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--foreground);
+  flex: 1;
+}
+
+.voteCount {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--primary);
+  flex-shrink: 0;
+}
+
+.voteCountLabel {
+  font-size: 0.75rem;
+  color: var(--muted-foreground);
+  display: block;
+  text-align: right;
+}
+
+.voteBar {
+  height: 6px;
+  background-color: var(--pond-100);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.voteFill {
+  height: 100%;
+  background-color: var(--accent);
+  border-radius: 3px;
+  transition: width 0.6s ease;
+}
+
+.voted .voteFill {
+  background-color: var(--primary);
+}
+
+.voteDesc {
+  margin-top: 0.75rem;
+  font-size: 0.875rem;
+  color: var(--muted-foreground);
+  line-height: 1.5;
+}
+
+.voteBudget {
+  margin-top: 0.5rem;
+  font-size: 0.8125rem;
+  color: var(--primary);
+  font-weight: 500;
+}
+
+.voteTotal {
+  margin-top: 1.5rem;
+  padding: 1rem 1.25rem;
+  background-color: var(--pond-50);
+  border-radius: 0.75rem;
+  font-size: 0.875rem;
+  color: var(--muted-foreground);
+  text-align: center;
+}
+
+.voteTotal strong {
+  color: var(--primary);
+}
+
+/* ── Roadmap ── */
+.roadmap {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.roadmapYear {
+  margin-bottom: 0.75rem;
+  padding-top: 1.5rem;
+}
+
+.roadmapYear:first-child {
+  padding-top: 0;
+}
+
+.roadmapYearLabel {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 1rem;
+}
+
+.roadmapItems {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.roadmapItem {
+  background-color: white;
+  border-radius: 0.875rem;
+  padding: 1.25rem;
+  border: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.roadmapItem.itemDone {
+  border-color: var(--pond-200);
+}
+
+.roadmapItem.itemActive {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(82, 183, 136, 0.15);
+}
+
+.roadmapItem.itemPlanned {
+  opacity: 0.7;
+}
+
+.roadmapItemStripe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+}
+
+.itemDone .roadmapItemStripe {
+  background-color: var(--pond-400);
+}
+
+.itemActive .roadmapItemStripe {
+  background: linear-gradient(90deg, var(--accent), var(--primary));
+}
+
+.itemPlanned .roadmapItemStripe {
+  background-color: var(--border);
+}
+
+.roadmapQ {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--muted-foreground);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 0.375rem;
+}
+
+.roadmapItemName {
+  font-family: var(--font-body);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--foreground);
+  margin-bottom: 0.25rem;
+}
+
+.roadmapItemBudget {
+  font-size: 0.8125rem;
+  color: var(--muted-foreground);
+}
+
+.roadmapItemStatus {
+  margin-top: 0.625rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
+}
+
+.itemDone .roadmapItemStatus {
+  color: var(--pond-600);
+}
+.itemActive .roadmapItemStatus {
+  color: #856404;
+}
+.itemPlanned .roadmapItemStatus {
+  color: var(--muted-foreground);
+}
+
+/* ── Budget ── */
+.budgetGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+  margin-bottom: 2rem;
+}
+
+.budgetCard {
+  background-color: white;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  border: 1px solid var(--border);
+  text-align: center;
+}
+
+.budgetCardValue {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--primary);
+  line-height: 1;
+  margin-bottom: 0.5rem;
+}
+
+.budgetCardLabel {
+  font-size: 0.875rem;
+  color: var(--muted-foreground);
+  line-height: 1.4;
+}
+
+.budgetTable {
+  width: 100%;
+  background-color: white;
+  border-radius: 1rem;
+  border: 1px solid var(--border);
+  overflow: hidden;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.budgetTable th {
+  background-color: var(--pond-50);
+  padding: 0.875rem 1.25rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--muted-foreground);
+  text-align: left;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.budgetTable td {
+  padding: 0.875rem 1.25rem;
+  font-size: 0.9375rem;
+  color: var(--foreground);
+  border-top: 1px solid var(--border);
+}
+
+.budgetTable td.money {
+  font-family: var(--font-display);
+  font-weight: 600;
+  color: var(--primary);
+}
+
+.budgetTable td.category {
+  color: var(--muted-foreground);
+  font-size: 0.875rem;
+}
+
+@media (max-width: 768px) {
+  .projectCard {
+    grid-template-columns: 1fr;
+  }
+  .projectRight {
+    align-items: flex-start;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  .roadmapItems {
+    grid-template-columns: 1fr;
+  }
+  .budgetGrid {
+    grid-template-columns: 1fr;
+  }
+}

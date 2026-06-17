@@ -1,0 +1,121 @@
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600&display=swap");
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --text: 16px;
+
+  --font-display: "Playfair Display", Georgia, serif;
+  --font-body: "Inter", system-ui, sans-serif;
+
+  --pond-50: #eaf5ee;
+  --pond-100: #d1ebd8;
+  --pond-200: #a3d7b1;
+  --pond-300: #74c38a;
+  --pond-400: #52b788;
+  --pond-500: #2d9e63;
+  --pond-600: #2d6a4f;
+  --pond-700: #1b5e38;
+  --pond-800: #154728;
+  --pond-900: #0d2f1a;
+
+  --background: #f5faf7;
+  --foreground: #1a2e1f;
+  --card: #ffffff;
+  --card-foreground: #1a2e1f;
+  --popover: #ffffff;
+  --popover-foreground: #1a2e1f;
+  --primary: #2d6a4f;
+  --primary-foreground: #ffffff;
+  --secondary: #d1ebd8;
+  --secondary-foreground: #1a2e1f;
+  --muted: #eaf5ee;
+  --muted-foreground: #4a6b53;
+  --accent: #52b788;
+  --accent-foreground: #ffffff;
+  --destructive: #c0392b;
+  --destructive-foreground: #ffffff;
+  --border: #c3dcc9;
+  --input: transparent;
+  --input-background: #eaf5ee;
+  --switch-background: #a3d7b1;
+  --font-weight-medium: 500;
+  --font-weight-normal: 400;
+  --ring: #74c38a;
+  --chart-1: #2d6a4f;
+  --chart-2: #52b788;
+  --chart-3: #74c38a;
+  --chart-4: #a3d7b1;
+  --chart-5: #d1ebd8;
+  --radius: 0.625rem;
+  --sidebar: #eaf5ee;
+  --sidebar-foreground: #1a2e1f;
+  --sidebar-primary: #2d6a4f;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #d1ebd8;
+  --sidebar-accent-foreground: #1a2e1f;
+  --sidebar-border: #c3dcc9;
+  --sidebar-ring: #74c38a;
+
+  --font-display: "Inter";
+  --font-body: "";
+}
+
+@layer base {
+  html {
+    font-size: var(--font-size);
+    font-family: var(--font-body);
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+  }
+
+  h1 {
+    font-size: var(--text-2xl);
+    font-weight: var(--font-weight-medium);
+    line-height: 1.5;
+  }
+
+  h2 {
+    font-size: var(--text-xl);
+    font-weight: var(--font-weight-medium);
+    line-height: 1.5;
+  }
+
+  h3 {
+    font-size: var(--text-lg);
+    font-weight: var(--font-weight-medium);
+    line-height: 1.5;
+  }
+
+  h4 {
+    font-size: var(--text-base);
+    font-weight: var(--font-weight-medium);
+    line-height: 1.5;
+  }
+
+  label {
+    font-size: var(--text-base);
+    font-weight: var(--font-weight-medium);
+    line-height: 1.5;
+  }
+
+  button {
+    font-size: var(--text-base);
+    font-weight: var(--font-weight-medium);
+    line-height: 1.5;
+  }
+
+  input {
+    font-size: var(--text-base);
+    font-weight: var(--font-weight-normal);
+    line-height: 1.5;
+  }
+}
