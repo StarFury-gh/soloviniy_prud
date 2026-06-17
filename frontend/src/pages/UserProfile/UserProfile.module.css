@@ -4,89 +4,6 @@
   min-height: 100vh;
 }
 
-/* Auth screen */
-.authWrap {
-  min-height: calc(100vh - 5rem);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 2rem 1.5rem;
-}
-
-.authCard {
-  background-color: white;
-  border-radius: 1.5rem;
-  padding: 2.5rem;
-  width: 100%;
-  max-width: 420px;
-  box-shadow: 0 8px 40px rgba(45, 106, 79, 0.12);
-  border: 1px solid var(--border);
-}
-
-.authLogo {
-  text-align: center;
-  margin-bottom: 1.75rem;
-}
-
-.authIcon {
-  font-size: 3rem;
-  display: block;
-  margin-bottom: 0.5rem;
-}
-
-.authTitle {
-  font-family: var(--font-display);
-  font-size: 1.75rem;
-  font-weight: 700;
-  color: var(--foreground);
-  margin: 0 0 0.375rem;
-}
-
-.authSubtitle {
-  font-size: 0.9375rem;
-  color: var(--muted-foreground);
-  margin: 0;
-}
-
-.authForm {
-  display: flex;
-  flex-direction: column;
-  gap: 1.25rem;
-}
-
-.authDivider {
-  text-align: center;
-  font-size: 0.8125rem;
-  color: var(--muted-foreground);
-  margin: 0.5rem 0;
-  position: relative;
-}
-
-.authDivider::before,
-.authDivider::after {
-  content: "";
-  position: absolute;
-  top: 50%;
-  width: 40%;
-  height: 1px;
-  background-color: var(--border);
-}
-
-.authDivider::before {
-  left: 0;
-}
-.authDivider::after {
-  right: 0;
-}
-
-.authNote {
-  font-size: 0.8125rem;
-  color: var(--muted-foreground);
-  text-align: center;
-  line-height: 1.5;
-}
-
-/* Cabinet layout */
 .cabinet {
   display: grid;
   grid-template-columns: 280px 1fr;
@@ -213,7 +130,6 @@
   color: var(--destructive);
 }
 
-/* Main content */
 .main {
   padding: 2.5rem 2rem;
   overflow-y: auto;
@@ -233,7 +149,6 @@
   margin: 0 0 2rem;
 }
 
-/* Profile tab */
 .profileGrid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -286,7 +201,6 @@
   color: var(--foreground);
 }
 
-/* Hours tab */
 .hoursLog {
   display: flex;
   flex-direction: column;

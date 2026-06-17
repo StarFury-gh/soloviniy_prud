@@ -1,10 +1,9 @@
 import { useState } from "react";
 import styles from "./UserProfile.module.css";
 
-import { Input, Button } from "../../components/common";
 import IssueReporter from "../../components/IssueReporter";
 
-type CabinetTab = "profile" | "hours" | "issues";
+type ProfileTab = "profile" | "hours" | "issues";
 
 const hoursLog = [
   {
@@ -76,84 +75,13 @@ const achievements = [
 ];
 
 function UserProfile() {
-  const [loggedIn, setLoggedIn] = useState(false);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [tab, setTab] = useState<CabinetTab>("profile");
-  const [loginError, setLoginError] = useState("");
+  const [tab, setTab] = useState<ProfileTab>();
 
-  const handleLogin = () => {
-    if (!email || !password) {
-      setLoginError("Заполните все поля");
-      return;
-    }
-    setLoginError("");
-    setLoggedIn(true);
-  };
-
-  const sidebarLinks: { id: CabinetTab; icon: string; label: string }[] = [
+  const sidebarLinks: { id: ProfileTab; icon: string; label: string }[] = [
     { id: "profile", icon: "👤", label: "Мой профиль" },
     { id: "hours", icon: "⏰", label: "Журнал часов" },
     { id: "issues", icon: "📍", label: "Фиксация проблем" },
   ];
-
-  if (!loggedIn) {
-    return (
-      <div className={styles.page}>
-        <div className={styles.authWrap}>
-          <div className={styles.authCard}>
-            <div className={styles.authLogo}>
-              <span className={styles.authIcon}>🌿</span>
-              <h2 className={styles.authTitle}>Вход в аккаунт</h2>
-              <p className={styles.authSubtitle}>
-                Войдите в личный кабинет, чтобы добавлять истории, фотографии и
-                сообщать о проблемах
-              </p>
-            </div>
-            <div className={styles.authForm}>
-              <Input
-                type="email"
-                label="Электронная почта"
-                placeholder="volunteer@example.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
-              <Input
-                type="password"
-                label="Пароль"
-                placeholder="••••••••"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                error={loginError}
-                required
-              />
-              <Button variant="primary" fullWidth onClick={handleLogin}>
-                Войти
-              </Button>
-              <div className={styles.authDivider}>или</div>
-              <Button
-                variant="outline"
-                fullWidth
-                onClick={() => {
-                  setEmail("demo@solovyinyprud.ru");
-                  setPassword("demo2024");
-                  setLoggedIn(true);
-                }}
-              >
-                🦢 Демо-вход (без регистрации)
-              </Button>
-              <p className={styles.authNote}>
-                Ещё нет аккаунта? Напишите нам на{" "}
-                <strong>solovyinyprud_admin@mail.ru</strong> — мы создадим
-                профиль.
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className={styles.page}>
@@ -182,10 +110,7 @@ function UserProfile() {
             </button>
           ))}
 
-          <button
-            className={styles.logoutBtn}
-            onClick={() => setLoggedIn(false)}
-          >
+          <button className={styles.logoutBtn}>
             <span className={styles.sidebarLinkIcon}>↩</span>
             Выйти
           </button>

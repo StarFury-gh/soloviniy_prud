@@ -10,7 +10,7 @@
 .bg {
   position: absolute;
   inset: 0;
-  background-image: url("/public/splash.jpg");
+  background-image: url("/splash.jpg");
   background-size: cover;
   background-position: center 40%;
   opacity: 0.45;

@@ -79,6 +79,7 @@ function IdentifyPlantForm({
         className={`${styles.dropZone} ${previewUrl ? styles.hasImage : ""}`}
         onDragOver={handleDragOver}
         onDrop={handleDrop}
+        onClick={() => fileInputRef.current?.click()}
       >
         {previewUrl ? (
           <div className={styles.imageContainer}>
@@ -100,11 +101,7 @@ function IdentifyPlantForm({
             <span className={styles.dropText}>
               Перетащите изображение сюда или
             </span>
-            <button
-              type="button"
-              onClick={() => fileInputRef.current?.click()}
-              className={styles.browseButton}
-            >
+            <button type="button" className={styles.browseButton}>
               Выбрать файл
             </button>
           </div>
