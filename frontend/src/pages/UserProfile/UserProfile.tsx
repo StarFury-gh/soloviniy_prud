@@ -1,5 +1,5 @@
 import { useState } from "react";
-import styles from "./VolunteerCabinet.module.css";
+import styles from "./UserProfile.module.css";
 
 import { Input, Button } from "../../components/common";
 import IssueReporter from "../../components/IssueReporter";
@@ -75,7 +75,7 @@ const achievements = [
   { icon: "🧹", label: "8 субботников" },
 ];
 
-function VolunteerCabinet() {
+function UserProfile() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -104,10 +104,10 @@ function VolunteerCabinet() {
           <div className={styles.authCard}>
             <div className={styles.authLogo}>
               <span className={styles.authIcon}>🌿</span>
-              <h2 className={styles.authTitle}>Вход для волонтёров</h2>
+              <h2 className={styles.authTitle}>Вход в аккаунт</h2>
               <p className={styles.authSubtitle}>
-                Войдите в личный кабинет, чтобы записывать часы и сообщать о
-                проблемах
+                Войдите в личный кабинет, чтобы добавлять истории, фотографии и
+                сообщать о проблемах
               </p>
             </div>
             <div className={styles.authForm}>
@@ -299,4 +299,4 @@ function VolunteerCabinet() {
   );
 }
 
-export default VolunteerCabinet;
+export default UserProfile;

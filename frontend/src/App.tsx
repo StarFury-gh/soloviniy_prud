@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import { Header } from "./components/common";
-import { MainPage, VolunteerCabinet, DevelopmentPage } from "./pages";
+import { MainPage, UserProfile, DevelopmentPage, IdentifyPage } from "./pages";
 
 function App() {
   return (
@@ -9,8 +9,9 @@ function App() {
       <Header />
       <Routes>
         <Route path="/" element={<MainPage />}></Route>
-        <Route path="/volunteer" element={<VolunteerCabinet />}></Route>
+        <Route path="/profile" element={<UserProfile />}></Route>
         <Route path="/development" element={<DevelopmentPage />}></Route>
+        <Route path="/identify" element={<IdentifyPage />}></Route>
       </Routes>
     </Router>
   );

@@ -8,7 +8,7 @@ import { Button } from "../";
 const navItems: { label: string; page: string }[] = [
   { label: "Главная", page: "/" },
   { label: "Развитие", page: "development" },
-  { label: "Волонтёры", page: "volunteer" },
+  { label: "Сообщество", page: "community" },
 ];
 
 function Header() {
@@ -33,7 +33,6 @@ function Header() {
     <header className={`${styles.header} ${scrolled ? styles.scrolled : ""}`}>
       <div className={styles.inner}>
         <div className={styles.logo} onClick={() => handleNav("/")}>
-          {/* <div className={styles.logoIcon}>🦢</div> */}
           <img src={favicon} alt="" className={styles.logoIcon} />
           <div className={styles.logoText}>
             <span className={styles.logoName}>Соловьиный пруд</span>
@@ -60,9 +59,9 @@ function Header() {
           <Button
             variant="outline"
             size="sm"
-            onClick={() => handleNav("volunteer")}
+            onClick={() => handleNav("login")}
           >
-            Войти как волонтёр
+            Войти
           </Button>
         </div>
 

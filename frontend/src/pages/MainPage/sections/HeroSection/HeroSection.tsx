@@ -27,17 +27,16 @@ function HeroSection({ onNavigate }: HeroSectionProps) {
           <Button
             variant="primary"
             size="lg"
-            onClick={() => onNavigate("volunteer")}
+            onClick={() => onNavigate("login")}
           >
-            🌿 Стать волонтёром
+            Стать частью сообщества
           </Button>
           <Button
             variant="outline"
             size="lg"
             onClick={() => onNavigate("development")}
-            style={{ borderColor: "rgba(82,183,136,0.6)", color: "white" }}
           >
-            📋 План развития
+            План развития
           </Button>
         </div>
       </div>

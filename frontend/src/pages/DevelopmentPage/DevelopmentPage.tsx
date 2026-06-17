@@ -6,60 +6,18 @@ type DevTab = "projects" | "voting" | "roadmap" | "budget";
 const projects = [
   {
     id: 1,
-    icon: "🌿",
     name: "Экологическая тропа",
     desc: "1.2 км дорожек с информационными стендами",
     budget: "2 500 000 ₽",
     funded: 100,
     status: "done" as const,
-    quarter: "Q1 2024",
-  },
-  {
-    id: 2,
-    icon: "🔭",
-    name: "Смотровая площадка",
-    desc: "Деревянный помост 8×12 м с видом на пруд",
-    budget: "4 200 000 ₽",
-    funded: 67,
-    status: "active" as const,
-    quarter: "Q2 2024",
-  },
-  {
-    id: 3,
-    icon: "🛝",
-    name: "Детская площадка",
-    desc: "Экостиль с использованием натурального дерева",
-    budget: "1 800 000 ₽",
-    funded: 34,
-    status: "active" as const,
-    quarter: "Q3 2024",
-  },
-  {
-    id: 4,
-    icon: "💡",
-    name: "Освещение набережной",
-    desc: "LED-фонари вдоль 800 м берега",
-    budget: "3 100 000 ₽",
-    funded: 0,
-    status: "planned" as const,
-    quarter: "Q4 2024",
-  },
-  {
-    id: 5,
-    icon: "⛲",
-    name: "Реконструкция фонтана",
-    desc: "Восстановление исторического фонтана 1890-х гг.",
-    budget: "5 600 000 ₽",
-    funded: 0,
-    status: "planned" as const,
-    quarter: "Q1 2025",
   },
 ];
 
 const statusLabel: Record<string, string> = {
-  done: "✅ Завершён",
-  active: "🔨 В работе",
-  planned: "📅 Запланирован",
+  done: "Завершён",
+  active: "В работе",
+  planned: "Запланирован",
 };
 
 const proposals = [
@@ -70,93 +28,23 @@ const proposals = [
     desc: "Кольцевой маршрут 3.4 км для велосипедистов и самокатчиков",
     budget: "7 800 000 ₽",
   },
-  {
-    id: 2,
-    title: "Открытый амфитеатр",
-    votes: 623,
-    desc: "Площадка на 300 мест для концертов и кинопоказов",
-    budget: "12 500 000 ₽",
-  },
-  {
-    id: 3,
-    title: "Пляжная зона",
-    votes: 521,
-    desc: "Облагороженный пляж с деревянными лежаками",
-    budget: "4 200 000 ₽",
-  },
-  {
-    id: 4,
-    title: "Арт-объекты и скульптуры",
-    votes: 312,
-    desc: "Конкурс на создание 5 инсталляций о природе",
-    budget: "2 100 000 ₽",
-  },
 ];
 
 const roadmap = [
   {
-    year: "2024",
-    items: [
-      {
-        q: "Q1",
-        name: "Экологическая тропа",
-        budget: "2.5 млн ₽",
-        status: "itemDone" as const,
-        statusText: "✅ Выполнено",
-      },
-      {
-        q: "Q2",
-        name: "Смотровая площадка",
-        budget: "4.2 млн ₽",
-        status: "itemActive" as const,
-        statusText: "🔨 В процессе",
-      },
-      {
-        q: "Q3",
-        name: "Детская площадка",
-        budget: "1.8 млн ₽",
-        status: "itemPlanned" as const,
-        statusText: "📅 Запланировано",
-      },
-      {
-        q: "Q4",
-        name: "Освещение набережной",
-        budget: "3.1 млн ₽",
-        status: "itemPlanned" as const,
-        statusText: "📅 Запланировано",
-      },
-    ],
-  },
-  {
     year: "2025",
     items: [
       {
-        q: "Q1",
         name: "Реконструкция фонтана",
         budget: "5.6 млн ₽",
-        status: "itemPlanned" as const,
-        statusText: "📅 Запланировано",
+        status: "itemPlanned",
+        statusText: "Запланировано",
       },
       {
-        q: "Q2",
         name: "Велодорожка",
         budget: "7.8 млн ₽",
-        status: "itemPlanned" as const,
-        statusText: "📅 Запланировано",
-      },
-      {
-        q: "Q3",
-        name: "Амфитеатр (I этап)",
-        budget: "6.2 млн ₽",
-        status: "itemPlanned" as const,
-        statusText: "📅 Запланировано",
-      },
-      {
-        q: "Q4",
-        name: "Пляжная зона",
-        budget: "4.2 млн ₽",
-        status: "itemPlanned" as const,
-        statusText: "📅 Запланировано",
+        status: "itemPlanned",
+        statusText: "Запланировано",
       },
     ],
   },
@@ -198,6 +86,8 @@ function DevelopmentPage() {
     { id: "budget", label: "Публичный бюджет" },
   ];
 
+  const currentYear = new Date().getFullYear();
+
   return (
     <div className={styles.page}>
       <div className={styles.pageHero}>
@@ -205,8 +95,7 @@ function DevelopmentPage() {
         <h1 className={styles.pageHeroTitle}>Развитие Соловьиного пруда</h1>
         <p className={styles.pageHeroDesc}>
           Прозрачные сметы, публичное голосование за новые объекты и дорожная
-          карта работ на 2024–2025 годы. Каждый житель может участвовать в
-          принятии решений.
+          карта работ. Каждый житель может участвовать в принятии решений.
         </p>
       </div>
 
@@ -236,12 +125,8 @@ function DevelopmentPage() {
               {projects.map((p) => (
                 <div key={p.id} className={styles.projectCard}>
                   <div className={styles.projectHead}>
-                    <div className={styles.projectIcon}>{p.icon}</div>
                     <div className={styles.projectInfo}>
                       <p className={styles.projectName}>{p.name}</p>
-                      <p className={styles.projectMeta}>
-                        {p.desc} · {p.quarter}
-                      </p>
                       <div className={styles.progressBar}>
                         <div
                           className={`${styles.progressFill} ${p.status === "done" ? styles.done : ""}`}
@@ -318,8 +203,7 @@ function DevelopmentPage() {
             </div>
             {votedId === null && (
               <div className={styles.voteTotal}>
-                Нажмите на карточку, чтобы проголосовать ·{" "}
-                <strong>1 голос</strong> в руках
+                Нажмите на карточку, чтобы проголосовать
               </div>
             )}
           </>
@@ -342,7 +226,6 @@ function DevelopmentPage() {
                         className={`${styles.roadmapItem} ${styles[item.status]}`}
                       >
                         <div className={styles.roadmapItemStripe} />
-                        <div className={styles.roadmapQ}>{item.q}</div>
                         <div className={styles.roadmapItemName}>
                           {item.name}
                         </div>
@@ -363,7 +246,7 @@ function DevelopmentPage() {
 
         {tab === "budget" && (
           <>
-            <h2 className={styles.sectionTitle}>Публичный бюджет 2024</h2>
+            <h2 className={styles.sectionTitle}>Публичный бюджет 2026</h2>
             <p className={styles.sectionDesc}>
               Полная прозрачность расходов. Все статьи подтверждены документами.
             </p>
@@ -371,7 +254,7 @@ function DevelopmentPage() {
               <div className={styles.budgetCard}>
                 <div className={styles.budgetCardValue}>17.2 млн</div>
                 <div className={styles.budgetCardLabel}>
-                  Общий бюджет на 2024 год, ₽
+                  Общий бюджет на {currentYear} год, ₽
                 </div>
               </div>
               <div className={styles.budgetCard}>

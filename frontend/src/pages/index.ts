@@ -1,5 +1,6 @@
 import MainPage from "./MainPage";
-import VolunteerCabinet from "./VolunteerCabinet";
+import UserProfile from "./UserProfile";
 import DevelopmentPage from "./DevelopmentPage";
+import IdentifyPage from "./IdentifyPage";
 
-export { MainPage, VolunteerCabinet, DevelopmentPage };
+export { MainPage, UserProfile, DevelopmentPage, IdentifyPage };

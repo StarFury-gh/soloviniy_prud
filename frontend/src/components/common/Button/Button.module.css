@@ -24,8 +24,8 @@
   color: var(--primary-foreground);
 }
 
-.primary:hover:not(:disabled) {
-  background-color: var(--pond-600);
+.primary:hover {
+  background-color: var(--accent);
 }
 
 .primary:active:not(:disabled) {

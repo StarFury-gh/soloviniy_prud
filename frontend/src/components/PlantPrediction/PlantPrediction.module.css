@@ -1,0 +1,85 @@
+.container {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.25rem;
+  background-color: var(--surface);
+  border-radius: var(--border-radius-round);
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow 0.2s ease;
+  border: 1px solid var(--border);
+}
+
+.container:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.probabilityCircle {
+  position: relative;
+  width: 60px;
+  height: 60px;
+  flex-shrink: 0;
+}
+
+.probabilityCircle svg {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+
+.probabilityCircle circle {
+  fill: none;
+}
+
+.probabilityCircle .circle-bg {
+  stroke: var(--border);
+  stroke-width: 4;
+}
+
+.probabilityCircle .circle-progress {
+  stroke: var(--primary);
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-dasharray: 150.8;
+  transition: stroke-dashoffset 0.5s ease;
+}
+
+.circlePercent {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-dark);
+  font-family: var(--font-body);
+}
+
+.content {
+  flex: 1;
+  min-width: 0;
+}
+
+.ruName {
+  font-size: 1.25rem;
+  color: var(--text-dark);
+  margin: 0 0 0.25rem 0;
+  font-weight: 600;
+  font-family: var(--font-display);
+}
+
+.latName {
+  font-size: 0.9375rem;
+  color: var(--text-light);
+  font-style: italic;
+  margin: 0 0 0.5rem 0;
+  font-family: var(--font-body);
+}
+
+.probabilityText {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--primary);
+  font-family: var(--font-body);
+}

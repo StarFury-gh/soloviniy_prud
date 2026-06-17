@@ -25,6 +25,7 @@
     rgba(13, 47, 26, 0.6) 60%,
     rgba(13, 47, 26, 0.85) 100%
   );
+  pointer-events: none;
 }
 
 .content {
@@ -90,6 +91,11 @@
   display: flex;
   gap: 1rem;
   flex-wrap: wrap;
+}
+
+.secondaryAction {
+  --button-border-color: rgba(82, 183, 136, 0.6);
+  --button-text-color: white;
 }
 
 .scroll {

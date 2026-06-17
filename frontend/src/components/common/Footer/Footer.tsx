@@ -1,6 +1,7 @@
 import styles from "./Footer.module.css";
 
 function Footer() {
+  const currentYear = new Date().getFullYear();
   const onNavigate = (page: string) => {
     console.log("handle page change:", page);
   };
@@ -15,13 +16,7 @@ function Footer() {
           </p>
           <div className={styles.socialRow}>
             <a className={styles.socialBtn} href="#" aria-label="ВКонтакте">
-              В
-            </a>
-            <a className={styles.socialBtn} href="#" aria-label="Telegram">
-              ✈
-            </a>
-            <a className={styles.socialBtn} href="#" aria-label="Instagram">
-              ◻
+              VK
             </a>
           </div>
         </div>
@@ -67,20 +62,18 @@ function Footer() {
         </div>
 
         <div className={styles.col}>
-          <h4>Волонтёрам</h4>
+          <h4>Сообщникам</h4>
           <ul>
             <li>
-              <button onClick={() => onNavigate("volunteer")}>
+              <button onClick={() => onNavigate("login")}>
                 Личный кабинет
               </button>
             </li>
             <li>
-              <button onClick={() => onNavigate("volunteer")}>
-                Субботники
-              </button>
+              <button onClick={() => onNavigate("login")}>Мерпориятия</button>
             </li>
             <li>
-              <button onClick={() => onNavigate("volunteer")}>
+              <button onClick={() => onNavigate("profile")}>
                 Сообщить о проблеме
               </button>
             </li>
@@ -93,11 +86,9 @@ function Footer() {
 
       <div className={styles.bottom}>
         <span className={styles.copyright}>
-          © 2024 Соловьиный пруд — Владимир. Открытый проект сообщества.
+          {currentYear} Соловьиный пруд — Владимир. Открытый проект сообщества.
         </span>
-        <span className={styles.coords}>
-          📍 56.1290°N, 40.4049°E · г. Владимир
-        </span>
+        <span className={styles.coords}>ул. Горького, д. 79А</span>
       </div>
     </footer>
   );

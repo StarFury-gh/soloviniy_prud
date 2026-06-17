@@ -1,8 +1,8 @@
 import styles from "./StatsSection.module.css";
 
 const stats = [
-  { value: "47 га", label: "площадь прудового ландшафта" },
-  { value: "...", label: "год основания водоёма" },
+  { value: "0.79 га", label: "площадь прудового ландшафта" },
+  { value: "XVIII", label: "Век основания водоёма" },
   { value: "1 247", label: "зарегистрированных волонтёров" },
   { value: "4 сезона", label: "активности круглый год" },
 ];
