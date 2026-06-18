@@ -1,0 +1,19 @@
+services:
+  postgres:
+    build: ./infra/db/postgres
+    ports:
+      - 5432:5432
+    volumes:
+      - pg_data:/var/lib/postgresql
+    networks:
+      - internal
+
+volumes:
+  pg_data:
+
+networks:
+  internal:
+    driver: bridge
+
+  external:
+    driver: bridge
