@@ -11,10 +11,13 @@ const navItems: { label: string; page: string }[] = [
   { label: "Сообщество", page: "community" },
 ];
 
-function Header() {
+interface HeaderProps {
+  authStatus?: boolean;
+}
+
+function Header({ authStatus }: HeaderProps) {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -56,13 +59,17 @@ function Header() {
         </nav>
 
         <div className={styles.navActions}>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => handleNav("login")}
-          >
-            Войти
-          </Button>
+          {authStatus ? (
+            <Button onClick={() => handleNav("profile")}>Профиль</Button>
+          ) : (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => handleNav("login")}
+            >
+              Войти
+            </Button>
+          )}
         </div>
 
         <button
@@ -76,19 +83,21 @@ function Header() {
 
       <div className={`${styles.mobileMenu} ${menuOpen ? styles.open : ""}`}>
         {navItems.map(({ label, page }) => (
-          <button key={page} onClick={() => handleNav(page)}>
+          <Button size="sm" key={page} onClick={() => handleNav(page)}>
             {label}
-          </button>
+          </Button>
         ))}
-        <Button
-          variant="primary"
-          size="sm"
-          fullWidth
-          onClick={() => handleNav("volunteer")}
-          style={{ marginTop: "0.5rem" }}
-        >
-          Войти
-        </Button>
+        {authStatus ? (
+          <Button onClick={() => handleNav("profile")}>Профиль</Button>
+        ) : (
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => handleNav("login")}
+          >
+            Войти
+          </Button>
+        )}
       </div>
     </header>
   );

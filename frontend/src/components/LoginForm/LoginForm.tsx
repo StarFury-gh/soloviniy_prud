@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
+import { API_URL, LS_ACCESS_TOKEN } from "../../constants";
+
 import { Button, Input } from "../common";
 import styles from "./LoginForm.module.css";
 
@@ -8,13 +10,32 @@ function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loginError, setLoginError] = useState("");
+  const [message, setMessage] = useState("");
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     if (!email || !password) {
       setLoginError("Заполните все поля");
       return;
     }
     setLoginError("");
+    const url = `${API_URL}/users/login`;
+    const body = JSON.stringify({ email, password });
+    console.log(body);
+    const response = await fetch(url, {
+      method: "POST",
+      body,
+      headers: { "Content-type": "application/json" },
+    });
+    if (response.ok) {
+      const { access_token } = await response.json();
+      localStorage.setItem(LS_ACCESS_TOKEN, access_token);
+      setMessage("Вы успешно вошли в аккаунт!");
+      setTimeout(() => {
+        window.location.href = "/profile";
+      }, 2500);
+    } else {
+      setLoginError("Ошибка при авторизации.");
+    }
   };
 
   return (
@@ -30,6 +51,7 @@ function LoginForm() {
             </p>
           </div>
           <div className={styles.authForm}>
+            <p>{message}</p>
             <Input
               type="email"
               label="Электронная почта"

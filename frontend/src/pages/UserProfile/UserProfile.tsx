@@ -1,9 +1,22 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "./UserProfile.module.css";
 
 import IssueReporter from "../../components/IssueReporter";
+import { API_URL, LS_ACCESS_TOKEN } from "../../constants";
 
-type ProfileTab = "profile" | "hours" | "issues";
+type ProfileTab = "profile" | "admin_panel" | "issues";
+
+interface UserInfo {
+  id: string;
+  email: string;
+  name: string;
+  surname: string;
+  role: string;
+}
+
+interface UserInfoServerResponse {
+  info: UserInfo;
+}
 
 const hoursLog = [
   {
@@ -77,20 +90,55 @@ const achievements = [
 function UserProfile() {
   const [tab, setTab] = useState<ProfileTab>();
 
-  const sidebarLinks: { id: ProfileTab; icon: string; label: string }[] = [
-    { id: "profile", icon: "👤", label: "Мой профиль" },
-    { id: "hours", icon: "⏰", label: "Журнал часов" },
-    { id: "issues", icon: "📍", label: "Фиксация проблем" },
-  ];
+  const [userInfo, setUserInfo] = useState<UserInfo>();
+  const [ruRole, setRuRole] = useState<string>("");
+
+  useEffect(() => {
+    const handleRoleChanging = () => {
+      if (userInfo?.role === "admin") {
+        setRuRole("Администратор");
+      } else if (userInfo?.role === "user") {
+        setRuRole("Участник");
+      }
+    };
+    handleRoleChanging();
+  }, [userInfo]);
+
+  useEffect(() => {
+    const getUserInfo = async () => {
+      const url = `${API_URL}/users/get_info`;
+      const token = localStorage.getItem(LS_ACCESS_TOKEN);
+      try {
+        const response = await fetch(url, {
+          headers: { Authorization: token || "" },
+        });
+        if (response.ok) {
+          const { info }: UserInfoServerResponse = await response.json();
+          console.log(info);
+          setUserInfo(info);
+        }
+      } catch {
+        console.error("Getting user info error");
+      }
+    };
+    getUserInfo();
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.clear();
+    window.location.href = "/";
+  };
 
   return (
     <div className={styles.page}>
       <div className={styles.cabinet}>
         <aside className={styles.sidebar}>
           <div className={styles.userCard}>
-            <div className={styles.avatar}>М</div>
-            <p className={styles.userName}>Мария Петрова</p>
-            <p className={styles.userRole}>Волонтёр с марта 2023</p>
+            <div className={styles.avatar}>{userInfo?.name[0]}</div>
+            <p className={styles.userName}>
+              {userInfo?.name} {userInfo?.surname}
+            </p>
+            <p className={styles.userRole}>{ruRole}</p>
             <div className={styles.userStats}>
               <span className={styles.userStatBadge}>{totalHours} ч.</span>
               <span className={styles.userStatBadge}>
@@ -99,18 +147,28 @@ function UserProfile() {
             </div>
           </div>
 
-          {sidebarLinks.map((link) => (
+          <button
+            className={`${styles.sidebarLink} ${tab === "profile" ? styles.activeLink : ""}`}
+            onClick={() => setTab("profile")}
+          >
+            Профиль
+          </button>
+          <button
+            className={`${styles.sidebarLink} ${tab === "issues" ? styles.activeLink : ""}`}
+            onClick={() => setTab("issues")}
+          >
+            Фиксация проблем
+          </button>
+          {userInfo?.role === "admin" && (
             <button
-              key={link.id}
-              className={`${styles.sidebarLink} ${tab === link.id ? styles.activeLink : ""}`}
-              onClick={() => setTab(link.id)}
+              className={`${styles.sidebarLink} ${tab === "admin_panel" ? styles.activeLink : ""}`}
+              onClick={() => setTab("admin_panel")}
             >
-              <span className={styles.sidebarLinkIcon}>{link.icon}</span>
-              {link.label}
+              Панель администратора
             </button>
-          ))}
+          )}
 
-          <button className={styles.logoutBtn}>
+          <button className={styles.logoutBtn} onClick={handleLogout}>
             <span className={styles.sidebarLinkIcon}>↩</span>
             Выйти
           </button>
@@ -170,39 +228,6 @@ function UserProfile() {
                       <span>{a.label}</span>
                     </div>
                   ))}
-                </div>
-              </div>
-            </>
-          )}
-
-          {tab === "hours" && (
-            <>
-              <h2 className={styles.mainTitle}>Журнал часов</h2>
-              <p className={styles.mainDesc}>
-                История вашего участия в мероприятиях
-              </p>
-              <div className={styles.hoursLog}>
-                {hoursLog.map((entry, i) => (
-                  <div key={i} className={styles.hourEntry}>
-                    <div className={styles.hourEntryDate}>
-                      <span className={styles.hourEntryDay}>{entry.day}</span>
-                      <span className={styles.hourEntryMonth}>
-                        {entry.month}
-                      </span>
-                    </div>
-                    <div>
-                      <div className={styles.hourEntryName}>{entry.name}</div>
-                      <div className={styles.hourEntryType}>{entry.type}</div>
-                    </div>
-                    <div>
-                      <div className={styles.hourEntryHours}>{entry.hours}</div>
-                      <span className={styles.hourEntryHoursLabel}>часов</span>
-                    </div>
-                  </div>
-                ))}
-                <div className={styles.totalRow}>
-                  <span className={styles.totalLabel}>Итого за всё время</span>
-                  <span className={styles.totalValue}>{totalHours} ч.</span>
                 </div>
               </div>
             </>
