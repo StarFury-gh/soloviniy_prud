@@ -1,6 +1,7 @@
 from fastapi import HTTPException, status
 
 from jwt import encode, decode
+from jwt.exceptions import DecodeError
 from hashlib import sha256
 
 from core.config import cfg_obj
@@ -15,10 +16,10 @@ class UsersService:
         self.repo = repo
 
     def __encode_jwt(self, payload: dict[str, str]) -> str:
-        return encode(payload=payload, key=cfg_obj.JWT_SECRET_KEY, algorithm="HS256")
+        return encode(payload=payload, key=cfg_obj.JWT_SECRET_KEY, algorithm="HS256")  # type: ignore
 
     def __decode_jwt(self, jwt: str) -> dict:
-        return decode(jwt=jwt, key=cfg_obj.JWT_SECRET_KEY, algorithms=["HS256"])
+        return decode(jwt=jwt, key=cfg_obj.JWT_SECRET_KEY, algorithms=["HS256"])  # type: ignore
 
     def __get_hash(self, value: str) -> str:
         return sha256(value.encode("utf-8")).hexdigest()
@@ -139,7 +140,7 @@ class UsersService:
                 detail="Internal server error",
             )
 
-    async def auth_user(self, authorization: str):
+    async def auth_user(self, authorization: str) -> dict[str, str]:
         if not authorization.startswith("Bearer"):
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid token"
@@ -147,4 +148,20 @@ class UsersService:
 
         jwt = authorization.split("Bearer ")[1]
 
-        return self.__decode_jwt(jwt)
+        try:
+            return self.__decode_jwt(jwt)
+
+        except DecodeError:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid token"
+            )
+
+    async def get_user_info(self, id: str):
+        try:
+            user_info = await self.repo.get_user_info(id)
+            return {"info": user_info}
+
+        except UserNotFound:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND, detail="User not found"
+            )

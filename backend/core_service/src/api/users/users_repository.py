@@ -4,7 +4,7 @@ from asyncpg.exceptions import UniqueViolationError
 from typing import List
 
 from .users_exceptions import UserAlreadyExists, UserNotFound
-from .users_schemas import User, USERS_ROLES
+from .users_schemas import User, USERS_ROLES, GetUser
 
 
 class UsersRepository:
@@ -95,3 +95,13 @@ class UsersRepository:
             )
         except UniqueViolationError:
             raise UserAlreadyExists
+
+    async def get_user_info(self, id: str) -> GetUser:
+        user = await self.db.fetchrow(
+            "SELECT id, email, name, surname, role, avatar FROM users WHERE id=$1", id
+        )
+        if user is not None:
+            user = dict(user)
+            return GetUser(**user)
+
+        raise UserNotFound

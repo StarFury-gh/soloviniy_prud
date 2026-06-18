@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, Header
 
 from .users_service import UsersService
-from .users_dependencies import get_service, admin_required
+from .users_dependencies import get_service, admin_required, auth_required
 from .users_schemas import LoginUserDTO, RegisterUserDTO
 
 users_router = APIRouter(prefix="/users", tags=["users"])
@@ -25,6 +25,13 @@ async def auth_user(
     service: UsersService = Depends(get_service),
 ):
     return await service.auth_user(authorization=authorization)
+
+
+@users_router.get("/get_info")
+async def get_info(
+    auth=Depends(auth_required), service: UsersService = Depends(get_service)
+):
+    return await service.get_user_info(auth.get("id"))
 
 
 @users_router.get("/all")

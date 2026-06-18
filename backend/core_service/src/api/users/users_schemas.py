@@ -15,7 +15,7 @@ class RegisterUserDTO(BaseModel):
     password: str
     name: str
     surname: str
-    avatar: str  # Base64
+    avatar: str = "Null"  # Base64
 
 
 class CreateAdminDTO(BaseModel):
@@ -30,6 +30,15 @@ class User(BaseModel):
     id: str | UUID
     email: str
     password: str
+    name: str
+    surname: str
+    avatar: str | None  # Путь
+    role: str
+
+
+class GetUser(BaseModel):
+    id: str | UUID
+    email: str
     name: str
     surname: str
     avatar: str | None  # Путь
