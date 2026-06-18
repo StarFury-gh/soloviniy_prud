@@ -34,7 +34,8 @@ function IdentifyPlantForm({
     }
   };
 
-  const handleRemoveImage = () => {
+  const handleRemoveImage = (e: React.MouseEvent) => {
+    e.stopPropagation();
     setImage(null);
     if (previewUrl) {
       URL.revokeObjectURL(previewUrl);

@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 import styles from "./Footer.module.css";
 
 function Footer() {
@@ -57,6 +59,20 @@ function Footer() {
             </li>
             <li>
               <button onClick={() => onNavigate("development")}>Бюджет</button>
+            </li>
+          </ul>
+        </div>
+
+        <div className={styles.col}>
+          <h4>Полезное</h4>
+          <ul>
+            <li>
+              <Link to={"identify"}>Распознаватель растений</Link>
+            </li>
+            <li>
+              <Link to={"identify/admin"}>
+                Список зарегистрированных растений
+              </Link>
             </li>
           </ul>
         </div>

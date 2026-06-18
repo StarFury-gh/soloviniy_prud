@@ -1,0 +1,56 @@
+.container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background-color: var(--surface);
+  border-radius: var(--border-radius-round);
+  box-shadow: var(--shadow-md);
+  transition: box-shadow 0.2s ease;
+}
+
+.container:hover {
+  box-shadow: var(--shadow-lg);
+}
+
+.content {
+  flex: 1;
+  min-width: 0;
+}
+
+.ruName {
+  font-size: var(--title-size);
+  color: var(--text-dark);
+  margin: 0 0 0.25rem 0;
+  font-weight: 600;
+  width: 100%;
+}
+
+.ruNameInput {
+  font-size: var(--title-size);
+  color: var(--text-dark);
+  margin: 0 0 0.25rem 0;
+  font-weight: 600;
+  width: 100%;
+  border: none;
+  outline: none;
+  cursor: text;
+}
+
+.ruNameInput:focus {
+  border-bottom: 1px solid var(--primary);
+}
+
+.latName {
+  font-size: var(--text-size);
+  color: var(--text-light);
+  font-style: italic;
+  margin: 0 0 0.5rem 0;
+}
+
+.class_id {
+  font-size: var(--text-size);
+  color: var(--text-light);
+  font-style: italic;
+  margin: 0 0 0.5rem 0;
+}

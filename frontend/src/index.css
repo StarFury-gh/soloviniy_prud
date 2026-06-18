@@ -8,7 +8,7 @@
 
 :root {
   --text: 16px;
-
+  --font-size: 14px;
   --font-display: "Playfair Display", Georgia, serif;
   --font-body: "Inter", system-ui, sans-serif;
 
@@ -61,7 +61,6 @@
   --sidebar-border: #c3dcc9;
   --sidebar-ring: #74c38a;
 
-  /* Стили проекта для IdentifyPlantForm и PlantPrediction */
   --text-dark: #1a2e1f;
   --text-light: #4a6b53;
   --surface: #ffffff;
@@ -69,8 +68,10 @@
   --border-radius: 0.625rem;
   --border-radius-round: 1rem;
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-md:
+    0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg:
+    0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
   --title-size: clamp(1.5rem, 3vw, 2rem);
   --text-size: 0.9375rem;
   --accent-light: rgba(45, 166, 151, 0.1);

@@ -4,13 +4,12 @@ import os
 print("Начало загрузки")
 
 model_id = "juppy44/plant-identification-2m-vit-b"
-local_dir = "./models/identifier"  # Папка для модели
+local_dir = "./models/identifier"
 
 # Загружаем процессор и модель (в этот момент они будут скачаны и закэшированы)
 processor = AutoImageProcessor.from_pretrained(model_id)
 model = AutoModelForImageClassification.from_pretrained(model_id)
 
-# Создаём директорию, если её нет
 os.makedirs(local_dir, exist_ok=True)
 
 # Сохраняем процессор и модель в локальную папку проекта

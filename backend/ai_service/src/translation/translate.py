@@ -5,7 +5,7 @@ import sqlite3
 from deep_translator import GoogleTranslator
 
 logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(name)s - %(message)s"
+    level=logging.INFO, format="%(levelname)s - %(asctime)s - %(name)s - %(message)s"
 )
 logger = logging.getLogger("translate.py")
 
