@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button } from "../common";
+import { Button } from "../../../common";
 import styles from "./RegisteredPlantCard.module.css";
 
 interface RegisteredPlantCardProps {

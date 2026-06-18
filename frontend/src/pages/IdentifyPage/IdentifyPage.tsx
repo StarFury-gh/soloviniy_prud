@@ -6,7 +6,7 @@ import { Spinner } from "../../components/common";
 
 import styles from "./IdentifyPage.module.css";
 
-import { API_URL } from "../../constants";
+import { AI_API_URL } from "../../constants";
 
 interface PlantPrediction {
   lat_name: string;
@@ -31,7 +31,7 @@ function IdentifyPage() {
     try {
       const body = new FormData();
       body.append("image", file);
-      const url = `${API_URL}/plants/identify/`;
+      const url = `${AI_API_URL}/plants/identify/`;
       const response = await fetch(url, {
         method: "POST",
         body,
@@ -51,20 +51,22 @@ function IdentifyPage() {
 
   return (
     <div className={styles.container}>
-      <IdentifyPlantForm
-        onRemoveImage={handleRemoveImage}
-        onIdentify={handlePlantIdentify}
-      />
-      <div className={styles["predictions-list"]}>
-        {loading && <Spinner />}
-        {predictions?.map((prediction, index) => (
-          <PlantPrediction
-            key={index}
-            lat_name={prediction.lat_name}
-            ru_name={prediction.ru_name}
-            probability={prediction.probability}
-          />
-        ))}
+      <div className={styles.items}>
+        <IdentifyPlantForm
+          onRemoveImage={handleRemoveImage}
+          onIdentify={handlePlantIdentify}
+        />
+        <div className={styles["predictions-list"]}>
+          {loading && <Spinner />}
+          {predictions?.map((prediction, index) => (
+            <PlantPrediction
+              key={index}
+              lat_name={prediction.lat_name}
+              ru_name={prediction.ru_name}
+              probability={prediction.probability}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );

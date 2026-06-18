@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 
-import RegisteredPlantCard from "../../components/RegisteredPlantCard";
+import RegisteredPlantCard from "../RegisteredPlantCard";
 
-import { Button } from "../../components/common";
-import { API_URL } from "../../constants";
+import { Button } from "../../../common";
+import { AI_API_URL } from "../../../../constants";
 
 import styles from "./RegisteredPlantsList.module.css";
 
@@ -26,7 +26,7 @@ function RegisteredPlantsList() {
       const offset = page * PAGINATION_LIMIT;
       params.append("limit", `${PAGINATION_LIMIT}`);
       params.append("offset", `${offset}`);
-      const url = `${API_URL}/plants/?${params}`;
+      const url = `${AI_API_URL}/plants/?${params}`;
       const response = await fetch(url);
       if (response.ok) {
         const data: Array<RegisteredPlant> = await response.json();
@@ -45,7 +45,7 @@ function RegisteredPlantsList() {
 
   const handlePlantRename = async (classId: number, newName: string) => {
     try {
-      const url = `${API_URL}/plants/update_translation`;
+      const url = `${AI_API_URL}/plants/update_translation`;
       const response = await fetch(url, {
         method: "PATCH",
         headers: {

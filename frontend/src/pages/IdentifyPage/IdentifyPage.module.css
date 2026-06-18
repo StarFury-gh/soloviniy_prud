@@ -1,6 +1,9 @@
 .container {
-  max-width: 800px;
+  /* max-width: 800px; */
+  width: 100%;
   height: 100vh;
+
+  background-color: var(--background);
 
   display: flex;
   flex-direction: column;
@@ -9,6 +12,11 @@
 
   margin: 0 auto;
   padding: 2rem;
+}
+
+.items {
+  max-width: 800px;
+  width: 100%;
 }
 
 .predictions-list {
