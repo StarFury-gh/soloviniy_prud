@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 
 from uvicorn import run
@@ -31,6 +32,10 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(lifespan=lifespan)
+
+# Раздача статики
+app.mount("/static", StaticFiles(directory=cfg_obj.UPLOAD_DIR))
+
 app.add_middleware(
     CORSMiddleware,
     # Хосты, которым разрешено стучаться до API

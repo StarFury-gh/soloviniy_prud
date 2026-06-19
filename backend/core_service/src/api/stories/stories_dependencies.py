@@ -1,4 +1,4 @@
-from fastapi import Depends
+from fastapi import Depends, Request
 
 from core.db.postgres import get_pg_connection
 
@@ -6,8 +6,11 @@ from .stories_repository import StoriesRepository
 from .stories_service import StoriesService
 
 
-def get_repository(db=Depends(get_pg_connection)):
-    return StoriesRepository(db)
+async def get_repository(request: Request, db=Depends(get_pg_connection)):
+    repo = StoriesRepository(db)
+    # Передаем пул соединений для фоновых операций
+    repo.set_pool(request.app.state.pg_pool)
+    return repo
 
 
 def get_service(repo=Depends(get_repository)):

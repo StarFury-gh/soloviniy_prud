@@ -1,4 +1,4 @@
-from asyncpg import Connection
+from asyncpg import Connection, Pool
 from asyncpg.exceptions import ForeignKeyViolationError
 import aiofiles
 
@@ -13,20 +13,45 @@ from api.users.users_exceptions import UserNotFound
 
 from .stories_exceptions import IncorrectImageType
 
-from .stories_schemas import Story, StoryTag, STORY_STATUS
+from .stories_schemas import Story, StoryTag, STORY_STATUS, FullStory
 
 
 class StoriesRepository:
     def __init__(self, db: Connection) -> None:
+        """
+        Инициализация репозитория.
+
+        :param db: asyncpg.Connection для работы с БД
+        """
         self.db = db
+        self.pool: Pool | None = None
+
+    def set_pool(self, pool: Pool) -> None:
+        """
+        Устанавливает connection pool для фоновых операций.
+
+        :param pool: Pool объект из asyncpg для управления соединениями.
+        """
+        self.pool = pool
 
     async def create_story_tag(self, tag_name: str) -> StoryTag:
+        """
+        Создаёт новый тег для истории в БД.
+
+        :param tag_name: Название нового тега
+        :return: StoryTag
+        """
         tag_id = await self.db.fetchval(
             "INSERT INTO available_tags (name) VALUES ($1) RETURNING id", tag_name
         )
         return StoryTag(id=tag_id, name=tag_name)
 
     async def get_all_stories_tags(self) -> List[StoryTag]:
+        """
+        Получает список всех доступных тегов для историй.
+
+        :return: List[StoryTag] со всеми тегами из БД.
+        """
         tags = await self.db.fetch("SELECT id, name FROM available_tags")
         tags = [StoryTag(**dict(tag)) for tag in tags]
         return tags
@@ -34,6 +59,16 @@ class StoriesRepository:
     async def save_story(
         self, title: str, author_id: str, tags_ids: List[int], content: str
     ) -> Story | None:
+        """
+        Сохраняет новую историю в базу данных с указанными тегами.
+
+        :param title: Заголовок истории
+        :param author_id: ID автора (UUID)
+        :param tags_ids: Список ID тегов для истории
+        :param content: Текстовое содержимое истории
+        :return: Story при создании, None при ошибке
+        :raises UserNotFound: Если автор не найден
+        """
         tx = self.db.transaction()
         await tx.start()
         try:
@@ -78,50 +113,117 @@ class StoriesRepository:
             print(f"Saving story error: {e}")
             await tx.rollback()
 
-    async def save_story_images(
+    async def save_story_images_background(
         self, images: List[str], story_id: int
     ) -> List[str | None] | None:
-        tx = self.db.transaction()
-        await tx.start()
+        """
+        Фоновое сохранение изображений для истории.
+
+        :param images: Список изображений в base64
+        :param story_id: ID истории
+        :return: Список имен сохраненных файлов, None при ошибке.
+        :raises IncorrectImageType: Если формат изображения не base64
+        :raises RuntimeError: Если pool не был установлен
+        """
+        if self.pool is None:
+            raise RuntimeError("Pool not set for background operations")
+
+        tx = None
         try:
-            saved_images = []
-            for image in images:
-                if not image.startswith("data:image"):
-                    raise IncorrectImageType
+            async with self.pool.acquire() as connection:
+                tx = connection.transaction()
+                await tx.start()
 
-                if "," in image:
-                    image = image.split(",")[1]
+                saved_images = []
+                for image in images:
+                    if not image.startswith("data:image"):
+                        raise IncorrectImageType
 
-                image_data_base64 = base64.b64decode(image)
+                    if "," in image:
+                        image = image.split(",")[1]
 
-                fileid = uuid4()
+                    image_data_base64 = base64.b64decode(image)
 
-                filename = f"{fileid}.jpg"
+                    fileid = uuid4()
 
-                filepath = f"{cfg_obj.UPLOAD_DIR}/{filename}"
+                    filename = f"{fileid}.jpg"
 
-                async with aiofiles.open(filepath, "wb") as buffer:
-                    await buffer.write(image_data_base64)
+                    filepath = f"{cfg_obj.UPLOAD_DIR}/{filename}"
 
-                await self.db.execute(
-                    "INSERT INTO stories_images (story_id, path) VALUES ($1, $2)",
-                    story_id,
-                    filename,
-                )
+                    async with aiofiles.open(filepath, "wb") as buffer:
+                        await buffer.write(image_data_base64)
 
-                saved_images.append(filename)
+                    await connection.execute(
+                        "INSERT INTO stories_images (story_id, path) VALUES ($1, $2)",
+                        story_id,
+                        filename,
+                    )
 
-                # TODO: change to logger
-                print(f"Saved image: {filename} for story #{story_id}")
+                    saved_images.append(filename)
 
-            await tx.commit()
-            return saved_images
+                    # TODO: change to logger
+                    print(f"Saved image: {filename} for story #{story_id}")
+
+                await tx.commit()
+                return saved_images
 
         except IncorrectImageType:
-            await tx.rollback()
+            if tx:
+                await tx.rollback()
             raise
         except Exception as e:
             # TODO: change to logger
             print(f"Error saving image for post #{story_id}: {e} - {type(e)}")
-            await tx.rollback()
+            if tx:
+                await tx.rollback()
             return None
+
+    async def get_stories(
+        self, limit: int, offset: int, status: str
+    ) -> List[FullStory]:
+        stmt = """SELECT
+    s.id,
+    s.author_id,
+    s.title,
+    s.content,
+    s.status,
+    s.created_at,
+    s.updated_at,
+    COALESCE(array_agg(DISTINCT si.path) FILTER (WHERE si.path IS NOT NULL), '{}') AS images,
+    COALESCE(array_agg(DISTINCT at.name) FILTER (WHERE at.name IS NOT NULL), '{}') AS tags
+FROM 
+    stories AS s
+LEFT JOIN stories_images AS si ON s.id = si.story_id
+LEFT JOIN stories_tags AS st ON s.id = st.story_id
+LEFT JOIN available_tags AS at ON st.tag_id = at.id
+WHERE 
+    s.status = $1
+GROUP BY 
+    s.id
+ORDER BY 
+    s.created_at DESC
+LIMIT $2 OFFSET $3;
+"""
+
+        stories = await self.db.fetch(
+            stmt,
+            status,
+            limit,
+            offset,
+        )
+
+        stories = [FullStory(**dict(story)) for story in stories]
+
+        return stories
+
+    async def update_story_status(
+        self, story_id: int, new_status: str, admin_id: str
+    ) -> bool:
+        await self.db.execute(
+            "UPDATE stories SET status=$1, updated_by=$2 WHERE id=$3",
+            new_status,
+            admin_id,
+            story_id,
+        )
+
+        return True

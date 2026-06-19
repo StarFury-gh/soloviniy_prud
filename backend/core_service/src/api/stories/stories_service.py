@@ -1,9 +1,10 @@
 from fastapi import HTTPException, status
+import asyncio
 
 from api.users.users_exceptions import UserNotFound
 
 from .stories_repository import StoriesRepository
-from .stories_schemas import CreateStoryDTO, CreateStoryTagDTO
+from .stories_schemas import CreateStoryDTO, CreateStoryTagDTO, STORY_STATUS
 
 
 class StoriesService:
@@ -30,7 +31,12 @@ class StoriesService:
 
             if story is not None:
                 print(f"Saving photos for story: #{story.id}")
-                await self.repo.save_story_images(body.images, story_id=story.id)
+                # Запускаем фоновую задачу для сохранения изображений
+                asyncio.create_task(
+                    self.repo.save_story_images_background(
+                        body.images, story_id=story.id
+                    )
+                )
 
             else:
                 raise HTTPException(
@@ -42,4 +48,25 @@ class StoriesService:
         except UserNotFound:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED, detail="User not found"
+            )
+
+    async def get_stories_requests(
+        self, limit: int, offset: int, status: str = STORY_STATUS.NEW.value
+    ):
+        stories = await self.repo.get_stories(limit=limit, offset=offset, status=status)
+
+        return {"stories": stories}
+
+    async def update_story_status(self, story_id: int, new_status: str, admin_id: str):
+        try:
+            result = await self.repo.update_story_status(
+                story_id=story_id, new_status=new_status, admin_id=admin_id
+            )
+            return {"updated": result}
+
+        except Exception as e:
+            print(e)
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail="Internal server error",
             )

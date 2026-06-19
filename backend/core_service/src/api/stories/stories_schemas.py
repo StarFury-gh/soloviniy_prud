@@ -2,6 +2,12 @@ from pydantic import BaseModel
 from typing import List
 from datetime import datetime
 from enum import Enum
+from uuid import UUID
+
+
+class Pagination(BaseModel):
+    limit: int = 3
+    offset: int = 0
 
 
 class STORY_STATUS(Enum):
@@ -28,6 +34,19 @@ class Story(BaseModel):
     status: STORY_STATUS
     created_at: datetime | None = None
     updated_at: datetime | None = None
+
+
+class FullStory(BaseModel):
+    id: int
+    author_id: str | UUID
+    title: str
+    content: str
+    status: STORY_STATUS
+    created_at: datetime | None = None
+    updated_at: datetime | None = None
+    tags: List[str]
+    # Список путей до картинок
+    images: List[str | None]
 
 
 class CreateStoryDTO(BaseModel):
