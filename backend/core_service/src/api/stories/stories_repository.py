@@ -80,7 +80,9 @@ class StoriesRepository:
 
     async def save_story_images(
         self, images: List[str], story_id: int
-    ) -> List[str] | None:
+    ) -> List[str | None] | None:
+        tx = self.db.transaction()
+        await tx.start()
         try:
             saved_images = []
             for image in images:
@@ -111,8 +113,15 @@ class StoriesRepository:
 
                 # TODO: change to logger
                 print(f"Saved image: {filename} for story #{story_id}")
+
+            await tx.commit()
             return saved_images
 
+        except IncorrectImageType:
+            await tx.rollback()
+            raise
         except Exception as e:
             # TODO: change to logger
             print(f"Error saving image for post #{story_id}: {e} - {type(e)}")
+            await tx.rollback()
+            return None

@@ -1,7 +1,5 @@
 from fastapi import HTTPException, status
 
-import asyncio
-
 from api.users.users_exceptions import UserNotFound
 
 from .stories_repository import StoriesRepository
@@ -32,9 +30,7 @@ class StoriesService:
 
             if story is not None:
                 print(f"Saving photos for story: #{story.id}")
-                asyncio.create_task(
-                    self.repo.save_story_images(body.images, story_id=story.id)
-                )
+                await self.repo.save_story_images(body.images, story_id=story.id)
 
             else:
                 raise HTTPException(
