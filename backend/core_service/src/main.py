@@ -5,14 +5,24 @@ from uvicorn import run
 
 from contextlib import asynccontextmanager
 
-from api import users_router
+from api import users_router, stories_router
 
 from core.db.postgres import create_pg_pool, init_admin
 from core.config import cfg_obj
 
 
+def __init_images_dir():
+    from os import makedirs
+
+    # TODO: Change to logger
+    print(f"Initializing upload dir: {cfg_obj.UPLOAD_DIR}")
+    makedirs(cfg_obj.UPLOAD_DIR, exist_ok=True)
+    print("Upload dir initialized.")
+
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    __init_images_dir()
     pg_pool = await create_pg_pool()
     app.state.pg_pool = pg_pool
     await init_admin()
@@ -37,6 +47,7 @@ app.add_middleware(
 
 # Подключаем внешние роутеры
 app.include_router(users_router)
+app.include_router(stories_router)
 
 if __name__ == "__main__":
     run(

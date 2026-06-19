@@ -1,12 +1,14 @@
+from fastapi import Depends
+
+from core.db.postgres import get_pg_connection
+
 from .stories_repository import StoriesRepository
 from .stories_service import StoriesService
 
-def get_db():
-    # TODO: подключить реальную БД
-    return None
 
-def get_repository(db = get_db()):
+def get_repository(db=Depends(get_pg_connection)):
     return StoriesRepository(db)
 
-def get_service(repo = get_repository()):
+
+def get_service(repo=Depends(get_repository)):
     return StoriesService(repo)

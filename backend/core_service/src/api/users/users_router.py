@@ -31,7 +31,7 @@ async def auth_user(
 async def get_info(
     auth=Depends(auth_required), service: UsersService = Depends(get_service)
 ):
-    return await service.get_user_info(auth.get("id"))
+    return await service.get_user_info(auth.id)
 
 
 @users_router.get("/all")

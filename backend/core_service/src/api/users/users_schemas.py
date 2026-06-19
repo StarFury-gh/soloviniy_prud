@@ -48,3 +48,9 @@ class GetUser(BaseModel):
 class USERS_ROLES(Enum):
     ADMIN = "admin"
     USER = "user"
+
+
+class AuthUserResponse(BaseModel):
+    id: str | UUID
+    email: str
+    role: str

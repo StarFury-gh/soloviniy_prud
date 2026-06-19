@@ -7,7 +7,13 @@ from hashlib import sha256
 from core.config import cfg_obj
 
 from .users_repository import UsersRepository
-from .users_schemas import LoginUserDTO, RegisterUserDTO, CreateAdminDTO, USERS_ROLES
+from .users_schemas import (
+    LoginUserDTO,
+    RegisterUserDTO,
+    CreateAdminDTO,
+    USERS_ROLES,
+    AuthUserResponse,
+)
 from .users_exceptions import UserAlreadyExists, UserNotFound
 
 
@@ -140,7 +146,7 @@ class UsersService:
                 detail="Internal server error",
             )
 
-    async def auth_user(self, authorization: str) -> dict[str, str]:
+    async def auth_user(self, authorization: str) -> AuthUserResponse:
         if not authorization.startswith("Bearer"):
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid token"
@@ -149,7 +155,8 @@ class UsersService:
         jwt = authorization.split("Bearer ")[1]
 
         try:
-            return self.__decode_jwt(jwt)
+            payload = self.__decode_jwt(jwt)
+            return AuthUserResponse(**payload)
 
         except DecodeError:
             raise HTTPException(
