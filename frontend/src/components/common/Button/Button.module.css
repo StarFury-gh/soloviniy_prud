@@ -61,6 +61,17 @@
   transform: translateY(1px);
 }
 
+.danger {
+  background-color: transparent;
+  border: 2px solid var(--destructive);
+  color: var(--destructive);
+}
+
+.danger:hover {
+  background-color: var(--destructive);
+  color: white;
+}
+
 .text {
   background-color: transparent;
   color: var(--primary);

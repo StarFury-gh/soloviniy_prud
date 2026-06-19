@@ -107,162 +107,164 @@ function IssueReporter() {
   };
 
   return (
-    <div className={styles.wrap}>
-      <div className={styles.tabButtons}>
-        <Button
-          variant={tab === "report" ? "primary" : "secondary"}
-          size="sm"
-          onClick={() => setTab("report")}
-        >
-          Сообщить о проблеме
-        </Button>
-        <Button
-          variant={tab === "myIssues" ? "primary" : "secondary"}
-          size="sm"
-          onClick={() => setTab("myIssues")}
-        >
-          Мои отчёты ({issues.length})
-        </Button>
-      </div>
-
-      {tab === "report" && (
-        <>
-          {submitted ? (
-            <div className={styles.successBanner}>
-              <span className={styles.successBannerIcon}></span>
-              <p className={styles.successBannerTitle}>Отчёт принят!</p>
-              <p className={styles.successBannerDesc}>
-                Спасибо за внимательность. Ответственная бригада рассмотрит
-                обращение в течение 3 рабочих дней.
-              </p>
-            </div>
-          ) : (
-            <>
-              <div className={styles.formCard}>
-                <p className={styles.formTitle}>Новое обращение</p>
-                <p className={styles.formDesc}>
-                  Выберите тип проблемы, опишите её и загрузите фото. Все
-                  обращения рассматриваются в течение 3 дней.
-                </p>
-
-                <div className={styles.formGroup}>
-                  <label className={styles.formLabel}>
-                    Тип проблемы{" "}
-                    <span className={styles.requiredMarker}>*</span>
-                  </label>
-                  <div className={styles.typeGrid}>
-                    {issueTypes.map((t) => (
-                      <button
-                        key={t.id}
-                        className={`${styles.typeBtn} ${
-                          selectedType === t.id ? styles.selectedType : ""
-                        }`}
-                        onClick={() => setSelectedType(t.id)}
-                        type="button"
-                      >
-                        <span className={styles.typeBtnIcon}>{t.icon}</span>
-                        <span className={styles.typeBtnLabel}>{t.label}</span>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                <div className={styles.formRow}>
-                  <Input
-                    as="textarea"
-                    label="Описание проблемы"
-                    required
-                    placeholder="Опишите проблему подробнее: что произошло, где именно находится на берегу..."
-                    value={desc}
-                    onChange={(e) =>
-                      setDesc((e.target as HTMLTextAreaElement).value)
-                    }
-                  />
-                </div>
-
-                <div className={styles.formGroup}>
-                  <label className={styles.formLabel}>
-                    Фотография (необязательно)
-                  </label>
-                  <label
-                    className={`${styles.photoUpload} ${
-                      photos.length > 0 ? styles.hasPhoto : ""
-                    }`}
-                  >
-                    <input
-                      type="file"
-                      accept="image/*"
-                      multiple
-                      className={styles.photoUploadInput}
-                      onChange={handlePhoto}
-                    />
-                    {photos.length === 0 ? (
-                      <>
-                        <span className={styles.photoUploadIcon}>СП</span>
-                        <span className={styles.photoUploadText}>
-                          Нажмите для загрузки фото
-                        </span>
-                        <span className={styles.photoUploadHint}>
-                          JPG, PNG · до 10 МБ
-                        </span>
-                      </>
-                    ) : (
-                      <div className={styles.photoPreviewRow}>
-                        {photos.map((src, i) => (
-                          <img
-                            key={i}
-                            src={src}
-                            alt={`Фото ${i + 1}`}
-                            className={styles.photoPreview}
-                          />
-                        ))}
-                        <span className={styles.photoUploadHint}>
-                          + добавить ещё
-                        </span>
-                      </div>
-                    )}
-                  </label>
-                </div>
-
-                <Button
-                  variant="primary"
-                  fullWidth
-                  onClick={handleSubmit}
-                  disabled={!selectedType || !desc.trim()}
-                >
-                  Отправить обращение
-                </Button>
-              </div>
-            </>
-          )}
-        </>
-      )}
-
-      {tab === "myIssues" && (
-        <div className={styles.issuesList}>
-          {issues.length === 0 ? (
-            <p className={styles.emptyIssuesText}>
-              У вас ещё нет поданных обращений.
-            </p>
-          ) : (
-            issues.map((issue) => (
-              <div key={issue.id} className={styles.issueCard}>
-                <div className={styles.issueIconWrap}>{issue.icon}</div>
-                <div className={styles.issueInfo}>
-                  <div className={styles.issueName}>{issue.type}</div>
-                  <div className={styles.issueDesc}>{issue.desc}</div>
-                  <div className={styles.issueDate}>{issue.date}</div>
-                </div>
-                <span
-                  className={`${styles.issueBadge} ${statusClass[issue.status]}`}
-                >
-                  {statusLabel[issue.status]}
-                </span>
-              </div>
-            ))
-          )}
+    <div className={styles.page}>
+      <div className={styles.wrap}>
+        <div className={styles.tabButtons}>
+          <Button
+            variant={tab === "report" ? "primary" : "secondary"}
+            size="sm"
+            onClick={() => setTab("report")}
+          >
+            Сообщить о проблеме
+          </Button>
+          <Button
+            variant={tab === "myIssues" ? "primary" : "secondary"}
+            size="sm"
+            onClick={() => setTab("myIssues")}
+          >
+            Мои отчёты ({issues.length})
+          </Button>
         </div>
-      )}
+
+        {tab === "report" && (
+          <>
+            {submitted ? (
+              <div className={styles.successBanner}>
+                <span className={styles.successBannerIcon}></span>
+                <p className={styles.successBannerTitle}>Отчёт принят!</p>
+                <p className={styles.successBannerDesc}>
+                  Спасибо за внимательность. Ответственная бригада рассмотрит
+                  обращение в течение 3 рабочих дней.
+                </p>
+              </div>
+            ) : (
+              <>
+                <div className={styles.formCard}>
+                  <p className={styles.formTitle}>Новое обращение</p>
+                  <p className={styles.formDesc}>
+                    Выберите тип проблемы, опишите её и загрузите фото. Все
+                    обращения рассматриваются в течение 3 дней.
+                  </p>
+
+                  <div className={styles.formGroup}>
+                    <label className={styles.formLabel}>
+                      Тип проблемы{" "}
+                      <span className={styles.requiredMarker}>*</span>
+                    </label>
+                    <div className={styles.typeGrid}>
+                      {issueTypes.map((t) => (
+                        <button
+                          key={t.id}
+                          className={`${styles.typeBtn} ${
+                            selectedType === t.id ? styles.selectedType : ""
+                          }`}
+                          onClick={() => setSelectedType(t.id)}
+                          type="button"
+                        >
+                          <span className={styles.typeBtnIcon}>{t.icon}</span>
+                          <span className={styles.typeBtnLabel}>{t.label}</span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className={styles.formRow}>
+                    <Input
+                      as="textarea"
+                      label="Описание проблемы"
+                      required
+                      placeholder="Опишите проблему подробнее: что произошло, где именно находится на берегу..."
+                      value={desc}
+                      onChange={(e) =>
+                        setDesc((e.target as HTMLTextAreaElement).value)
+                      }
+                    />
+                  </div>
+
+                  <div className={styles.formGroup}>
+                    <label className={styles.formLabel}>
+                      Фотография (необязательно)
+                    </label>
+                    <label
+                      className={`${styles.photoUpload} ${
+                        photos.length > 0 ? styles.hasPhoto : ""
+                      }`}
+                    >
+                      <input
+                        type="file"
+                        accept="image/*"
+                        multiple
+                        className={styles.photoUploadInput}
+                        onChange={handlePhoto}
+                      />
+                      {photos.length === 0 ? (
+                        <>
+                          <span className={styles.photoUploadIcon}>СП</span>
+                          <span className={styles.photoUploadText}>
+                            Нажмите для загрузки фото
+                          </span>
+                          <span className={styles.photoUploadHint}>
+                            JPG, PNG · до 10 МБ
+                          </span>
+                        </>
+                      ) : (
+                        <div className={styles.photoPreviewRow}>
+                          {photos.map((src, i) => (
+                            <img
+                              key={i}
+                              src={src}
+                              alt={`Фото ${i + 1}`}
+                              className={styles.photoPreview}
+                            />
+                          ))}
+                          <span className={styles.photoUploadHint}>
+                            + добавить ещё
+                          </span>
+                        </div>
+                      )}
+                    </label>
+                  </div>
+
+                  <Button
+                    variant="primary"
+                    fullWidth
+                    onClick={handleSubmit}
+                    disabled={!selectedType || !desc.trim()}
+                  >
+                    Отправить обращение
+                  </Button>
+                </div>
+              </>
+            )}
+          </>
+        )}
+
+        {tab === "myIssues" && (
+          <div className={styles.issuesList}>
+            {issues.length === 0 ? (
+              <p className={styles.emptyIssuesText}>
+                У вас ещё нет поданных обращений.
+              </p>
+            ) : (
+              issues.map((issue) => (
+                <div key={issue.id} className={styles.issueCard}>
+                  <div className={styles.issueIconWrap}>{issue.icon}</div>
+                  <div className={styles.issueInfo}>
+                    <div className={styles.issueName}>{issue.type}</div>
+                    <div className={styles.issueDesc}>{issue.desc}</div>
+                    <div className={styles.issueDate}>{issue.date}</div>
+                  </div>
+                  <span
+                    className={`${styles.issueBadge} ${statusClass[issue.status]}`}
+                  >
+                    {statusLabel[issue.status]}
+                  </span>
+                </div>
+              ))
+            )}
+          </div>
+        )}
+      </div>
     </div>
   );
 }

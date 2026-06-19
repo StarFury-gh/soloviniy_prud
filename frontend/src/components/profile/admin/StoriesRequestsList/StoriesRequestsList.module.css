@@ -1,0 +1,112 @@
+.page {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.pageHeader {
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.pageTitle {
+  font-size: var(--title-size);
+  color: var(--text-dark);
+  font-weight: var(--font-weight-medium);
+  margin-bottom: 0.5rem;
+}
+
+.pageDescription {
+  font-size: var(--text-size);
+  color: var(--text-light);
+}
+
+.filters {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.filterButton {
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius);
+  font-size: var(--text-size);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.filterButton.active {
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+}
+
+.filterButton:not(.active) {
+  background-color: var(--secondary);
+  color: var(--secondary-foreground);
+}
+
+.filterButton:not(.active):hover {
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+}
+
+.stories {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.pagination {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.5rem 0;
+  background-color: var(--background);
+  border-radius: var(--radius);
+}
+
+.paginationButton {
+  padding: 0.5rem 1.5rem;
+  border-radius: var(--radius);
+  font-size: var(--text-size);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.paginationButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.paginationButton:not(:disabled):hover {
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+}
+
+.paginationInfo {
+  font-size: var(--text-size);
+  color: var(--text-dark);
+  font-weight: var(--font-weight-medium);
+}
+
+.noRequests {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 4rem 2rem;
+  background-color: var(--background);
+  border-radius: var(--radius);
+}
+
+.noRequestsText {
+  font-size: var(--text-size);
+  color: var(--text-light);
+}

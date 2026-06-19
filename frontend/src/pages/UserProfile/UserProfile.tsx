@@ -5,6 +5,8 @@ import { IssueReporter, CreatePostForm } from "../../components/profile/";
 import {
   RegisteredPlantsList,
   CreateEventForm,
+  CreateStoryTagForm,
+  StoriesRequestsList,
 } from "../../components/profile/admin";
 
 import { API_URL, LS_ACCESS_TOKEN } from "../../constants";
@@ -56,6 +58,14 @@ function UserProfile() {
             tabName: "addEvent",
             title: "Добавить событие",
           },
+          {
+            tabName: "addStoryTag",
+            title: "Добавить теги",
+          },
+          {
+            tabName: "storiesRequests",
+            title: "Заявки историй",
+          },
         ]
       : []),
   ].filter(Boolean) as Array<MenuItem>;
@@ -66,6 +76,8 @@ function UserProfile() {
     issues: <IssueReporter />,
     plants: <RegisteredPlantsList />,
     addEvent: <CreateEventForm />,
+    addStoryTag: <CreateStoryTagForm />,
+    storiesRequests: <StoriesRequestsList />,
   };
 
   useEffect(() => {

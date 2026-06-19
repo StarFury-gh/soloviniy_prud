@@ -2,7 +2,7 @@ import { forwardRef } from "react";
 import type { ButtonHTMLAttributes, ReactNode } from "react";
 import styles from "./Button.module.css";
 
-type Variant = "primary" | "secondary" | "outline" | "text";
+type Variant = "primary" | "secondary" | "outline" | "text" | "danger";
 type Size = "sm" | "md" | "lg";
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -18,6 +18,7 @@ const variantStyles = {
   secondary: styles.secondary,
   outline: styles.outline,
   text: styles.text,
+  danger: styles.danger,
 };
 
 const sizeStyles = {

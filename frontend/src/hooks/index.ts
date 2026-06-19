@@ -1,3 +1,5 @@
-import useAuth from "./useAuth/hook";
+import useAuth from "./useAuth";
+import useStoryTags from "./useStoryTags";
+import useStories from "./useStories";
 
-export { useAuth };
+export { useAuth, useStoryTags, useStories };
