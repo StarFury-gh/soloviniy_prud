@@ -9,7 +9,7 @@ interface UseStoriesParams {
   page: number;
 }
 
-const PAGINATION_LIMIT = 5;
+const PAGINATION_LIMIT = 4;
 
 function useStories({ status = "new", page = 1 }: UseStoriesParams) {
   const [stories, setStories] = useState<Array<RequestInfo>>([]);

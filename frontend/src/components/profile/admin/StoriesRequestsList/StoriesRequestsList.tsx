@@ -115,31 +115,29 @@ function StoriesRequestsList() {
             })}
           </div>
 
-          {hasMore && (
-            <div className={styles.pagination}>
-              <Button
-                className={styles.paginationButton}
-                disabled={!(page > 1)}
-                onClick={() => {
-                  setPage(page - 1);
-                  window.scrollTo({ top: 0, behavior: "smooth" });
-                }}
-              >
-                Назад
-              </Button>
-              <span className={styles.paginationInfo}>Страница {page}</span>
-              <Button
-                className={styles.paginationButton}
-                disabled={!hasMore}
-                onClick={() => {
-                  setPage(page + 1);
-                  window.scrollTo({ top: 0, behavior: "smooth" });
-                }}
-              >
-                Далее
-              </Button>
-            </div>
-          )}
+          <div className={styles.pagination}>
+            <Button
+              className={styles.paginationButton}
+              disabled={!(page > 1)}
+              onClick={() => {
+                setPage(page - 1);
+                window.scrollTo({ top: 0, behavior: "smooth" });
+              }}
+            >
+              Назад
+            </Button>
+            <span className={styles.paginationInfo}>Страница {page}</span>
+            <Button
+              className={styles.paginationButton}
+              disabled={!hasMore}
+              onClick={() => {
+                setPage(page + 1);
+                window.scrollTo({ top: 0, behavior: "smooth" });
+              }}
+            >
+              Далее
+            </Button>
+          </div>
         </>
       )}
     </div>
