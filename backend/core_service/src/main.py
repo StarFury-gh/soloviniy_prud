@@ -6,7 +6,7 @@ from uvicorn import run
 
 from contextlib import asynccontextmanager
 
-from api import users_router, stories_router
+from api import users_router, stories_router, events_router
 
 from core.db.postgres import create_pg_pool, init_admin
 from core.config import cfg_obj
@@ -53,6 +53,7 @@ app.add_middleware(
 # Подключаем внешние роутеры
 app.include_router(users_router)
 app.include_router(stories_router)
+app.include_router(events_router)
 
 if __name__ == "__main__":
     run(

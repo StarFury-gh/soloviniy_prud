@@ -3,7 +3,9 @@ from fastapi import APIRouter, Depends
 from api.users.users_dependencies import auth_required, admin_required
 from api.users.users_schemas import AuthUserResponse
 
-from .stories_schemas import CreateStoryDTO, CreateStoryTagDTO, Pagination, STORY_STATUS
+from api.shared import Pagination
+
+from .stories_schemas import CreateStoryDTO, CreateStoryTagDTO, STORY_STATUS
 from .stories_service import StoriesService
 from .stories_dependencies import get_service
 

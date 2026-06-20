@@ -5,11 +5,6 @@ from enum import Enum
 from uuid import UUID
 
 
-class Pagination(BaseModel):
-    limit: int = 3
-    offset: int = 0
-
-
 class STORY_STATUS(Enum):
     NEW = "new"
     APPROVED = "approved"
