@@ -43,5 +43,6 @@ CREATE TABLE events (
     description TEXT,
     created_at TIMESTAMPTZ DEFAULT NOW(),
     updated_at TIMESTAMPTZ DEFAULT NOW(),
-    created_by UUID REFERENCES users(id)
+    created_by UUID REFERENCES users(id),
+    date TIMESTAMPTZ NOT NULL
 );
