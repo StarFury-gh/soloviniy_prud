@@ -7,6 +7,7 @@ import {
   CreateEventForm,
   CreateStoryTagForm,
   StoriesRequestsList,
+  AdminEventsList,
 } from "../../components/profile/admin";
 
 import { API_URL, LS_ACCESS_TOKEN } from "../../constants";
@@ -66,6 +67,10 @@ function UserProfile() {
             tabName: "storiesRequests",
             title: "Заявки историй",
           },
+          {
+            tabName: "eventsList",
+            title: "События",
+          },
         ]
       : []),
   ].filter(Boolean) as Array<MenuItem>;
@@ -78,6 +83,7 @@ function UserProfile() {
     addEvent: <CreateEventForm />,
     addStoryTag: <CreateStoryTagForm />,
     storiesRequests: <StoriesRequestsList />,
+    eventsList: <AdminEventsList />,
   };
 
   useEffect(() => {
@@ -99,7 +105,10 @@ function UserProfile() {
       const token = localStorage.getItem(LS_ACCESS_TOKEN);
       try {
         const response = await fetch(url, {
-          headers: { Authorization: token || "" },
+          headers: {
+            Authorization: token || "",
+            "Content-type": "application/json",
+          },
         });
         if (response.ok) {
           const { info }: UserInfoServerResponse = await response.json();

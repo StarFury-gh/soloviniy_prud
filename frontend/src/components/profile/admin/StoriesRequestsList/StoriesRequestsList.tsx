@@ -41,8 +41,6 @@ function StoriesRequestsList() {
     });
 
     if (response.ok) {
-      const data = await response.json();
-      console.log("data:", data);
       setHiddenRequests((prev) => new Set(prev).add(storyId));
     } else {
       console.error("Error");

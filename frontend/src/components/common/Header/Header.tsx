@@ -8,7 +8,7 @@ import { Button } from "../";
 const navItems: { label: string; page: string }[] = [
   { label: "Главная", page: "/" },
   { label: "Истории", page: "stories" },
-  { label: "Мероприятия", page: "events" },
+  { label: "События", page: "events" },
 ];
 
 interface HeaderProps {

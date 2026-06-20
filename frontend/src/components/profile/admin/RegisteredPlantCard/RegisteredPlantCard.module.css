@@ -2,15 +2,17 @@
   display: flex;
   align-items: center;
   gap: 1rem;
-  padding: 1rem;
-  background-color: var(--surface);
-  border-radius: var(--border-radius-round);
+  padding: 1.5rem;
+  background-color: var(--card);
+  border-radius: var(--radius);
   box-shadow: var(--shadow-md);
-  transition: box-shadow 0.2s ease;
+  transition: all 0.2s ease;
+  border: 1px solid var(--border);
 }
 
 .container:hover {
   box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
 }
 
 .content {
@@ -19,38 +21,48 @@
 }
 
 .ruName {
-  font-size: var(--title-size);
-  color: var(--text-dark);
-  margin: 0 0 0.25rem 0;
-  font-weight: 600;
-  width: 100%;
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  color: var(--card-foreground);
+  margin: 0 0 0.5rem 0;
+  font-weight: var(--font-weight-medium);
+  line-height: 1.5;
 }
 
 .ruNameInput {
-  font-size: var(--title-size);
-  color: var(--text-dark);
-  margin: 0 0 0.25rem 0;
-  font-weight: 600;
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  color: var(--card-foreground);
+  margin: 0 0 0.5rem 0;
+  font-weight: var(--font-weight-medium);
+  line-height: 1.5;
   width: 100%;
+  padding: 0.5rem 0;
   border: none;
+  border-bottom: 2px solid var(--border);
+  background-color: transparent;
   outline: none;
   cursor: text;
+  transition: border-color 0.2s ease;
 }
 
 .ruNameInput:focus {
-  border-bottom: 1px solid var(--primary);
+  border-bottom-color: var(--primary);
 }
 
 .latName {
   font-size: var(--text-size);
-  color: var(--text-light);
+  color: var(--muted-foreground);
   font-style: italic;
-  margin: 0 0 0.5rem 0;
+  margin: 0 0 0.75rem 0;
+  font-family: var(--font-body);
 }
 
 .class_id {
-  font-size: var(--text-size);
-  color: var(--text-light);
-  font-style: italic;
-  margin: 0 0 0.5rem 0;
+  font-size: 0.75rem;
+  color: var(--muted-foreground);
+  margin: 0 0 0.75rem 0;
+  font-family: var(--font-body);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
