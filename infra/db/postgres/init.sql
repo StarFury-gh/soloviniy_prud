@@ -46,3 +46,8 @@ CREATE TABLE events (
     created_by UUID REFERENCES users(id),
     date TIMESTAMPTZ NOT NULL
 );
+
+CREATE TABLE events_images (
+    event_id INT REFERENCES events(id),
+    path VARCHAR(255)
+);
