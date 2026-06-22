@@ -9,8 +9,34 @@ services:
     networks:
       - internal
 
+  core_service:
+    build: ./backend/core_service
+    container_name: core_service
+    volumes:
+      - core_data:/app/saved
+    depends_on:
+      - postgres
+    networks:
+      - internal
+
+  ai_service:
+    build: ./backend/ai_service
+    container_name: ai_service
+    networks:
+      - internal
+
+  frontend:
+    build: ./frontend
+    container_name: frontend
+    ports:
+      - 8080:80
+    networks:
+      - external
+      - internal
+
 volumes:
   pg_data:
+  core_data:
 
 networks:
   internal:
