@@ -20,7 +20,7 @@ __pycache__/
 *~
 
 # Models (should be mounted as volume or copied separately)
-models/identifier/*
+# models/identifier/*
 
 # Documentation
 *.md
