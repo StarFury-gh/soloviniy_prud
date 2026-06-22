@@ -1,8 +1,6 @@
 from pydantic import BaseModel
 from enum import Enum
 
-from typing import List
-
 from uuid import UUID
 from datetime import datetime
 
@@ -20,14 +18,14 @@ class Event(BaseModel):
     updated_at: datetime
     created_by: str | UUID
     date: datetime
-    images: List[str] = []
+    path: str | None = None
 
 
 class CreateEventDTO(BaseModel):
     name: str
     description: str
     date: datetime
-    images: List[str] = []
+    banner: str | None = None
 
 
 class UpdateEventDTO(BaseModel):

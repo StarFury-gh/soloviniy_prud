@@ -21,6 +21,9 @@ def __init_images_dir():
     print("Upload dir initialized.")
 
 
+__init_images_dir()
+
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     __init_images_dir()
@@ -43,6 +46,7 @@ app.add_middleware(
         "http://localhost:5173",
         "http://127.0.0.1:5173",
         "http://frontend:80",
+        "http://frontend:8080",
     ],
     allow_methods=["*"],
     # Заголовки, которые разрешены для запросов + базовые HTTP заголовки

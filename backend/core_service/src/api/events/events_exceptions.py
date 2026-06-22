@@ -19,3 +19,9 @@ class EmptyEventUpdate(BaseEventException):
     def __init__(self) -> None:
         message = "Невозможно обновить событие на пустые значения"
         super().__init__(message)
+
+
+class IncorrectImageType(BaseEventException):
+    def __init__(self) -> None:
+        message = "Передан неверный формат файла"
+        super().__init__(message)

@@ -33,6 +33,7 @@ class EventsService:
                 description=body.description,
                 date=body.date,
                 created_by=created_by,
+                banner=body.banner,
             )
 
             if not created_event:

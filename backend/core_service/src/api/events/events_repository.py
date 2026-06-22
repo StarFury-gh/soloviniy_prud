@@ -1,10 +1,15 @@
 from asyncpg import Connection
+import aiofiles
 
 from datetime import datetime, timezone
 from typing import List
-from uuid import UUID
+from uuid import UUID, uuid4
 
-from .events_exceptions import IncorrectEventStatus, EventNotFound
+from core.config import cfg_obj
+
+import base64
+
+from .events_exceptions import IncorrectEventStatus, EventNotFound, IncorrectImageType
 from .events_schemas import EVENT_STATUS, Event
 
 
@@ -13,15 +18,32 @@ class EventsRepository:
         self.db = db
 
     async def get_events(self, status: str, limit: int, offset: int) -> List[Event]:
+        comparison_sign = None
         current_date = datetime.now(timezone.utc)
         if status == EVENT_STATUS.PAST.value:
-            stmt = "SELECT id, name, description, created_at, updated_at, created_by, date FROM events WHERE date < $1 LIMIT $2 OFFSET $3"
-
+            comparison_sign = "<"
         elif status == EVENT_STATUS.FUTURE.value:
-            stmt = "SELECT id, name, description, created_at, updated_at, created_by, date FROM events WHERE date >= $1 LIMIT $2 OFFSET $3"
-
+            comparison_sign = ">="
         else:
             raise IncorrectEventStatus
+
+        stmt = f"""SELECT 
+e.id, 
+e.name, 
+e.description, 
+e.created_at, 
+e.updated_at, 
+e.created_by, 
+e.date,
+ei.path
+FROM 
+    events AS e 
+JOIN events_images AS ei ON e.id=ei.event_id 
+WHERE date {comparison_sign} $1 
+ORDER BY 
+    e.date
+LIMIT $2 OFFSET $3;
+"""
 
         events = await self.db.fetch(
             stmt,
@@ -35,17 +57,57 @@ class EventsRepository:
         return events
 
     async def create_event(
-        self, name: str, description: str, date: datetime, created_by: str | UUID
-    ) -> Event:
-        event = await self.db.fetchrow(
-            "INSERT INTO events (name, description, date, created_by) VALUES ($1, $2, $3, $4) RETURNING id, name, description, created_at, updated_at, created_by, date",
-            name,
-            description,
-            date,
-            created_by,
-        )
+        self,
+        name: str,
+        description: str,
+        date: datetime,
+        created_by: str | UUID,
+        banner: str | None,
+    ) -> Event | None:
+        tx = self.db.transaction()
+        await tx.start()
+        created_event = None
+        try:
+            event = await self.db.fetchrow(
+                "INSERT INTO events (name, description, date, created_by) VALUES ($1, $2, $3, $4) RETURNING id, name, description, created_at, updated_at, created_by, date",
+                name,
+                description,
+                date,
+                created_by,
+            )
 
-        return Event(**dict(event))
+            created_event = Event(**dict(event))
+
+            if banner:
+                if not banner.startswith("data:image"):
+                    raise IncorrectImageType
+
+                if "," in banner:
+                    banner = banner.split(",")[1]
+
+                banner_data_base64 = base64.b64decode(banner)
+
+                fileid = uuid4()
+
+                filename = f"{fileid}.jpg"
+                filepath = f"{cfg_obj.UPLOAD_DIR}/{filename}"
+
+                async with aiofiles.open(filepath, "wb") as buffer:
+                    await buffer.write(banner_data_base64)
+
+                await self.db.execute(
+                    "INSERT INTO events_images (event_id, path) VALUES ($1, $2)",
+                    created_event.id,
+                    filename,
+                )
+
+            await tx.commit()
+
+        except Exception as e:
+            print(e)
+            await tx.rollback()
+
+        return created_event
 
     async def delete_event(self, event_id: int) -> Event:
         deleted_event = await self.db.fetchrow(

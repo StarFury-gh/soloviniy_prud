@@ -136,6 +136,7 @@ class StoriesRepository:
 
                 saved_images = []
                 for image in images:
+                    # TODO: Move to separated function
                     if not image.startswith("data:image"):
                         raise IncorrectImageType
 
