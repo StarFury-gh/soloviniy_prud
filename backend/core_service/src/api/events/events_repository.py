@@ -38,7 +38,7 @@ e.date,
 ei.path
 FROM 
     events AS e 
-JOIN events_images AS ei ON e.id=ei.event_id 
+LEFT JOIN events_images AS ei ON e.id=ei.event_id 
 WHERE date {comparison_sign} $1 
 ORDER BY 
     e.date

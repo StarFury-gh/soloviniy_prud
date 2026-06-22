@@ -26,7 +26,6 @@ __init_images_dir()
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    __init_images_dir()
     pg_pool = await create_pg_pool()
     app.state.pg_pool = pg_pool
     await init_admin()
