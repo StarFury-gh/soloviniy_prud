@@ -7,6 +7,7 @@ import {
   DevelopmentPage,
   IdentifyPage,
   StoriesPage,
+  EventsPage,
 } from "./pages";
 import LoginForm from "./components/LoginForm";
 import RegisterForm from "./components/RegisterForm";
@@ -15,7 +16,7 @@ import { useAuth } from "./hooks";
 
 function App() {
   const auth = useAuth();
-  console.log(auth);
+
   return (
     <Router>
       <Header authStatus={auth.status} />
@@ -27,6 +28,7 @@ function App() {
         <Route path="/development" element={<DevelopmentPage />}></Route>
         <Route path="/identify" element={<IdentifyPage />}></Route>
         <Route path="/stories" element={<StoriesPage />}></Route>
+        <Route path="/events" element={<EventsPage />}></Route>
       </Routes>
     </Router>
   );

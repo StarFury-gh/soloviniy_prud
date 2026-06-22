@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useStories } from "../../hooks";
 
 import { Spinner } from "../../components/common";
+import Button from "../../components/common/Button";
 
 import StoryCard from "../../components/StoryCard";
 import styles from "./StoriesPage.module.css";
@@ -12,6 +13,10 @@ function StoriesPage() {
     status: "approved",
     page,
   });
+
+  const handleLoadMore = () => {
+    setPage((prev) => prev + 1);
+  };
 
   return (
     <div className={styles.storiesPage}>
@@ -32,6 +37,13 @@ function StoriesPage() {
       {isLoading && (
         <div className={styles.loadingMore}>
           <Spinner />
+        </div>
+      )}
+      {hasMore && !isLoading && (
+        <div className={styles.loadMoreContainer}>
+          <Button onClick={handleLoadMore} variant="primary" size="md">
+            Загрузить ещё
+          </Button>
         </div>
       )}
     </div>

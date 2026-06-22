@@ -22,7 +22,7 @@ function AdminEventsList() {
   };
 
   const handleDeleteEvent = async (eventId: number) => {
-    const url = `${API_URL}/events/delete/${eventId}`;
+    const url = `${API_URL}/events/delete/${eventId}/`;
     const token = localStorage.getItem(LS_ACCESS_TOKEN);
 
     try {
@@ -49,7 +49,7 @@ function AdminEventsList() {
     description: string;
     date: string;
   }) => {
-    const url = `${API_URL}/events/${updatedEvent.id}`;
+    const url = `${API_URL}/events/${updatedEvent.id}/`;
     const token = localStorage.getItem(LS_ACCESS_TOKEN);
 
     try {

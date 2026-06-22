@@ -3,5 +3,13 @@ import UserProfile from "./UserProfile";
 import DevelopmentPage from "./DevelopmentPage";
 import IdentifyPage from "./IdentifyPage";
 import StoriesPage from "./StoriesPage";
+import EventsPage from "./EventsPage";
 
-export { MainPage, UserProfile, DevelopmentPage, IdentifyPage, StoriesPage };
+export {
+  MainPage,
+  UserProfile,
+  DevelopmentPage,
+  IdentifyPage,
+  StoriesPage,
+  EventsPage,
+};

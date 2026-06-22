@@ -88,7 +88,7 @@ function CreatePostForm() {
       }
     }
 
-    const url = `${API_URL}/stories/new`;
+    const url = `${API_URL}/stories/new/`;
     const token = localStorage.getItem(LS_ACCESS_TOKEN);
 
     const body = JSON.stringify({

@@ -60,16 +60,16 @@ function UserProfile() {
             title: "Добавить событие",
           },
           {
+            tabName: "eventsList",
+            title: "События",
+          },
+          {
             tabName: "addStoryTag",
             title: "Добавить теги",
           },
           {
             tabName: "storiesRequests",
             title: "Заявки историй",
-          },
-          {
-            tabName: "eventsList",
-            title: "События",
           },
         ]
       : []),
@@ -101,7 +101,7 @@ function UserProfile() {
 
   useEffect(() => {
     const getUserInfo = async () => {
-      const url = `${API_URL}/users/get_info`;
+      const url = `${API_URL}/users/get_info/`;
       const token = localStorage.getItem(LS_ACCESS_TOKEN);
       try {
         const response = await fetch(url, {

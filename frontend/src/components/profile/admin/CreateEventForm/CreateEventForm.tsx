@@ -9,6 +9,7 @@ interface EventFormData {
   title: string;
   description: string;
   date: string;
+  banner?: string;
 }
 
 function CreateEventForm() {
@@ -16,6 +17,7 @@ function CreateEventForm() {
     title: "",
     description: "",
     date: "",
+    banner: undefined,
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [statusMessage, setStatusMessage] = useState<{
@@ -33,6 +35,21 @@ function CreateEventForm() {
     }));
   };
 
+  const handleBannerChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const base64String = reader.result as string;
+        setFormData((prev) => ({
+          ...prev,
+          banner: base64String,
+        }));
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const handleSubmit = async () => {
     if (
       !formData.title.trim() ||
@@ -46,13 +63,14 @@ function CreateEventForm() {
     setIsSubmitting(true);
     setStatusMessage(null);
 
-    const url = `${API_URL}/events/new`;
+    const url = `${API_URL}/events/new/`;
     const token = localStorage.getItem(LS_ACCESS_TOKEN);
 
     const body = JSON.stringify({
       name: formData.title,
       description: formData.description,
       date: formData.date,
+      banner: formData.banner,
     });
 
     const response = await fetch(url, {
@@ -68,6 +86,7 @@ function CreateEventForm() {
       title: "",
       description: "",
       date: "",
+      banner: undefined,
     });
 
     if (response.ok) {
@@ -140,6 +159,17 @@ function CreateEventForm() {
               className={styles.dateInput}
               value={formData.date}
               onChange={handleChange}
+            />
+          </div>
+
+          <div className={styles.formRow}>
+            <label className={styles.dateLabel}>Баннер события</label>
+            <input
+              type="file"
+              accept="image/*"
+              name="banner"
+              className={styles.dateInput}
+              onChange={handleBannerChange}
             />
           </div>
 

@@ -1,4 +1,4 @@
-.storiesPage {
+.eventsPage {
   min-height: 100vh;
   background-color: var(--background-page);
   padding: 2rem 1rem;
@@ -12,7 +12,14 @@
   text-align: center;
 }
 
-.stories {
+.statusFilters {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.events {
   display: flex;
   flex-direction: column;
   gap: 2rem;
@@ -33,11 +40,15 @@
 }
 
 @media (min-width: 768px) {
-  .storiesPage {
+  .eventsPage {
     padding: 3rem 2rem;
   }
 
   .pageTitle {
     font-size: clamp(2rem, 4vw, 2.5rem);
+  }
+
+  .statusFilters {
+    gap: 2rem;
   }
 }
