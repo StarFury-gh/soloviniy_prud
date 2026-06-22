@@ -63,7 +63,7 @@ function useStories({
       ["offset", `${offset}`],
       ["status", status],
     ]);
-    const url = `${API_URL}/stories/requests?${queryParams}`;
+    const url = `${API_URL}/stories/requests/?${queryParams}`;
     const token = localStorage.getItem(LS_ACCESS_TOKEN);
 
     try {

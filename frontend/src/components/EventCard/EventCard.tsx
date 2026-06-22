@@ -3,6 +3,8 @@ import { STATIC_API_URL } from "../../constants";
 import Button from "../common/Button";
 import styles from "./EventCard.module.css";
 
+import event_splash from "/event_splash.png";
+
 interface EventCardProps {
   id: number;
   name: string;
@@ -35,7 +37,9 @@ function EventCard(props: EventCardProps) {
     <div className={styles.eventCard}>
       <div className={styles.imageContainer}>
         <img
-          src={`${STATIC_API_URL}/${props.banner}`}
+          src={
+            props.banner ? `${STATIC_API_URL}/${props.banner}` : event_splash
+          }
           alt={props.name}
           className={styles.banner}
         />
