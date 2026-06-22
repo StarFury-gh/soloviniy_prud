@@ -63,7 +63,7 @@ function CreateEventForm() {
     setIsSubmitting(true);
     setStatusMessage(null);
 
-    const url = `${API_URL}/events/new/`;
+    const url = `${API_URL}/events/new`;
     const token = localStorage.getItem(LS_ACCESS_TOKEN);
 
     const body = JSON.stringify({

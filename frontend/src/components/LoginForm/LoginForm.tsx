@@ -18,7 +18,7 @@ function LoginForm() {
       return;
     }
     setLoginError("");
-    const url = `${API_URL}/users/login/`;
+    const url = `${API_URL}/users/login`;
     const body = JSON.stringify({ email, password });
     console.log(body);
     const response = await fetch(url, {

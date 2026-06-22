@@ -34,7 +34,7 @@ function useStoryTags() {
 
   useEffect(() => {
     const fetchTags = async () => {
-      const url = `${API_URL}/stories/tags/`;
+      const url = `${API_URL}/stories/tags`;
       const response = await fetch(url);
       if (response.ok) {
         const { tags }: GetTagsServerResponse = await response.json();

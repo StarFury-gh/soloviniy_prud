@@ -37,7 +37,7 @@ function CreateStoryTagForm() {
     setSuccess(false);
 
     try {
-      const url = `${API_URL}/stories/new_tag/`;
+      const url = `${API_URL}/stories/new_tag`;
       const token = localStorage.getItem(LS_ACCESS_TOKEN);
       const response = await fetch(url, {
         method: "POST",

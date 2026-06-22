@@ -29,7 +29,7 @@ function StoriesRequestsList() {
       ["story_id", `${storyId}`],
       ["new_status", `${newStatus}`],
     ]);
-    const url = `${API_URL}/stories/status?${queryParams}/`;
+    const url = `${API_URL}/stories/status/?${queryParams}`;
     const token = localStorage.getItem(LS_ACCESS_TOKEN);
 
     const response = await fetch(url, {

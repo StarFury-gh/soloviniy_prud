@@ -101,7 +101,7 @@ function UserProfile() {
 
   useEffect(() => {
     const getUserInfo = async () => {
-      const url = `${API_URL}/users/get_info/`;
+      const url = `${API_URL}/users/get_info`;
       const token = localStorage.getItem(LS_ACCESS_TOKEN);
       try {
         const response = await fetch(url, {

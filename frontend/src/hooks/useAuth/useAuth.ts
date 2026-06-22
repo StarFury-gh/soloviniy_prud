@@ -40,7 +40,7 @@ function useAuth(): AuthStatus {
   });
 
   const token = localStorage.getItem(LS_ACCESS_TOKEN);
-  const url = `${API_URL}/users/auth/`;
+  const url = `${API_URL}/users/auth`;
 
   useEffect(() => {
     async function checkAuth() {

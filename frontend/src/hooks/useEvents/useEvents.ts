@@ -56,7 +56,7 @@ function useEvents({ status, page }: { status: EventStatus; page: number }) {
       ["offset", `${offset}`],
       ["event_status", status],
     ]);
-    const url = `${API_URL}/events/?${queryParams}/`;
+    const url = `${API_URL}/events/?${queryParams}`;
 
     try {
       const response = await fetch(url, {

@@ -31,7 +31,7 @@ function IdentifyPage() {
     try {
       const body = new FormData();
       body.append("image", file);
-      const url = `${AI_API_URL}/plants/identify/`;
+      const url = `${AI_API_URL}/plants/identify`;
       const response = await fetch(url, {
         method: "POST",
         body,
