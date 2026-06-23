@@ -31,6 +31,12 @@ class Story(BaseModel):
     updated_at: datetime | None = None
 
 
+class StoryAuthor(BaseModel):
+    id: UUID | str
+    name: str
+    surname: str
+
+
 class FullStory(BaseModel):
     id: int
     author_id: str | UUID
@@ -40,6 +46,7 @@ class FullStory(BaseModel):
     created_at: datetime | None = None
     updated_at: datetime | None = None
     tags: List[str]
+    author: StoryAuthor
     # Список путей до картинок
     images: List[str | None]
 

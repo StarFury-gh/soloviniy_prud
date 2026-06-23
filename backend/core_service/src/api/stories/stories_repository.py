@@ -13,7 +13,7 @@ from api.users.users_exceptions import UserNotFound
 
 from .stories_exceptions import IncorrectImageType
 
-from .stories_schemas import Story, StoryTag, STORY_STATUS, FullStory
+from .stories_schemas import Story, StoryTag, STORY_STATUS, FullStory, StoryAuthor
 
 
 class StoriesRepository:
@@ -190,6 +190,8 @@ class StoriesRepository:
     s.status,
     s.created_at,
     s.updated_at,
+    (SELECT name FROM users WHERE id = s.author_id) AS name,
+    (SELECT surname FROM users WHERE id = s.author_id) AS surname,
     COALESCE(array_agg(DISTINCT si.path) FILTER (WHERE si.path IS NOT NULL), '{}') AS images,
     COALESCE(array_agg(DISTINCT at.name) FILTER (WHERE at.name IS NOT NULL), '{}') AS tags
 FROM 
@@ -213,9 +215,18 @@ LIMIT $2 OFFSET $3;
             offset,
         )
 
-        stories = [FullStory(**dict(story)) for story in stories]
+        result = []
 
-        return stories
+        for story in stories:
+            story_as_dict = dict(story)
+            author = StoryAuthor(
+                id=story_as_dict.get("author_id"),
+                name=story_as_dict.get("name"),
+                surname=story_as_dict.get("surname"),
+            )
+            result.append(FullStory(**story_as_dict, author=author))
+
+        return result
 
     async def update_story_status(
         self, story_id: int, new_status: str, admin_id: str
