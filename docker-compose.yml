@@ -20,7 +20,11 @@ services:
       - internal
 
   ai_service:
-    build: ./backend/ai_service
+    build:
+      context: ./backend/ai_service
+      dockerfile: Dockerfile
+      args:
+        HF_ACCESS_TOKEN: ${HF_ACCESS_TOKEN}
     container_name: ai_service
     networks:
       - internal

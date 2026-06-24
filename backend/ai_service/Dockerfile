@@ -1,6 +1,9 @@
 # Stage 1: Build stage
 FROM python:3.11-slim AS builder
 
+ARG HF_ACCESS_TOKEN
+ENV HF_TOKEN=$HF_ACCESS_TOKEN
+
 WORKDIR /build
 
 # Install build dependencies
@@ -21,6 +24,10 @@ RUN pip install --no-cache-dir --upgrade pip && \
 # Stage 2: Production stage
 FROM python:3.11-slim AS production
 
+ARG HF_ACCESS_TOKEN
+ENV HF_TOKEN=$HF_ACCESS_TOKEN
+ENV HF_ACCESS_TOKEN=$HF_ACCESS_TOKEN
+
 WORKDIR /app
 
 # Create non-root user
@@ -34,6 +41,9 @@ COPY --from=builder /usr/local/bin /usr/local/bin
 COPY src/ ./src/
 COPY models/ ./models/
 COPY translations.db .
+
+# Save model - используем Python скрипт с токеном из ENV
+RUN python3 src/saver.py
 
 # Set permissions
 RUN chown -R appuser:appgroup /app && \
