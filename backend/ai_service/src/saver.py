@@ -4,10 +4,11 @@ import os
 
 print("Начало загрузки")
 
-token = os.environ.get("HF_TOKEN") or os.environ.get("HF_ACCESS_TOKEN")
+token = os.getenv("HF_ACCESS_TOKEN")
 
 if token:
     print("Аутентификация с Hugging Face...")
+    print(f"{token=}")
     login(token=token, add_to_git_credential=False)
 else:
     print("ВНИМАНИЕ: Токен не найден! Модель может быть недоступна.")

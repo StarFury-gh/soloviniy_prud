@@ -15,7 +15,8 @@ services:
     volumes:
       - core_data:/app/saved
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
     networks:
       - internal
 
@@ -34,6 +35,12 @@ services:
     container_name: frontend
     ports:
       - 8080:80
+    depends_on:
+      core_service:
+        condition: service_healthy
+      ai_service:
+        condition: service_healthy
+
     networks:
       - external
       - internal
