@@ -53,10 +53,10 @@ function UserProfile() {
       tabName: "galery",
       title: "Добавить фотографии",
     },
-    {
-      tabName: "issues",
-      title: "Проблемы",
-    },
+    // {
+    //   tabName: "issues",
+    //   title: "Проблемы",
+    // },
     ...(userInfo?.role === "admin"
       ? [
           {
