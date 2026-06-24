@@ -1,4 +1,5 @@
 import IssueReporter from "./IssueReporter";
 import CreatePostForm from "./CreatePostForm";
+import AddToGaleryForm from "./AddToGaleryForm";
 
-export { IssueReporter, CreatePostForm };
+export { IssueReporter, CreatePostForm, AddToGaleryForm };

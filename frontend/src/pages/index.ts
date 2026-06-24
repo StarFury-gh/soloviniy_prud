@@ -4,6 +4,7 @@ import DevelopmentPage from "./DevelopmentPage";
 import IdentifyPage from "./IdentifyPage";
 import StoriesPage from "./StoriesPage";
 import EventsPage from "./EventsPage";
+import GaleryPage from "./GaleryPage";
 
 export {
   MainPage,
@@ -12,4 +13,5 @@ export {
   IdentifyPage,
   StoriesPage,
   EventsPage,
+  GaleryPage,
 };

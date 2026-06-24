@@ -3,8 +3,13 @@ import { STATIC_API_URL } from "../../constants";
 import Button from "../common/Button";
 import styles from "./StoryCard.module.css";
 
+interface StoryAuthor {
+  name: string;
+  surname: string;
+}
+
 interface StoryCardProps {
-  author: string;
+  author: StoryAuthor;
   storyTags: Array<string>;
   content: string;
   publishedAt: string;
@@ -42,7 +47,9 @@ function StoryCard(props: StoryCardProps) {
   return (
     <div className={styles.storyCard}>
       <div className={styles.header}>
-        <span className={styles.author}>{author}</span>
+        <span className={styles.author}>
+          {author.name} {author.surname}
+        </span>
         <span className={styles.date}>{formatDate(publishedAt)}</span>
       </div>
 

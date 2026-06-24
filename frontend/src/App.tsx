@@ -8,6 +8,7 @@ import {
   IdentifyPage,
   StoriesPage,
   EventsPage,
+  GaleryPage,
 } from "./pages";
 import LoginForm from "./components/LoginForm";
 import RegisterForm from "./components/RegisterForm";
@@ -29,6 +30,7 @@ function App() {
         <Route path="/identify" element={<IdentifyPage />}></Route>
         <Route path="/stories" element={<StoriesPage />}></Route>
         <Route path="/events" element={<EventsPage />}></Route>
+        <Route path="/galery" element={<GaleryPage />}></Route>
       </Routes>
     </Router>
   );

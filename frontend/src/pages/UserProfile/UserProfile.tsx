@@ -1,7 +1,11 @@
 import { useEffect, useState } from "react";
 import styles from "./UserProfile.module.css";
 
-import { IssueReporter, CreatePostForm } from "../../components/profile/";
+import {
+  IssueReporter,
+  CreatePostForm,
+  AddToGaleryForm,
+} from "../../components/profile/";
 import {
   RegisteredPlantsList,
   CreateEventForm,
@@ -46,6 +50,10 @@ function UserProfile() {
       title: "Добавить историю",
     },
     {
+      tabName: "galery",
+      title: "Добавить фотографии",
+    },
+    {
       tabName: "issues",
       title: "Проблемы",
     },
@@ -84,6 +92,7 @@ function UserProfile() {
     addStoryTag: <CreateStoryTagForm />,
     storiesRequests: <StoriesRequestsList />,
     eventsList: <AdminEventsList />,
+    galery: <AddToGaleryForm />,
   };
 
   useEffect(() => {

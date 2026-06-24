@@ -1,3 +1,8 @@
+export interface StoryAuthor {
+  name: string;
+  surname: string;
+}
+
 /**
  * Информация о заявке на историю.
  * @property id - Уникальный идентификатор заявки
@@ -10,7 +15,7 @@
  */
 export interface RequestInfo {
   id: number;
-  author_id: string;
+  author: StoryAuthor;
   title: string;
   content: string;
   images: Array<string>;
