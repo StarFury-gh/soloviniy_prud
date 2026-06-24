@@ -11,7 +11,9 @@ interface useGaleryProps {
 const PAGINATION_LIMIT = 3;
 
 function useGalery({ page }: useGaleryProps) {
-  const [publications, setPublications] = useState<Array<GaleryPublication>>([]);
+  const [publications, setPublications] = useState<Array<GaleryPublication>>(
+    [],
+  );
   const [hasMore, setHasMore] = useState<boolean>(true);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 

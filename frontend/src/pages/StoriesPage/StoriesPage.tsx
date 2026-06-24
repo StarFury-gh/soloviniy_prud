@@ -10,7 +10,6 @@ import styles from "./StoriesPage.module.css";
 function StoriesPage() {
   const [page, setPage] = useState(1);
   const { stories, hasMore, isLoading } = useStories({
-    status: "approved",
     page,
   });
 

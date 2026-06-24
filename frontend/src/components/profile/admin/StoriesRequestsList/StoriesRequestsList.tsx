@@ -2,7 +2,7 @@ import { useState } from "react";
 
 import { Button } from "../../../common";
 
-import { useStories } from "../../../../hooks";
+import { useStoriesRequests } from "../../../../hooks";
 
 import { API_URL, LS_ACCESS_TOKEN } from "../../../../constants";
 import StoryRequest from "../StoryRequest";
@@ -16,7 +16,7 @@ function StoriesRequestsList() {
   const [page, setPage] = useState<number>(1);
   const [findStatus, setFindStatus] = useState<RequestStatus>("new");
 
-  const { stories, hasMore } = useStories({
+  const { stories, hasMore } = useStoriesRequests({
     status: findStatus,
     page,
   });

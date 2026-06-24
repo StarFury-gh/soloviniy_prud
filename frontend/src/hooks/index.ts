@@ -1,8 +1,9 @@
 import useAuth from "./useAuth";
 import useStoryTags from "./useStoryTags";
-import useStories from "./useStories";
+import useStoriesRequests from "./useStoriesRequests";
 import useEvents from "./useEvents/";
 import useGalery from "./useGalery";
+import useStories from "./useStories";
 
 /**
  * Модуль хуков для работы с различными аспектами приложения.
@@ -28,4 +29,11 @@ import useGalery from "./useGalery";
  * ```
  */
 
-export { useAuth, useStoryTags, useStories, useEvents, useGalery };
+export {
+  useAuth,
+  useStoryTags,
+  useStoriesRequests,
+  useEvents,
+  useGalery,
+  useStories,
+};
