@@ -13,7 +13,7 @@ class GaleryService:
 
     async def get_photos(self, limit: int, offset: int):
         images = await self.repo.get_photos(limit=limit, offset=offset)
-        return {"images": images}
+        return {"publications": images}
 
     async def add_photos(self, body: AddGaleryPhotosDTO, user_id: str | UUID):
         photos = body.photos

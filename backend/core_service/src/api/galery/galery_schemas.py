@@ -16,6 +16,12 @@ class GaleryPhoto(BaseModel):
     path: str
 
 
+class GaleryPublication(BaseModel):
+    publishing_id: str | UUID
+    author: GaleryPhotoAuthor
+    photos: List[str]
+
+
 class AddGaleryPhotosDTO(BaseModel):
     # Base64 photos
     photos: List[str]
