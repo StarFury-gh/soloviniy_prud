@@ -38,6 +38,13 @@ async def get_requests(
     )
 
 
+@stories_router.get("/")
+async def get_stories(
+    pagination=Depends(Pagination), service: StoriesService = Depends(get_service)
+):
+    return await service.get_stories(limit=pagination.limit, offset=pagination.offset)
+
+
 @stories_router.post("/new")
 async def create_story(
     body: CreateStoryDTO,

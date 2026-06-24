@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 
 from uvicorn import run
 
@@ -34,6 +35,13 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(lifespan=lifespan)
+
+
+# Health check endpoint
+@app.get("/health")
+async def health_check():
+    return JSONResponse(status_code=200, content={"status": "healthy"})
+
 
 # Раздача статики
 app.mount("/static", StaticFiles(directory=cfg_obj.UPLOAD_DIR))

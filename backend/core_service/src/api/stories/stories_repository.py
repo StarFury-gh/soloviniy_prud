@@ -13,7 +13,14 @@ from api.users.users_exceptions import UserNotFound
 
 from .stories_exceptions import IncorrectImageType
 
-from .stories_schemas import Story, StoryTag, STORY_STATUS, FullStory, StoryAuthor
+from .stories_schemas import (
+    Story,
+    StoryTag,
+    STORY_STATUS,
+    FullStory,
+    StoryAuthor,
+    ReadableStory,
+)
 
 
 class StoriesRepository:
@@ -179,7 +186,7 @@ class StoriesRepository:
                 await tx.rollback()
             return None
 
-    async def get_stories(
+    async def get_stories_requests(
         self, limit: int, offset: int, status: str
     ) -> List[FullStory]:
         stmt = """SELECT
@@ -239,3 +246,45 @@ LIMIT $2 OFFSET $3;
         )
 
         return True
+
+    async def get_stories(self, limit: int, offset: int) -> List[FullStory]:
+        stmt = """SELECT
+    s.id,
+    s.author_id,
+    s.title,
+    s.content,
+    s.created_at,
+    (SELECT name FROM users WHERE id = s.author_id) AS name,
+    (SELECT surname FROM users WHERE id = s.author_id) AS surname,
+    COALESCE(array_agg(DISTINCT si.path) FILTER (WHERE si.path IS NOT NULL), '{}') AS images,
+    COALESCE(array_agg(DISTINCT at.name) FILTER (WHERE at.name IS NOT NULL), '{}') AS tags
+FROM 
+    stories AS s
+LEFT JOIN stories_images AS si ON s.id = si.story_id
+LEFT JOIN stories_tags AS st ON s.id = st.story_id
+LEFT JOIN available_tags AS at ON st.tag_id = at.id
+WHERE 
+    s.status = $1
+GROUP BY 
+    s.id
+ORDER BY 
+    s.created_at DESC
+LIMIT $2 OFFSET $3;
+"""
+
+        records = await self.db.fetch(stmt, STORY_STATUS.APPROVED.value, limit, offset)
+
+        result = []
+
+        for record in records:
+            record_as_dict = dict(record)
+            author = StoryAuthor(
+                id=record_as_dict.get("author_id"),
+                name=record_as_dict.get("name"),
+                surname=record_as_dict.get("surname"),
+            )
+            story = ReadableStory(author=author, **record_as_dict)
+
+            result.append(story)
+
+        return result

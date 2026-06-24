@@ -53,7 +53,9 @@ class StoriesService:
     async def get_stories_requests(
         self, limit: int, offset: int, status: str = STORY_STATUS.NEW.value
     ):
-        stories = await self.repo.get_stories(limit=limit, offset=offset, status=status)
+        stories = await self.repo.get_stories_requests(
+            limit=limit, offset=offset, status=status
+        )
 
         return {"stories": stories}
 
@@ -70,3 +72,7 @@ class StoriesService:
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 detail="Internal server error",
             )
+
+    async def get_stories(self, limit: int, offset: int):
+        stories = await self.repo.get_stories(limit=limit, offset=offset)
+        return {"stories": stories}

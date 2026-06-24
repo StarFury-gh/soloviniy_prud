@@ -37,6 +37,15 @@ class StoryAuthor(BaseModel):
     surname: str
 
 
+class ReadableStory(BaseModel):
+    id: int
+    author: StoryAuthor
+    content: str
+    created_at: datetime | None = None
+    tags: List[str]
+    images: List[str | None]
+
+
 class FullStory(BaseModel):
     id: int
     author_id: str | UUID
