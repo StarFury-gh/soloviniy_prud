@@ -12,6 +12,7 @@ import {
   CreateStoryTagForm,
   StoriesRequestsList,
   AdminEventsList,
+  PhotoRequestsList,
 } from "../../components/profile/admin";
 
 import { API_URL, LS_ACCESS_TOKEN } from "../../constants";
@@ -79,6 +80,10 @@ function UserProfile() {
             tabName: "storiesRequests",
             title: "Заявки историй",
           },
+          {
+            tabName: "photoRequests",
+            title: "Заявки фотогалереи",
+          },
         ]
       : []),
   ].filter(Boolean) as Array<MenuItem>;
@@ -93,6 +98,7 @@ function UserProfile() {
     storiesRequests: <StoriesRequestsList />,
     eventsList: <AdminEventsList />,
     galery: <AddToGaleryForm />,
+    photoRequests: <PhotoRequestsList />,
   };
 
   useEffect(() => {
