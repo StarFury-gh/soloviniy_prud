@@ -22,7 +22,7 @@ function CreateStoryTagForm() {
     updateTags();
   }, [availableTags]);
 
-  const handleCreateTag = async (e: React.FormEvent) => {
+  const handleCreateTag = async (e: React.SubmitEvent) => {
     e.preventDefault();
 
     const trimmedTagName = tagName.trim();

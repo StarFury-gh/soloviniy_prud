@@ -83,6 +83,34 @@
   line-height: 1.5;
 }
 
+.successMessage {
+  background-color: #10b981;
+  color: white;
+  padding: 1rem 1.5rem;
+  border-radius: 0.5rem;
+  text-align: center;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  margin-bottom: 1.25rem;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.successMessage::before {
+  content: "✓";
+  margin-right: 0.5rem;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .authNoteLink {
   font-size: 0.8125rem;
   color: var(--muted-foreground);

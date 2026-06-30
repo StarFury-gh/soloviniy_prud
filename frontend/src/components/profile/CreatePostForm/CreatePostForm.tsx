@@ -3,6 +3,7 @@ import type { ChangeEvent } from "react";
 import styles from "./CreatePostForm.module.css";
 import { Button, Input } from "../../common";
 
+import { upload_image } from "../../../icons";
 import { useStoryTags } from "../../../hooks";
 import { API_URL, LS_ACCESS_TOKEN } from "../../../constants";
 
@@ -45,7 +46,6 @@ function CreatePostForm() {
           });
         }
         loadedCount++;
-        // Обновляем состояние после загрузки всех файлов
         if (loadedCount === filesToProcess.length) {
           setPhotos((prev) => [...prev, ...newPhotos]);
         }
@@ -228,7 +228,9 @@ function CreatePostForm() {
               />
               {photos.length === 0 ? (
                 <>
-                  <span className={styles.photoUploadIcon}>СП</span>
+                  <span className={styles.photoUploadIcon}>
+                    <img src={upload_image} alt="СП" />
+                  </span>
                   <span className={styles.photoUploadText}>
                     Нажмите для загрузки фото
                   </span>

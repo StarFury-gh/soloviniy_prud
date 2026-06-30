@@ -1,4 +1,4 @@
-import type { ChangeEvent, DragEvent, ReactNode } from "react";
+import type { ChangeEvent, DragEvent } from "react";
 import { useState, useRef, useEffect } from "react";
 import Button from "../../common/Button/Button";
 import styles from "./AddToGaleryForm.module.css";
@@ -70,7 +70,7 @@ function AddToGaleryForm() {
 
     const filesList = event.dataTransfer.files;
     const newFiles = Array.from(filesList);
-    
+
     if (selectedFiles.length + newFiles.length > 10) {
       alert("Можно выбрать не более 10 файлов");
       return;
@@ -146,78 +146,74 @@ function AddToGaleryForm() {
     }
   };
 
-  const renderPreviews = (): ReactNode => {
-    if (selectedFiles.length === 0) return null;
-
-    return (
-      <div className={styles.previews}>
-        {selectedFiles.map((file, index) => (
-          <div
-            key={`${file.name}-${index}`}
-            className={styles.previewContainer}
-          >
-            <img
-              src={file.preview || ""}
-              alt={`Preview of ${file.name}`}
-              className={styles.previewImage}
-            />
-            <button
-              type="button"
-              onClick={() => handleRemoveFile(index)}
-              className={styles.removePreviewButton}
-              disabled={disabled}
-            >
-              ✕
-            </button>
-          </div>
-        ))}
-      </div>
-    );
-  };
-
   return (
-    <form onSubmit={handleSubmit} className={styles.form}>
-      <h2 className={styles.title}>Добавить в галерею</h2>
+    <div className={styles.container}>
+      <form onSubmit={handleSubmit} className={styles.form}>
+        <h2 className={styles.title}>Добавить в галерею</h2>
 
-      <div
-        className={`${styles.fileInputContainer} ${isDragging ? styles.dragging : ""}`}
-        onDragEnter={handleDragEnter}
-        onDragLeave={handleDragLeave}
-        onDragOver={handleDragOver}
-        onDrop={handleDrop}
-      >
-        <input
-          type="file"
-          multiple
-          accept="image/*"
-          max={10}
-          onChange={handleFileChange}
-          disabled={disabled}
-          className={styles.fileInput}
-          ref={fileInputRef}
-        />
-        <div className={styles.fileInputContent}>
-          <p className={styles.fileInputText}>
-            Перетащите файлы сюда или{" "}
-            <span
-              className={styles.browseLink}
-              onClick={() => fileInputRef.current?.click()}
-            >
-              выберите файлы
-            </span>
-          </p>
-          <p className={styles.fileInputHint}>
-            Максимум 10 файлов, поддерживаемые форматы: JPG, PNG, GIF
-          </p>
+        <div
+          className={`${styles.fileInputContainer} ${isDragging ? styles.dragging : ""}`}
+          onDragEnter={handleDragEnter}
+          onDragLeave={handleDragLeave}
+          onDragOver={handleDragOver}
+          onDrop={handleDrop}
+        >
+          <input
+            type="file"
+            multiple
+            accept="image/*"
+            max={10}
+            onChange={handleFileChange}
+            disabled={disabled}
+            className={styles.fileInput}
+            ref={fileInputRef}
+          />
+          <div className={styles.fileInputContent}>
+            <p className={styles.fileInputText}>
+              Перетащите файлы сюда или{" "}
+              <span
+                className={styles.browseLink}
+                onClick={() => fileInputRef.current?.click()}
+              >
+                выберите файлы
+              </span>
+            </p>
+            <p className={styles.fileInputHint}>
+              Максимум 10 файлов, поддерживаемые форматы: JPG, PNG, GIF
+            </p>
+          </div>
         </div>
-      </div>
 
-      {renderPreviews()}
+        {selectedFiles.length > 0 && (
+          <div className={styles.previews}>
+            {selectedFiles.map((file, index) => (
+              <div
+                key={`${file.name}-${index}`}
+                className={styles.previewContainer}
+              >
+                <img
+                  src={file.preview || ""}
+                  alt={`Preview of ${file.name}`}
+                  className={styles.previewImage}
+                />
+                <button
+                  type="button"
+                  onClick={() => handleRemoveFile(index)}
+                  className={styles.removePreviewButton}
+                  disabled={disabled}
+                >
+                  ✕
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
 
-      <Button type="submit" disabled={disabled || selectedFiles.length === 0}>
-        Отправить
-      </Button>
-    </form>
+        <Button type="submit" disabled={disabled || selectedFiles.length === 0}>
+          Отправить
+        </Button>
+      </form>
+    </div>
   );
 }
 

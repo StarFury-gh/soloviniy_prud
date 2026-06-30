@@ -54,7 +54,7 @@ function RegisterForm() {
             </p>
           </div>
           <div className={styles.authForm}>
-            <p>{message}</p>
+            {message && <div className={styles.successMessage}>{message}</div>}
             <Input
               type="email"
               label="Электронная почта"
