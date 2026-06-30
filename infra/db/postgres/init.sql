@@ -1,5 +1,6 @@
 CREATE TYPE user_role AS ENUM ('admin', 'user');
 CREATE TYPE story_status AS ENUM ('new', 'approved', 'rejected');
+CREATE TYPE galery_status AS ENUM ('new', 'approved', 'rejected');
 
 CREATE TABLE users (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -57,7 +58,8 @@ CREATE TABLE events_images (
 -- Фотогалерея
 CREATE TABLE galery (
     publishing_id VARCHAR(255) PRIMARY KEY,
-    author_id UUID REFERENCES users(id)
+    author_id UUID REFERENCES users(id),
+    status galery_status NOT NULL
 );
 
 CREATE TABLE galery_photos (
