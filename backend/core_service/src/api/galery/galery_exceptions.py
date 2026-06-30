@@ -13,3 +13,9 @@ class IncorrectImageType(BaseGaleryException):
     def __init__(self):
         message = "Incorrect image type"
         super().__init__(message)
+
+
+class PublicationNotFound(BaseGaleryException):
+    def __init__(self):
+        message = "Publication not found"
+        super().__init__(message)

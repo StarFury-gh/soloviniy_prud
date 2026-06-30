@@ -51,7 +51,7 @@ async def create_story(
     user: AuthUserResponse = Depends(auth_required),
     service: StoriesService = Depends(get_service),
 ):
-    return await service.create_story(body=body, author_id=str(user.id))
+    return await service.create_story(body=body, authorization=user)
 
 
 @stories_router.patch("/status")

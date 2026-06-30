@@ -2,6 +2,7 @@ from fastapi import HTTPException, status
 import asyncio
 
 from api.users.users_exceptions import UserNotFound
+from api.users.users_schemas import AuthUserResponse
 
 from .stories_repository import StoriesRepository
 from .stories_schemas import CreateStoryDTO, CreateStoryTagDTO, STORY_STATUS
@@ -19,14 +20,15 @@ class StoriesService:
         created_story_tag = await self.repo.create_story_tag(tag_name=body.name)
         return {"created": created_story_tag}
 
-    async def create_story(self, body: CreateStoryDTO, author_id: str):
+    async def create_story(self, body: CreateStoryDTO, authorization: AuthUserResponse):
         try:
             # Сохранить текстовую информацию о посте
             story = await self.repo.save_story(
                 title=body.title,
-                author_id=author_id,
+                author_id=authorization.id,
                 tags_ids=body.tags,
                 content=body.content,
+                author_role=authorization.role,
             )
 
             if story is not None:

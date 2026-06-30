@@ -10,6 +10,7 @@ from uuid import uuid4
 from core.config import cfg_obj
 
 from api.users.users_exceptions import UserNotFound
+from api.users.users_schemas import USERS_ROLES
 
 from .stories_exceptions import IncorrectImageType
 
@@ -64,7 +65,12 @@ class StoriesRepository:
         return tags
 
     async def save_story(
-        self, title: str, author_id: str, tags_ids: List[int], content: str
+        self,
+        title: str,
+        author_id: str,
+        tags_ids: List[int],
+        content: str,
+        author_role: str | USERS_ROLES,
     ) -> Story | None:
         """
         Сохраняет новую историю в базу данных с указанными тегами.
@@ -73,9 +79,15 @@ class StoriesRepository:
         :param author_id: ID автора (UUID)
         :param tags_ids: Список ID тегов для истории
         :param content: Текстовое содержимое истории
+        :param author_role: Роль автора (из ENUM USERS_ROLES)
         :return: Story при создании, None при ошибке
         :raises UserNotFound: Если автор не найден
         """
+        story_status = STORY_STATUS.NEW.value
+
+        if author_role == USERS_ROLES.ADMIN.value:
+            story_status = STORY_STATUS.APPROVED.value
+
         tx = self.db.transaction()
         await tx.start()
         try:
@@ -84,7 +96,7 @@ class StoriesRepository:
                 title,
                 author_id,
                 content,
-                STORY_STATUS.NEW.value,
+                story_status,
             )
 
             for tag_id in tags_ids:
@@ -104,7 +116,7 @@ class StoriesRepository:
                 title=title,
                 tags=tags_ids,
                 content=content,
-                status=STORY_STATUS.NEW,
+                status=story_status,
             )
 
             await tx.commit()
