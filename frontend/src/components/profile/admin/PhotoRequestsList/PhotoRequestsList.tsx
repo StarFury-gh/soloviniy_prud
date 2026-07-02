@@ -46,6 +46,27 @@ function PhotoRequestsList() {
     }
   };
 
+  const handleDeletePhoto = async (photoPath: string) => {
+    const queryParams = new URLSearchParams([["photo_path", photoPath]]);
+    const url = `${API_URL}/galery/photo?${queryParams}`;
+    const token = localStorage.getItem(LS_ACCESS_TOKEN);
+
+    const response = await fetch(url, {
+      method: "DELETE",
+      headers: {
+        "Content-type": "application/json",
+        Authorization: token || "",
+      },
+    });
+
+    if (!response.ok) {
+      console.error("Ошибка удаления фотографии:", response.statusText);
+      throw new Error("Ошибка удаления фотографии");
+    }
+
+    return photoPath;
+  };
+
   const handleRequestStatusChange = (status: RequestStatus) => {
     setHiddenRequests(new Set());
     setPage(1);
@@ -101,6 +122,7 @@ function PhotoRequestsList() {
                   onReject={() => {
                     changeRequestStatus(req.publishing_id, "rejected");
                   }}
+                  onDeletePhoto={handleDeletePhoto}
                 />
               );
             })}

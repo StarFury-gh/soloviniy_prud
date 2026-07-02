@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { STATIC_API_URL } from "../../../../constants";
+import { delete_icon } from "../../../../icons";
 import Button from "../../../common/Button/Button";
 import styles from "./PhotoRequest.module.css";
 
@@ -21,13 +22,15 @@ interface PhotoRequestProps {
   request: PhotoRequest;
   onAccept: () => void;
   onReject: () => void;
+  onDeletePhoto?: (photoPath: string) => void;
 }
 
 function PhotoRequest(props: PhotoRequestProps) {
-  const { request } = props;
+  const { request, onDeletePhoto } = props;
   const [selectedPhoto, setSelectedPhoto] = useState<string | null>(null);
+  const [photos, setPhotos] = useState(request.photos);
 
-  const { author, photos, created_at } = request;
+  const { author, created_at } = request;
   const authorName = `${author.name} ${author.surname}`;
 
   const handlePhotoClick = (photo: string) => {
@@ -41,6 +44,19 @@ function PhotoRequest(props: PhotoRequestProps) {
   const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.target === e.currentTarget) {
       handleCloseModal();
+    }
+  };
+
+  const handleDeletePhoto = async (photo: string) => {
+    if (onDeletePhoto) {
+      try {
+        await onDeletePhoto(photo);
+        setPhotos((prevPhotos) =>
+          prevPhotos.filter((p) => p !== photo)
+        );
+      } catch (error) {
+        console.error("Ошибка при удалении фотографии:", error);
+      }
     }
   };
 
@@ -64,14 +80,28 @@ function PhotoRequest(props: PhotoRequestProps) {
       <div className={styles.photosGallery}>
         {photos.length > 0 ? (
           photos.map((photo, index) => (
-            <img
-              key={`${request.publishing_id}-${index}`}
-              src={`${STATIC_API_URL}/${photo}`}
-              alt={`Photo ${index + 1}`}
-              className={styles.photo}
-              loading="lazy"
-              onClick={() => handlePhotoClick(photo)}
-            />
+            <div key={`${request.publishing_id}-${index}`} className={styles.photoWrapper}>
+              <img
+                src={`${STATIC_API_URL}/${photo}`}
+                alt={`Photo ${index + 1}`}
+                className={styles.photo}
+                loading="lazy"
+                onClick={() => handlePhotoClick(photo)}
+              />
+              {onDeletePhoto && (
+                <button
+                  className={styles.deleteButton}
+                  onClick={() => handleDeletePhoto(photo)}
+                  title="Удалить фотографию"
+                >
+                  <img
+                    src={delete_icon}
+                    alt="Удалить"
+                    className={styles.deleteIcon}
+                  />
+                </button>
+              )}
+            </div>
           ))
         ) : (
           <div className={styles.emptyGallery}>Нет фотографий</div>

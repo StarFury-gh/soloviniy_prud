@@ -121,7 +121,7 @@ function CreatePostForm() {
       setPhotos([]);
       setTags([]);
       setSelectedTag("");
-    }, 1000);
+    }, 0);
   };
 
   return (
