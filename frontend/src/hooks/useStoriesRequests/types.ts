@@ -11,7 +11,7 @@ export interface StoryAuthor {
  * @property content - Текст содержания истории
  * @property images - Массив URL изображений
  * @property created_at - Дата создания заявки (в формате ISO 8601)
- * @property tags - Массив тегов, связанных с историей
+ * @property tags - Массив рубрик, связанных с историей
  */
 export interface RequestInfo {
   id: number;

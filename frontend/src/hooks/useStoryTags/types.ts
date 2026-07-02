@@ -1,7 +1,7 @@
 /**
- * Тег для категоризации историй (формат сервера).
- * @property id - Уникальный идентификатор тега
- * @property name - Название тега
+ * Рубрика для категоризации историй (формат сервера).
+ * @property id - Уникальный идентификатор рубрики
+ * @property name - Название рубрики
  */
 export interface TagFromServer {
   id: number;
@@ -9,17 +9,17 @@ export interface TagFromServer {
 }
 
 /**
- * Ответ от сервера со списком тегов.
- * @property tags - Массив тегов
+ * Ответ от сервера со списком рубрик.
+ * @property tags - Массив рубрик
  */
 export interface GetTagsServerResponse {
   tags: Array<TagFromServer>;
 }
 
 /**
- * Тег для категоризации историй (формат приложения).
- * @property tagId - Уникальный идентификатор тега
- * @property tagName - Название тега (для отображения)
+ * Рубрика для категоризации историй (формат приложения).
+ * @property tagId - Уникальный идентификатор рубрики
+ * @property tagName - Название рубрики (для отображения)
  */
 export interface Tag {
   tagId: number;

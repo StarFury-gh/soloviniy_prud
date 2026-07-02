@@ -28,7 +28,7 @@ function CreateStoryTagForm() {
     const trimmedTagName = tagName.trim();
 
     if (!trimmedTagName) {
-      setError("Введите название тега");
+      setError("Введите название рубрики");
       return;
     }
 
@@ -50,14 +50,14 @@ function CreateStoryTagForm() {
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
-        setError(errorData.message || "Ошибка при создании тега");
+        setError(errorData.message || "Ошибка при создании рубрики");
         return;
       }
 
       setTagName("");
       setSuccess(true);
 
-      // Добавляем тег в локальный список сразу после успешного создания
+      // Добавляем рубрику в локальный список сразу после успешного создания
       const newTag: Tag = {
         tagId: Date.now(),
         tagName: trimmedTagName,
@@ -79,18 +79,20 @@ function CreateStoryTagForm() {
     <div className={styles.page}>
       <div className={styles.wrap}>
         <form className={styles.formCard} onSubmit={handleCreateTag}>
-          <p className={styles.formTitle}>Создать тег</p>
-          <p className={styles.formDesc}>Добавьте новый тег для историй</p>
+          <p className={styles.formTitle}>Создать рубрику</p>
+          <p className={styles.formDesc}>Добавьте новую рубрику для историй</p>
 
           {success && (
-            <div className={styles.successMessage}>Тег успешно создан!</div>
+            <div className={styles.successMessage}>
+              Рубрика успешно создана!
+            </div>
           )}
 
           <div className={styles.formRow}>
             <Input
-              label="Название тега"
+              label="Название рубрики"
               required
-              placeholder="Введите название тега"
+              placeholder="Введите название рубрики"
               value={tagName}
               onChange={(e) => {
                 setTagName(e.target.value);
@@ -106,12 +108,12 @@ function CreateStoryTagForm() {
             type="submit"
             disabled={isSubmitting || !tagName.trim()}
           >
-            {isSubmitting ? "Создание..." : "Создать тег"}
+            {isSubmitting ? "Создание..." : "Создать рубрику"}
           </Button>
         </form>
 
         <div className={styles.tagsListSection}>
-          <p className={styles.tagsListTitle}>Доступные теги</p>
+          <p className={styles.tagsListTitle}>Доступные рубрики</p>
           <div className={styles.tagsContainer}>
             {localTags.length > 0 ? (
               localTags.map((tag) => (
@@ -120,7 +122,7 @@ function CreateStoryTagForm() {
                 </span>
               ))
             ) : (
-              <p className={styles.noTags}>Нет доступных тегов</p>
+              <p className={styles.noTags}>Нет доступных рубрик</p>
             )}
           </div>
         </div>

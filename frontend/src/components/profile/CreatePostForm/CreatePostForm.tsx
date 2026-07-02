@@ -146,9 +146,9 @@ function CreatePostForm() {
 
           <div className={styles.tagsRow}>
             <label className={styles.tagsLabel}>
-              Теги истории
+              Рубрики истории
               <span className={styles.tagsHint}>
-                (необязательно, максимум {MAX_TAGS} тегов)
+                (необязательно, максимум {MAX_TAGS} рубрик)
               </span>
             </label>
             <div className={styles.tagsContainer}>
@@ -192,7 +192,7 @@ function CreatePostForm() {
               })}
               {tags.length >= MAX_TAGS && (
                 <span className={styles.tagsLimitHint}>
-                  Максимум {MAX_TAGS} тегов
+                  Максимум {MAX_TAGS} рубрик
                 </span>
               )}
             </div>

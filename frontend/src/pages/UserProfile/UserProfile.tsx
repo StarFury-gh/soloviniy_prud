@@ -74,7 +74,7 @@ function UserProfile() {
           },
           {
             tabName: "addStoryTag",
-            title: "Добавить теги",
+            title: "Добавить рубрики",
           },
           {
             tabName: "storiesRequests",
