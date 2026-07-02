@@ -300,3 +300,47 @@ LIMIT $2 OFFSET $3;
             result.append(story)
 
         return result
+
+    async def update_story(
+        self, story_id: int, new_title: str | None, new_content: str | None
+    ) -> ReadableStory:
+        if new_title is not None:
+            await self.db.execute(
+                "UPDATE stories SET title=$1 WHERE id=$2", new_title, story_id
+            )
+        if new_content is not None:
+            await self.db.execute(
+                "UPDATE stories SET content=$1 WHERE id=$2", new_content, story_id
+            )
+
+        stmt = """SELECT
+    s.id,
+    s.author_id,
+    s.title,
+    s.content,
+    s.created_at,
+    (SELECT name FROM users WHERE id = s.author_id) AS name,
+    (SELECT surname FROM users WHERE id = s.author_id) AS surname,
+    COALESCE(array_agg(DISTINCT si.path) FILTER (WHERE si.path IS NOT NULL), '{}') AS images,
+    COALESCE(array_agg(DISTINCT at.name) FILTER (WHERE at.name IS NOT NULL), '{}') AS tags
+FROM 
+    stories AS s
+LEFT JOIN stories_images AS si ON s.id = si.story_id
+LEFT JOIN stories_tags AS st ON s.id = st.story_id
+LEFT JOIN available_tags AS at ON st.tag_id = at.id
+WHERE 
+    s.id=$1
+GROUP BY 
+    s.id"""
+
+        updated_story = await self.db.fetchrow(stmt, story_id)
+        updated_story = dict(updated_story)
+
+        author = StoryAuthor(
+            id=updated_story.get("author_id"),
+            name=updated_story.get("name"),
+            surname=updated_story.get("surname"),
+        )
+        story = ReadableStory(author=author, **updated_story)
+
+        return story

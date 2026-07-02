@@ -5,7 +5,12 @@ from api.users.users_exceptions import UserNotFound
 from api.users.users_schemas import AuthUserResponse
 
 from .stories_repository import StoriesRepository
-from .stories_schemas import CreateStoryDTO, CreateStoryTagDTO, STORY_STATUS
+from .stories_schemas import (
+    CreateStoryDTO,
+    CreateStoryTagDTO,
+    STORY_STATUS,
+    UpdateStoryDTO,
+)
 
 
 class StoriesService:
@@ -78,3 +83,15 @@ class StoriesService:
     async def get_stories(self, limit: int, offset: int):
         stories = await self.repo.get_stories(limit=limit, offset=offset)
         return {"stories": stories}
+
+    async def update_story(self, story_id: int, body: UpdateStoryDTO):
+        if body.new_content is None and body.new_title is None:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid body"
+            )
+
+        updated = await self.repo.update_story(
+            story_id=story_id, new_content=body.new_content, new_title=body.new_title
+        )
+
+        return {"updated": updated}

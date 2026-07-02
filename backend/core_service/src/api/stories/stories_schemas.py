@@ -41,6 +41,7 @@ class ReadableStory(BaseModel):
     id: int
     author: StoryAuthor
     content: str
+    title: str
     created_at: datetime | None = None
     tags: List[str]
     images: List[str | None]
@@ -67,3 +68,8 @@ class CreateStoryDTO(BaseModel):
     content: str
     # Список картинок в Base64
     images: List[str]
+
+
+class UpdateStoryDTO(BaseModel):
+    new_title: str | None = None
+    new_content: str | None = None

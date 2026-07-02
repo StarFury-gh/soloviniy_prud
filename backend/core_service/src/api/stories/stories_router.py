@@ -5,7 +5,12 @@ from api.users.users_schemas import AuthUserResponse
 
 from api.shared import Pagination
 
-from .stories_schemas import CreateStoryDTO, CreateStoryTagDTO, STORY_STATUS
+from .stories_schemas import (
+    CreateStoryDTO,
+    CreateStoryTagDTO,
+    STORY_STATUS,
+    UpdateStoryDTO,
+)
 from .stories_service import StoriesService
 from .stories_dependencies import get_service
 
@@ -64,3 +69,13 @@ async def change_story_status(
     return await service.update_story_status(
         story_id=story_id, new_status=new_status.value, admin_id=admin_info.id
     )
+
+
+@stories_router.patch("/{story_id}")
+async def update_story(
+    story_id: int,
+    body: UpdateStoryDTO,
+    _=Depends(admin_required),
+    service: StoriesService = Depends(get_service),
+):
+    return await service.update_story(story_id=story_id, body=body)
