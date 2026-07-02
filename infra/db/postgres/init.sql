@@ -30,12 +30,12 @@ CREATE TABLE available_tags (
 );
 
 CREATE TABLE stories_tags (
-    story_id INT REFERENCES stories(id),
+    story_id INT REFERENCES stories(id) ON DELETE CASCADE,
     tag_id INT REFERENCES available_tags(id)
 );
 
 CREATE TABLE stories_images (
-    story_id INT REFERENCES stories(id),
+    story_id INT REFERENCES stories(id) ON DELETE CASCADE,
     path VARCHAR(255)
 );
 
