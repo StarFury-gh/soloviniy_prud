@@ -33,7 +33,7 @@ class GaleryRepository:
     g.author_id,
     u.name,
     u.surname,
-    ARRAY_AGG(gp.path ORDER BY gp.id) AS photos
+    ARRAY_AGG(gp.path) AS photos
 FROM galery g
 JOIN users u ON g.author_id = u.id
 LEFT JOIN galery_photos gp ON g.publishing_id = gp.publishing_id
@@ -122,7 +122,7 @@ LIMIT $2 OFFSET $3;
     g.author_id,
     u.name,
     u.surname,
-    ARRAY_AGG(gp.path ORDER BY gp.id) AS photos
+    ARRAY_AGG(gp.path) AS photos
 FROM galery g
 JOIN users u ON g.author_id = u.id
 LEFT JOIN galery_photos gp ON g.publishing_id = gp.publishing_id
