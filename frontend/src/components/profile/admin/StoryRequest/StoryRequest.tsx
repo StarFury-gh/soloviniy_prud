@@ -3,7 +3,7 @@ import { STATIC_API_URL } from "../../../../constants";
 import Button from "../../../common/Button/Button";
 import styles from "./StoryRequest.module.css";
 
-import { edit_icon } from "../../../../icons";
+import { delete_icon, edit_icon } from "../../../../icons";
 
 interface StoryRequestProps {
   id: number;
@@ -16,6 +16,7 @@ interface StoryRequestProps {
   onAccept: (id: number) => void;
   onReject: (id: number) => void;
   onStoryUpdate?: (id: number, title: string, content: string) => void;
+  onDelete?: (id: number) => void;
 }
 
 const StoryRequest = ({
@@ -29,6 +30,7 @@ const StoryRequest = ({
   onAccept,
   onReject,
   onStoryUpdate,
+  onDelete,
 }: StoryRequestProps) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [showFullContent, setShowFullContent] = useState(false);
@@ -59,6 +61,12 @@ const StoryRequest = ({
     setDisplayTitle(editedTitle);
     setDisplayContent(editedContent);
     setIsEditingForm(false);
+  };
+
+  const handleDelete = () => {
+    if (onDelete) {
+      onDelete(id);
+    }
   };
 
   const formattedDate = new Date(createdAt).toLocaleDateString("ru-RU", {
@@ -181,6 +189,9 @@ const StoryRequest = ({
           <div className={styles.actions}>
             <button onClick={handleEditFormClick} className={styles.editButton}>
               <img src={edit_icon} alt="" />
+            </button>
+            <button onClick={handleDelete} className={styles.editButton}>
+              <img src={delete_icon} alt="" />
             </button>
             <Button
               variant="primary"

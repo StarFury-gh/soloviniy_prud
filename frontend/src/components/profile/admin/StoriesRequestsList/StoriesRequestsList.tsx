@@ -79,6 +79,22 @@ function StoriesRequestsList() {
     }
   };
 
+  const handleDelete = async (id: number) => {
+    const url = `${API_URL}/stories/${id}`;
+    const token = localStorage.getItem(LS_ACCESS_TOKEN);
+    const response = await fetch(url, {
+      headers: {
+        Authorization: token || "",
+      },
+      method: "DELETE",
+    });
+    if (response.ok) {
+      console.log("Deleted successfully:", id);
+    } else {
+      console.error(response.statusText);
+    }
+  };
+
   const handleRequestStatusChange = (status: RequestStatus) => {
     setHiddenRequests(new Set());
     // setPage(1);
@@ -147,6 +163,7 @@ function StoriesRequestsList() {
                   ) => {
                     handleStoryChange(storyId, newTitle, newContent);
                   }}
+                  onDelete={handleDelete}
                 />
               );
             })}
