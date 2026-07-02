@@ -3,5 +3,13 @@ import camera_icon from "/camera.svg";
 import guess_plant from "/guess_plant.svg";
 import upload_image from "/upload_image.svg";
 import delete_icon from "/delete.svg";
+import edit_icon from "/edit.svg";
 
-export { identify_icon, camera_icon, guess_plant, upload_image, delete_icon };
+export {
+  identify_icon,
+  camera_icon,
+  guess_plant,
+  upload_image,
+  delete_icon,
+  edit_icon,
+};

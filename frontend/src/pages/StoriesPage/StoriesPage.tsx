@@ -24,6 +24,7 @@ function StoriesPage() {
         {stories.map((story) => {
           return (
             <StoryCard
+              title={story.title}
               author={story.author}
               storyTags={story.tags}
               content={story.content}

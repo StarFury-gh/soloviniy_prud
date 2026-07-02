@@ -29,6 +29,7 @@ function useStories({ page = 1 }: { page: number }) {
 
       if (response.ok) {
         const data = await response.json();
+        console.log("data:", data);
         setStories(data.stories || []);
         setHasMore(data.stories.length >= PAGINATION_LIMIT);
       } else {

@@ -10,6 +10,91 @@
   margin-right: 1.5rem;
 }
 
+.editableTitleContainer {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.contentContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.contentContainer > .description {
+  position: relative;
+}
+
+.contentContainer > .description > .readMoreButton {
+  margin-left: 0.5rem;
+}
+
+.titleInput {
+  font-size: var(--title-size);
+  color: var(--text-dark);
+  font-weight: var(--font-weight-medium);
+  padding: 0.5rem;
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  background-color: var(--background);
+  width: 100%;
+  max-width: 400px;
+}
+
+.titleInput:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+.titleContainer {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.editButton {
+  aspect-ratio: 1/1;
+  width: 40px;
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: var(--primary);
+  padding: 0.25rem;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+
+.editButton:hover {
+  background-color: var(--accent-light);
+}
+
+.editableContentContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.contentTextarea {
+  font-size: var(--text-size);
+  color: var(--text-dark);
+  line-height: 1.6;
+  padding: 0.75rem;
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  background-color: var(--background);
+  width: 100%;
+  min-height: 100px;
+  resize: vertical;
+  font-family: inherit;
+}
+
+.contentTextarea:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
 .header {
   display: flex;
   flex-direction: column;
@@ -175,4 +260,59 @@
 .rejectButton:hover {
   background-color: transparent;
   color: var(--destructive);
+}
+
+.editForm {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.formGroup > label {
+  font-size: var(--text-size);
+  color: var(--text-dark);
+  font-weight: var(--font-weight-medium);
+}
+
+.formInput {
+  font-size: var(--text-size);
+  padding: 0.5rem;
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  background-color: var(--background);
+  width: 100%;
+}
+
+.formInput:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+.formTextarea {
+  font-size: var(--text-size);
+  padding: 0.75rem;
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  background-color: var(--background);
+  width: 100%;
+  min-height: 150px;
+  resize: vertical;
+  font-family: inherit;
+}
+
+.formTextarea:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+.formActions {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
 }

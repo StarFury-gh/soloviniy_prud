@@ -47,9 +47,41 @@ function StoriesRequestsList() {
     }
   };
 
+  const handleStoryChange = async (
+    storyId: number,
+    newTitle: string,
+    newContent: string,
+  ) => {
+    console.log(
+      `Updating ${storyId}: title - "${newTitle}", content - ${newContent.slice(0, 20)}`,
+    );
+    const url = `${API_URL}/stories/${storyId}`;
+    const body = JSON.stringify({
+      new_title: newTitle,
+      new_content: newContent,
+    });
+    const token = localStorage.getItem(LS_ACCESS_TOKEN);
+
+    const response = await fetch(url, {
+      method: "PATCH",
+      body,
+      headers: {
+        Authorization: token || "",
+        "Content-type": "application/json",
+      },
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      console.log(data);
+    } else {
+      console.error(`Updating story error: ${response.statusText}`);
+    }
+  };
+
   const handleRequestStatusChange = (status: RequestStatus) => {
     setHiddenRequests(new Set());
-    setPage(1);
+    // setPage(1);
     setFindStatus(status);
   };
 
@@ -107,6 +139,13 @@ function StoriesRequestsList() {
                   }}
                   onReject={(id) => {
                     changeRequestStatus(id, "rejected");
+                  }}
+                  onStoryUpdate={(
+                    storyId: number,
+                    newTitle: string,
+                    newContent: string,
+                  ) => {
+                    handleStoryChange(storyId, newTitle, newContent);
                   }}
                 />
               );

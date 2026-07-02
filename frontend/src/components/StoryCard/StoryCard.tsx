@@ -11,13 +11,14 @@ interface StoryAuthor {
 interface StoryCardProps {
   author: StoryAuthor;
   storyTags: Array<string>;
+  title: string;
   content: string;
   publishedAt: string;
   images: Array<string>;
 }
 
 function StoryCard(props: StoryCardProps) {
-  const { author, storyTags, content, publishedAt, images } = props;
+  const { author, storyTags, content, publishedAt, images, title } = props;
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -62,6 +63,8 @@ function StoryCard(props: StoryCardProps) {
           ))}
         </div>
       )}
+
+      {title && <h2 className={styles.title}>{title}</h2>}
 
       {images.length > 0 && (
         <div className={styles.slider}>
