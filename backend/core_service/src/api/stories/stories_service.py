@@ -95,3 +95,7 @@ class StoriesService:
         )
 
         return {"updated": updated}
+
+    async def delete_story(self, story_id: int):
+        deleted = await self.repo.delete_story(story_id=story_id)
+        return {"deleted": deleted}

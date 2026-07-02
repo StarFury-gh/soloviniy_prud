@@ -79,3 +79,12 @@ async def update_story(
     service: StoriesService = Depends(get_service),
 ):
     return await service.update_story(story_id=story_id, body=body)
+
+
+@stories_router.delete("/{story_id}")
+async def delete_story(
+    story_id: int,
+    _=Depends(admin_required),
+    service: StoriesService = Depends(get_service),
+):
+    return await service.delete_story(story_id=story_id)

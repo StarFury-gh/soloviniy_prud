@@ -19,3 +19,9 @@ class IncorrectImageType(BaseStoryException):
     def __init__(self) -> None:
         message = "Передан неверный формат файла"
         super().__init__(message)
+
+
+class CannotGetImages(BaseStoryException):
+    def __init__(self):
+        message = "Cannot get story's images"
+        super().__init__(message)

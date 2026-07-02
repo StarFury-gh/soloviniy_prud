@@ -5,6 +5,7 @@ import aiofiles
 from typing import List
 
 import base64
+from pathlib import Path
 from uuid import uuid4
 
 from core.config import cfg_obj
@@ -12,7 +13,7 @@ from core.config import cfg_obj
 from api.users.users_exceptions import UserNotFound
 from api.users.users_schemas import USERS_ROLES
 
-from .stories_exceptions import IncorrectImageType
+from .stories_exceptions import IncorrectImageType, CannotGetImages
 
 from .stories_schemas import (
     Story,
@@ -344,3 +345,52 @@ GROUP BY
         story = ReadableStory(author=author, **updated_story)
 
         return story
+
+    async def get_story_images(self, story_id: int) -> List[str]:
+        images = await self.db.fetchrow(
+            """SELECT 
+    s.*,
+    ARRAY_AGG(si.path) AS images
+FROM stories s
+LEFT JOIN stories_images si ON s.id = si.story_id
+WHERE s.id = $1
+GROUP BY s.id;""",
+            story_id,
+        )
+
+        images = dict(images).get("images")
+
+        if images is None:
+            raise CannotGetImages
+
+        return images
+
+    async def delete_story_images(self, story_id: int) -> List[str]:
+        images = await self.get_story_images(story_id=story_id)
+        if images == []:
+            # TODO: change to logger
+            print(f"#{story_id} has no images")
+            return []
+
+        deleted = []
+
+        for image in images:
+            image_path = Path(f"{cfg_obj.UPLOAD_DIR}/{image}")
+            if image_path.exists():
+                image_path.unlink()
+                deleted.append(image)
+            else:
+                # TODO: change to logger
+                print(f"Cannot find: {image_path}")
+
+        return deleted
+
+    async def delete_story(self, story_id: int) -> List[str]:
+        try:
+            deleted_images = await self.delete_story_images(story_id=story_id)
+            await self.db.execute("DELETE FROM stories WHERE id=$1", story_id)
+            return deleted_images
+        except Exception as e:
+            # TODO: change to logger
+            print(e, type(e))
+            return []
