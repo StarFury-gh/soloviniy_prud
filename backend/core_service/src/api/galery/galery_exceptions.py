@@ -19,3 +19,9 @@ class PublicationNotFound(BaseGaleryException):
     def __init__(self):
         message = "Publication not found"
         super().__init__(message)
+
+
+class PhotoNotFound(BaseGaleryException):
+    def __init__(self):
+        message = "Photo not found"
+        super().__init__(message)

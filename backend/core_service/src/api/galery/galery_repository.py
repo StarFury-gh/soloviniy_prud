@@ -2,6 +2,7 @@ from asyncpg import Connection
 from asyncpg.exceptions import ForeignKeyViolationError
 
 import aiofiles
+from pathlib import Path
 import base64
 from typing import List
 from uuid import UUID, uuid4
@@ -19,6 +20,7 @@ from .galery_exceptions import (
     AuthorNotFound,
     IncorrectImageType,
     PublicationNotFound,
+    PhotoNotFound,
     BaseGaleryException,
 )
 
@@ -113,6 +115,7 @@ LIMIT $2 OFFSET $3;
         except Exception as e:
             # TODO: change to logger
             print(e, type(e))
+            raise e
 
     async def get_photos_requests(
         self, limit: int, offset: int, status: str | GaleryPublicationStatus
@@ -171,3 +174,50 @@ LIMIT $2 OFFSET $3;
         except Exception as e:
             # TODO: change to logger
             print(e, type(e))
+            raise e
+
+    async def delete_publication(self, publishing_id: str) -> bool:
+        try:
+            await self.db.execute(
+                "DELETE FROM galery WHERE publishing_id=$1", publishing_id
+            )
+        except Exception as e:
+            # TODO: change to logger
+            print(e)
+            return False
+
+    async def delete_publication_photo(self, path: str) -> None:
+        try:
+            delete_stmt = (
+                "DELETE FROM galery_photos AS gp WHERE path=$1 RETURNING publishing_id"
+            )
+            # publishing_id
+            deleted_from = await self.db.fetchval(delete_stmt, path)
+
+            remaining = await self.db.fetchval(
+                "SELECT COUNT(*) FROM galery_photos WHERE publishing_id=$1",
+                deleted_from,
+            )
+
+            remaining = int(remaining)
+            if remaining == 0:
+                # TODO: change to logger
+                print(
+                    f"Deleted publication: {deleted_from}, cause there are no more photos"
+                )
+                await self.delete_publication(publishing_id=deleted_from)
+
+            # Delete from folder
+            file_path = Path(f"{cfg_obj.UPLOAD_DIR}/{path}")
+            if file_path.exists():
+                file_path.unlink()
+            else:
+                raise PhotoNotFound
+
+        except BaseGaleryException as e:
+            raise e
+
+        except Exception as e:
+            # TODO: change to logger
+            print(e, type(e))
+            raise e

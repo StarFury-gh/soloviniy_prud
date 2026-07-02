@@ -33,7 +33,7 @@ class Config:
         self.ADMIN_PASSWORD = getenv("ADMIN_PASSWORD")
         self.ADMIN_SURNAME = getenv("ADMIN_SURNAME")
 
-        self.UPLOAD_DIR = "./saved/stories"
+        self.UPLOAD_DIR = "./saved"
 
 
 cfg_obj = Config()

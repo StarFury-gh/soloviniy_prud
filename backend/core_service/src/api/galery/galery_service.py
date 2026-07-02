@@ -4,7 +4,7 @@ from api.users.users_schemas import AuthUserResponse
 
 from .galery_schemas import AddGaleryPhotosDTO
 from .galery_repository import GaleryRepository
-from .galery_exceptions import AuthorNotFound, PublicationNotFound
+from .galery_exceptions import AuthorNotFound, PublicationNotFound, PhotoNotFound
 
 
 class GaleryService:
@@ -51,6 +51,21 @@ class GaleryService:
         except PublicationNotFound:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND, detail="Publication not found"
+            )
+        except Exception as e:
+            print(e)
+            return HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail="Internal server error",
+            )
+
+    async def delete_publication_photo(self, path: str):
+        try:
+            publishing_id = await self.repo.delete_publication_photo(path=path)
+            return {"deleted_from": publishing_id, "deleted": path}
+        except PhotoNotFound:
+            return HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND, detail="Photo not found"
             )
         except Exception as e:
             print(e)

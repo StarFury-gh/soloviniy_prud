@@ -48,3 +48,12 @@ async def update_publication_status(
     return await service.update_publication_status(
         publishing_id=publishing_id, new_status=new_status.value
     )
+
+
+@galery_router.delete("/photo")
+async def delete_publication_photo(
+    photo_path: str,
+    _=Depends(admin_required),
+    service: GaleryService = Depends(get_service),
+):
+    return await service.delete_publication_photo(path=photo_path)
