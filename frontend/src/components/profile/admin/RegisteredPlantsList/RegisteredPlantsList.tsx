@@ -1,9 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 import RegisteredPlantCard from "../RegisteredPlantCard";
 
-import { Button } from "../../../common";
-import { AI_API_URL } from "../../../../constants";
+import { Button, Input } from "../../../common";
+import { AI_API_URL, LS_ACCESS_TOKEN } from "../../../../constants";
 
 import styles from "./RegisteredPlantsList.module.css";
 
@@ -19,13 +19,25 @@ function RegisteredPlantsList() {
   const [plants, setPlants] = useState<Array<RegisteredPlant>>([]);
   const [page, setPage] = useState<number>(0);
   const [hasMore, setHasMore] = useState<boolean>(true);
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [isSearching, setIsSearching] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const isInitialRender = useRef(true);
 
   useEffect(() => {
+    if (isInitialRender.current) {
+      isInitialRender.current = false;
+      return;
+    }
+
     const getPlants = async () => {
+      setIsLoading(true);
       const params = new URLSearchParams();
       const offset = page * PAGINATION_LIMIT;
       params.append("limit", `${PAGINATION_LIMIT}`);
       params.append("offset", `${offset}`);
+      params.append("find", `${searchQuery}`);
       const url = `${AI_API_URL}/plants/?${params}`;
       const response = await fetch(url);
       if (response.ok) {
@@ -38,17 +50,20 @@ function RegisteredPlantsList() {
         console.error(`Unable to fetch: ${url}`);
         setHasMore(false);
       }
+      setIsLoading(false);
     };
     getPlants();
-  }, [page]);
+  }, [page, searchQuery]);
 
   const handlePlantRename = async (classId: number, newName: string) => {
     try {
+      const token = localStorage.getItem(LS_ACCESS_TOKEN);
       const url = `${AI_API_URL}/plants/update_translation`;
       const response = await fetch(url, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
+          Authorization: token || "",
         },
         body: JSON.stringify({ class_id: classId, new_ru_name: newName }),
       });
@@ -64,12 +79,44 @@ function RegisteredPlantsList() {
     }
   };
 
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newQuery = e.target.value;
+    setSearchQuery(newQuery);
+    setPage(0);
+    setHasMore(true);
+    setPlants([]);
+    if (newQuery.length > 0 && !isSearching) {
+      setIsSearching(true);
+    }
+  };
+
+  const handleStopSearch = () => {
+    setSearchQuery("");
+    setPage(0);
+    setHasMore(true);
+    setIsSearching(false);
+  };
+
   const handleLoadMore = () => {
     setPage((prevPage) => prevPage + 1);
   };
 
   return (
     <div className={styles.container}>
+      <div className={styles.searchContainer}>
+        <Input
+          type="text"
+          placeholder="Поиск по имени..."
+          value={searchQuery}
+          className={styles.searchQuery}
+          onChange={handleSearchChange}
+        />
+        {isSearching && (
+          <Button className={styles.btn} onClick={handleStopSearch}>
+            Прекратить поиск
+          </Button>
+        )}
+      </div>
       <div className={styles.grid}>
         {plants.map((plant) => (
           <RegisteredPlantCard
@@ -83,13 +130,11 @@ function RegisteredPlantsList() {
         ))}
       </div>
       {hasMore && (
-        <Button
-          style={{ maxWidth: 200, margin: "auto" }}
-          onClick={handleLoadMore}
-        >
+        <Button className={styles.btn} onClick={handleLoadMore}>
           Загрузить ещё...
         </Button>
       )}
+      {isLoading && <div>Загрузка...</div>}
     </div>
   );
 }
