@@ -260,7 +260,9 @@ LIMIT $2 OFFSET $3;
 
         return True
 
-    async def get_stories(self, limit: int, offset: int) -> List[FullStory]:
+    async def get_stories(
+        self, limit: int, offset: int, tags: List[int]
+    ) -> List[FullStory]:
         stmt = """SELECT
     s.id,
     s.author_id,
@@ -280,12 +282,16 @@ WHERE
     s.status = $1
 GROUP BY 
     s.id
+HAVING 
+    COUNT(DISTINCT st.tag_id) FILTER (WHERE st.tag_id = ANY($4)) = cardinality($4)
 ORDER BY 
     s.created_at DESC
 LIMIT $2 OFFSET $3;
 """
 
-        records = await self.db.fetch(stmt, STORY_STATUS.APPROVED.value, limit, offset)
+        records = await self.db.fetch(
+            stmt, STORY_STATUS.APPROVED.value, limit, offset, tags
+        )
 
         result = []
 

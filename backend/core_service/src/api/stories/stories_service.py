@@ -1,6 +1,8 @@
 from fastapi import HTTPException, status
 import asyncio
 
+from typing import List
+
 from api.users.users_exceptions import UserNotFound
 from api.users.users_schemas import AuthUserResponse
 
@@ -80,8 +82,8 @@ class StoriesService:
                 detail="Internal server error",
             )
 
-    async def get_stories(self, limit: int, offset: int):
-        stories = await self.repo.get_stories(limit=limit, offset=offset)
+    async def get_stories(self, limit: int, offset: int, tags: List[int]):
+        stories = await self.repo.get_stories(limit=limit, offset=offset, tags=tags)
         return {"stories": stories}
 
     async def update_story(self, story_id: int, body: UpdateStoryDTO):

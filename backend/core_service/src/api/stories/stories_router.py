@@ -1,4 +1,6 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Query
+
+from typing import List, Optional
 
 from api.users.users_dependencies import auth_required, admin_required
 from api.users.users_schemas import AuthUserResponse
@@ -45,9 +47,13 @@ async def get_requests(
 
 @stories_router.get("/")
 async def get_stories(
-    pagination=Depends(Pagination), service: StoriesService = Depends(get_service)
+    tags: Optional[List[int]] = Query(default=[]),
+    pagination=Depends(Pagination),
+    service: StoriesService = Depends(get_service),
 ):
-    return await service.get_stories(limit=pagination.limit, offset=pagination.offset)
+    return await service.get_stories(
+        limit=pagination.limit, offset=pagination.offset, tags=tags
+    )
 
 
 @stories_router.post("/new")
