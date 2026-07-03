@@ -12,15 +12,15 @@ function RegisterForm() {
   const [surname, setSurname] = useState("");
   const [name, setName] = useState("");
 
-  const [loginError, setLoginError] = useState("");
+  const [registerError, setRegisterError] = useState("");
   const [message, setMessage] = useState("");
 
-  const handleLogin = async () => {
+  const handleRegister = async () => {
     if (!email || !password) {
-      setLoginError("Заполните все поля");
+      setRegisterError("Заполните все поля");
       return;
     }
-    setLoginError("");
+    setRegisterError("");
     const url = `${API_URL}/users/register`;
     const body = JSON.stringify({ email, password, name, surname });
     const response = await fetch(url, {
@@ -36,7 +36,7 @@ function RegisterForm() {
         window.location.href = "/profile";
       }, 2500);
     } else {
-      setLoginError("Ошибка при авторизации.");
+      setRegisterError("Ошибка при регистрации.");
     }
   };
 
@@ -68,7 +68,7 @@ function RegisterForm() {
               placeholder="- - - - - - - -"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              error={loginError}
+              error={registerError}
               required
             />
             <Input
@@ -87,7 +87,7 @@ function RegisterForm() {
               onChange={(e) => setName(e.target.value)}
               required
             />
-            <Button variant="primary" fullWidth onClick={handleLogin}>
+            <Button variant="primary" fullWidth onClick={handleRegister}>
               Зарегистрироваться
             </Button>
             <div className={styles.authDivider}>или</div>
