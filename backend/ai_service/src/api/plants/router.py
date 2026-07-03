@@ -2,6 +2,8 @@ from fastapi import APIRouter, File, UploadFile, Depends, Query
 
 from typing import Optional
 
+from core.security import require_admin
+
 from .service import PlantsService
 from .dependencies import get_plants_service, Pagination
 from .model import get_predict
@@ -30,6 +32,7 @@ async def get_registered_plants(
 async def update_plant_translation(
     body: UpdatePlantTranslationDTO,
     service: PlantsService = Depends(get_plants_service),
+    _=Depends(require_admin),
 ):
     return await service.update_plant_translation(
         class_id=body.class_id, new_ru_name=body.new_ru_name

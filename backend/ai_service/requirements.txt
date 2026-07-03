@@ -6,6 +6,7 @@ certifi==2026.6.17
 charset-normalizer==3.4.7
 click==8.4.1
 deep-translator==1.11.4
+dotenv==0.9.9
 fastapi==0.137.2
 filelock==3.29.0
 fsspec==2026.4.0
@@ -27,6 +28,7 @@ pillow==12.2.0
 pydantic==2.13.4
 pydantic_core==2.46.4
 Pygments==2.20.0
+python-dotenv==1.2.2
 python-multipart==0.0.32
 PyYAML==6.0.3
 regex==2026.5.9

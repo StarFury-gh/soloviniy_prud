@@ -8,6 +8,7 @@ import io
 import logging
 
 from PIL import Image
+from functools import lru_cache
 
 from translation import translate_plant_name
 
@@ -22,19 +23,14 @@ logger = logging.getLogger(__name__)
 PREDICTIONS_COUNT = 3
 FLOAT_LEN_AFTER_DOT = 4
 
-processor = None
-model = None
-device = None
-id2label = None
 
-
-async def load_model():
-    """Инициализация и загрузка модели для распознания растений по фотографиям."""
-    global processor, model, device, id2label
-
+@lru_cache(maxsize=1)
+def load_model():
+    """Загружает ML-модель один раз и кеширует её."""
     local_model_path = "./models/identifier"
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
+    logger.info(f"🔄 Loading model from {local_model_path}...")
     processor = AutoImageProcessor.from_pretrained(
         local_model_path, local_files_only=True
     )
@@ -44,7 +40,6 @@ async def load_model():
     model.to(device)
     model.eval()
 
-    # Загружаем id2label из локального config.json
     config_path = os.path.join(local_model_path, "config.json")
     with open(config_path, "r") as f:
         config = json.load(f)
@@ -52,20 +47,16 @@ async def load_model():
     if id2label and all(isinstance(k, int) for k in id2label.keys()):
         id2label = {str(k): v for k, v in id2label.items()}
 
-    logger.info(f"Loaded {len(id2label)} class labels")
+    logger.info(f"✅ Model loaded on {device} with {len(id2label)} classes")
+    return processor, model, device, id2label
 
 
 async def get_predict(
     file: UploadFile, predictions_count: int = PREDICTIONS_COUNT
 ) -> PredictResponse:
-    """Используя модель для распознания, получаем предсказания по виду."""
-    global processor, model, device, id2label
+    processor, model, device, id2label = load_model()
 
-    if processor is None or model is None or device is None or id2label is None:
-        logger.info("Loading model from 'get_predict' (api/identifier/model.py).")
-        await load_model()
-
-    if not file.content_type.startswith("image/"):  # type: ignore
+    if not file.content_type.startswith("image/"):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST, detail="File must be an image"
         )
@@ -80,18 +71,18 @@ async def get_predict(
             status_code=status.HTTP_400_BAD_REQUEST, detail=f"Invalid image file: {e}"
         )
 
-    inputs = processor(images=image, return_tensors="pt")  # type: ignore
+    inputs = processor(images=image, return_tensors="pt")
     inputs = {k: v.to(device) for k, v in inputs.items()}
 
     with torch.no_grad():
-        outputs = model(**inputs)  # type: ignore
+        outputs = model(**inputs)
         probabilities = torch.softmax(outputs.logits, dim=1)[0]
 
     top_probs, top_indices = torch.topk(probabilities, k=predictions_count)
 
     predictions = []
     for prob, idx in zip(top_probs.tolist(), top_indices.tolist()):
-        label = id2label.get(str(idx), f"class_{idx}")  # type: ignore
+        label = id2label.get(str(idx), f"class_{idx}")
         predictions.append(
             PlantPredict(
                 lat_name=label,

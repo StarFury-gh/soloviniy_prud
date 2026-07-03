@@ -4,6 +4,8 @@ from uvicorn import run
 
 import logging
 
+from core.config import cfg_obj
+
 from api.plants import plants_router
 
 logging.basicConfig(
@@ -28,4 +30,9 @@ app.include_router(plants_router)
 
 
 if __name__ == "__main__":
-    run("main:app", host="0.0.0.0", port=8001, reload=True)
+    run(
+        "main:app",
+        host=cfg_obj.SERVER_HOST,
+        port=cfg_obj.SERVER_PORT,
+        reload=cfg_obj._ENV_TYPE != "prod",
+    )
