@@ -1,5 +1,5 @@
 import sqlite3
-from typing import List
+from typing import List, Optional
 
 from logging import getLogger
 
@@ -13,12 +13,23 @@ class SQLitePlantsRepository(ABCPlantsRepository):
     def __init__(self, db: str) -> None:
         self._db_path = db
 
-    def get_registered_plants(self, limit: int, offset: int) -> List[Plant]:
+    def get_registered_plants(
+        self, limit: int, offset: int, find: Optional[str] = None
+    ) -> List[Plant]:
         conn = sqlite3.connect(self._db_path)
         cursor = conn.cursor()
         cursor.execute(
-            "SELECT class_id, lat_name, ru_name FROM plants_translations LIMIT ? OFFSET ?",
+            """SELECT 
+class_id, 
+lat_name, 
+ru_name 
+FROM plants_translations 
+WHERE ru_name LIKE '%'||?||'%'
+OR lat_name LIKE '%'||?||'%'
+LIMIT ? OFFSET ?""",
             (
+                find,
+                find,
                 limit,
                 offset,
             ),

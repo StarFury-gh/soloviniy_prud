@@ -1,4 +1,6 @@
-from fastapi import APIRouter, File, UploadFile, Depends
+from fastapi import APIRouter, File, UploadFile, Depends, Query
+
+from typing import Optional
 
 from .service import PlantsService
 from .dependencies import get_plants_service, Pagination
@@ -17,9 +19,10 @@ async def identify_by_image(image: UploadFile = File(...)):
 async def get_registered_plants(
     service: PlantsService = Depends(get_plants_service),
     pagination: Pagination = Depends(Pagination),
+    find: Optional[str] = Query(default=""),
 ):
     return await service.get_registered_plants(
-        limit=pagination.limit, offset=pagination.offset
+        limit=pagination.limit, offset=pagination.offset, find=find
     )
 
 

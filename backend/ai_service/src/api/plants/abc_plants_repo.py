@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import List
+from typing import List, Optional
 
 from .schemas import Plant
 
@@ -9,7 +9,9 @@ class ABCPlantsRepository(ABC):
         super().__init__()
 
     @abstractmethod
-    def get_registered_plants(self, limit: int, offset: int) -> List[Plant]:
+    def get_registered_plants(
+        self, limit: int, offset: int, find: Optional[str] = None
+    ) -> List[Plant]:
         pass
 
     @abstractmethod

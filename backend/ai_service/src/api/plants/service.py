@@ -7,8 +7,8 @@ class PlantsService:
     def __init__(self, repo: ABCPlantsRepository) -> None:
         self._repo = repo
 
-    async def get_registered_plants(self, limit: int, offset: int):
-        return self._repo.get_registered_plants(limit=limit, offset=offset)
+    async def get_registered_plants(self, limit: int, offset: int, find: str):
+        return self._repo.get_registered_plants(limit=limit, offset=offset, find=find)
 
     async def update_plant_translation(self, class_id: int, new_ru_name: str):
         updated_plant = self._repo.update_plant_translation(
