@@ -26,7 +26,6 @@ function IdentifyPage() {
       alert("Файл не выбран.");
       return;
     }
-    console.log("Запрашиваем сервер...");
     setIsLoading(true);
     try {
       const body = new FormData();

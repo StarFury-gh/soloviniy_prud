@@ -3,7 +3,7 @@ import styles from "./UserProfile.module.css";
 
 import {
   IssueReporter,
-  CreatePostForm,
+  CreateStoryForm,
   AddToGaleryForm,
 } from "../../components/profile/";
 import {
@@ -90,7 +90,7 @@ function UserProfile() {
 
   const elementMapping: Record<string, React.ReactNode> = {
     profile: <></>,
-    addStory: <CreatePostForm />,
+    addStory: <CreateStoryForm />,
     issues: <IssueReporter />,
     plants: <RegisteredPlantsList />,
     addEvent: <CreateEventForm />,
@@ -127,7 +127,6 @@ function UserProfile() {
         });
         if (response.ok) {
           const { info }: UserInfoServerResponse = await response.json();
-          console.log(info);
           setUserInfo(info);
         }
       } catch {

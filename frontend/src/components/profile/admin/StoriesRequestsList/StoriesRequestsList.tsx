@@ -52,9 +52,6 @@ function StoriesRequestsList() {
     newTitle: string,
     newContent: string,
   ) => {
-    console.log(
-      `Updating ${storyId}: title - "${newTitle}", content - ${newContent.slice(0, 20)}`,
-    );
     const url = `${API_URL}/stories/${storyId}`;
     const body = JSON.stringify({
       new_title: newTitle,
@@ -71,10 +68,7 @@ function StoriesRequestsList() {
       },
     });
 
-    if (response.ok) {
-      const data = await response.json();
-      console.log(data);
-    } else {
+    if (!response.ok) {
       console.error(`Updating story error: ${response.statusText}`);
     }
   };
@@ -88,9 +82,7 @@ function StoriesRequestsList() {
       },
       method: "DELETE",
     });
-    if (response.ok) {
-      console.log("Deleted successfully:", id);
-    } else {
+    if (!response.ok) {
       console.error(response.statusText);
     }
   };

@@ -90,9 +90,6 @@ function CreateEventForm() {
     });
 
     if (response.ok) {
-      const data = await response.json();
-      console.log(data);
-      console.log("Событие успешно создано:", data);
       setStatusMessage({ type: "success", text: "Событие успешно добавлено!" });
       setTimeout(() => {
         setStatusMessage(null);

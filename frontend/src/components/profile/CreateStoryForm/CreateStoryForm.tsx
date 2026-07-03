@@ -1,6 +1,6 @@
 import { useState } from "react";
 import type { ChangeEvent } from "react";
-import styles from "./CreatePostForm.module.css";
+import styles from "./CreateStoryForm.module.css";
 import { Button, Input } from "../../common";
 
 import { upload_image } from "../../../icons";
@@ -16,7 +16,7 @@ interface PhotoPreview {
 
 const MAX_PHOTOS = 7;
 
-function CreatePostForm() {
+function CreateStoryForm() {
   const [title, setTitle] = useState("");
   const [text, setText] = useState("");
   const [photos, setPhotos] = useState<PhotoPreview[]>([]);
@@ -108,8 +108,8 @@ function CreatePostForm() {
     });
 
     if (response.ok) {
-      const data = await response.json();
-      console.log(data);
+      // TODO: add UI message
+      console.log("Story created");
     } else {
       console.error("CreatePost error.");
     }
@@ -277,4 +277,4 @@ function CreatePostForm() {
   );
 }
 
-export default CreatePostForm;
+export default CreateStoryForm;

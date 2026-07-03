@@ -89,7 +89,6 @@ function usePhotoRequests({
 
       if (response.ok) {
         const data = await response.json();
-        console.log(data);
         setRequests(data.requests || []);
         setHasMore(data.requests.length >= PAGINATION_LIMIT);
       } else {

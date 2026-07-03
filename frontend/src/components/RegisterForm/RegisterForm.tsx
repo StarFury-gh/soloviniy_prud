@@ -23,7 +23,6 @@ function RegisterForm() {
     setLoginError("");
     const url = `${API_URL}/users/register`;
     const body = JSON.stringify({ email, password, name, surname });
-    console.log(body);
     const response = await fetch(url, {
       method: "POST",
       body,

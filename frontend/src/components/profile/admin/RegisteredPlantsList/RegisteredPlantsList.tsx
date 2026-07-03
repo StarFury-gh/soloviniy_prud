@@ -30,7 +30,6 @@ function RegisteredPlantsList() {
       const response = await fetch(url);
       if (response.ok) {
         const data: Array<RegisteredPlant> = await response.json();
-        console.log("data:", data);
         if (data.length < PAGINATION_LIMIT) {
           setHasMore(false);
         }

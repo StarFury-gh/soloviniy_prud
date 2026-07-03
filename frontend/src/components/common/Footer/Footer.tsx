@@ -4,9 +4,7 @@ import styles from "./Footer.module.css";
 
 function Footer() {
   const currentYear = new Date().getFullYear();
-  const onNavigate = (page: string) => {
-    console.log("handle page change:", page);
-  };
+
   return (
     <footer className={styles.footer}>
       <div className={styles.inner}>
@@ -27,16 +25,16 @@ function Footer() {
           <h4>О месте</h4>
           <ul>
             <li>
-              <button onClick={() => onNavigate("home")}>История пруда</button>
+              <button onClick={() => console.log("home")}>История пруда</button>
             </li>
             <li>
-              <button onClick={() => onNavigate("home")}>Природа</button>
+              <button onClick={() => console.log("home")}>Природа</button>
             </li>
             <li>
-              <button onClick={() => onNavigate("home")}>Как добраться</button>
+              <button onClick={() => console.log("home")}>Как добраться</button>
             </li>
             <li>
-              <button onClick={() => onNavigate("home")}>Фотогалерея</button>
+              <button onClick={() => console.log("home")}>Фотогалерея</button>
             </li>
           </ul>
         </div>
@@ -45,20 +43,22 @@ function Footer() {
           <h4>Развитие</h4>
           <ul>
             <li>
-              <button onClick={() => onNavigate("development")}>Проекты</button>
+              <button onClick={() => console.log("development")}>
+                Проекты
+              </button>
             </li>
             <li>
-              <button onClick={() => onNavigate("development")}>
+              <button onClick={() => console.log("development")}>
                 Голосование
               </button>
             </li>
             <li>
-              <button onClick={() => onNavigate("development")}>
+              <button onClick={() => console.log("development")}>
                 Дорожная карта
               </button>
             </li>
             <li>
-              <button onClick={() => onNavigate("development")}>Бюджет</button>
+              <button onClick={() => console.log("development")}>Бюджет</button>
             </li>
           </ul>
         </div>
@@ -81,15 +81,15 @@ function Footer() {
           <h4>Сообщникам</h4>
           <ul>
             <li>
-              <button onClick={() => onNavigate("login")}>
+              <button onClick={() => console.log("login")}>
                 Личный кабинет
               </button>
             </li>
             <li>
-              <button onClick={() => onNavigate("events")}>Мерпориятия</button>
+              <button onClick={() => console.log("events")}>Мерпориятия</button>
             </li>
             <li>
-              <button onClick={() => onNavigate("profile")}>
+              <button onClick={() => console.log("profile")}>
                 Сообщить о проблеме
               </button>
             </li>
