@@ -1,10 +1,3 @@
-//id: int
-// author: StoryAuthor
-// content: str
-// created_at: datetime | None = None
-// tags: List[str]
-// images: List[str | None]
-
 interface StoryAuthor {
   id: string;
   name: string;
@@ -19,4 +12,11 @@ export interface Story {
   created_at: string;
   tags: Array<string>;
   images: Array<string>;
+}
+
+type TagId = number;
+
+export interface UseStoriesProps {
+  page: number;
+  tags?: Array<TagId>;
 }

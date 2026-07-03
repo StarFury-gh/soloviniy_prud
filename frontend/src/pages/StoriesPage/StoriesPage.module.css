@@ -12,6 +12,37 @@
   text-align: center;
 }
 
+.tagsSelector {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+  margin: 1rem 0;
+}
+
+.tagButton {
+  padding: 0.5rem 1rem;
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  background-color: var(--background-page);
+  color: var(--text-dark);
+  cursor: pointer;
+  font-size: var(--font-size);
+  font-weight: var(--font-weight-medium);
+  transition: all 0.2s ease;
+}
+
+.tagButton:hover {
+  background-color: var(--accent-light);
+  border-color: var(--primary);
+}
+
+.tagButtonActive {
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+  border-color: var(--primary);
+}
+
 .stories {
   display: flex;
   flex-direction: column;

@@ -2,11 +2,11 @@ import { useCallback, useEffect, useState } from "react";
 
 import { API_URL } from "../../constants";
 
-import type { Story } from "./types";
+import type { Story, UseStoriesProps } from "./types";
 
 const PAGINATION_LIMIT = 4;
 
-function useStories({ page = 1 }: { page: number }) {
+function useStories({ page = 1, tags = [] }: UseStoriesProps) {
   const [stories, setStories] = useState<Array<Story>>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [hasMore, setHasMore] = useState<boolean>(true);
@@ -18,6 +18,13 @@ function useStories({ page = 1 }: { page: number }) {
       ["limit", `${PAGINATION_LIMIT}`],
       ["offset", `${offset}`],
     ]);
+
+    if (tags.length > 0) {
+      tags.forEach((tagId) => {
+        queryParams.append("tags", `${tagId}`);
+      });
+    }
+
     const url = `${API_URL}/stories/?${queryParams}`;
 
     try {
@@ -43,7 +50,7 @@ function useStories({ page = 1 }: { page: number }) {
     } finally {
       setIsLoading(false);
     }
-  }, [page]);
+  }, [page, tags]);
 
   useEffect(() => {
     // Простите...
