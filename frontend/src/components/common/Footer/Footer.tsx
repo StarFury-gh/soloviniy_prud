@@ -86,7 +86,7 @@ function Footer() {
               </button>
             </li>
             <li>
-              <button onClick={() => onNavigate("login")}>Мерпориятия</button>
+              <button onClick={() => onNavigate("events")}>Мерпориятия</button>
             </li>
             <li>
               <button onClick={() => onNavigate("profile")}>

@@ -94,7 +94,7 @@ function RegisterForm() {
             <div className={styles.authDivider}>или</div>
 
             <p className={styles.authNote}>
-              УЖе есть аккаунт?{" "}
+              Уже есть аккаунт?{" "}
               <b>
                 <Link className={styles.authNoteLink} to="/login">
                   Войдите

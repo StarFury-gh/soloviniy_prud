@@ -27,7 +27,7 @@ function HeroSection({ onNavigate }: HeroSectionProps) {
           <Button
             variant="primary"
             size="lg"
-            onClick={() => onNavigate("login")}
+            onClick={() => onNavigate("register")}
           >
             Стать частью сообщества
           </Button>

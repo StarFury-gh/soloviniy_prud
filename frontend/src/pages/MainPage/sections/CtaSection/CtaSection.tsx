@@ -9,9 +9,7 @@ function CtaSection({ onNavigate }: CtaSectionProps) {
   return (
     <section className={styles.section}>
       <div className={styles.container}>
-        <p className={styles.subtitle}>
-          Вместе меняем город к лучшему
-        </p>
+        <p className={styles.subtitle}>Вместе меняем город к лучшему</p>
         <h2 className={styles.title}>
           Станьте частью сообщества Соловьиного пруда
         </h2>
@@ -24,7 +22,7 @@ function CtaSection({ onNavigate }: CtaSectionProps) {
             variant="secondary"
             size="lg"
             onClick={() => {
-              onNavigate("volunteer");
+              onNavigate("register");
               window.scrollTo({ top: 0, behavior: "smooth" });
             }}
           >
