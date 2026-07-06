@@ -3,6 +3,7 @@ from fastapi import HTTPException, status
 from jwt import encode, decode
 from jwt.exceptions import DecodeError
 from hashlib import sha256
+from logging import Logger
 
 from core.config import cfg_obj
 
@@ -18,8 +19,9 @@ from .users_exceptions import UserAlreadyExists, UserNotFound
 
 
 class UsersService:
-    def __init__(self, repo: UsersRepository) -> None:
+    def __init__(self, repo: UsersRepository, logger: Logger) -> None:
         self.repo = repo
+        self.logger = logger
 
     def __encode_jwt(self, payload: dict[str, str]) -> str:
         return encode(payload=payload, key=cfg_obj.JWT_SECRET_KEY, algorithm="HS256")  # type: ignore
@@ -47,6 +49,8 @@ class UsersService:
             )
             jwt = f"Bearer {jwt}"
 
+            self.logger.info(f"Successfully logged in: {user.id}")
+
             return {"access_token": jwt}
 
         except UserNotFound:
@@ -59,8 +63,7 @@ class UsersService:
             raise e
 
         except Exception as e:
-            # TODO: change to logger
-            print("Login user error:", e)
+            self.logger.error("Login user error:", e)
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 detail="Internal server error",
@@ -117,8 +120,7 @@ class UsersService:
             )
 
         except Exception as e:
-            # TODO: change to logger
-            print("Login user error:", e)
+            self.logger.error("Register user error:", e)
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 detail="Internal server error",
@@ -136,11 +138,9 @@ class UsersService:
                 avatar=body.avatar,
             )
         except UserAlreadyExists:
-            # TODO: change to logger
-            print("Admin already exists.")
+            self.logger.debug("Admin already exists.")
         except Exception as e:
-            # TODO: change to logger
-            print(e)
+            self.logger.error(e)
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 detail="Internal server error",

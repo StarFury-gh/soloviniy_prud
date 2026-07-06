@@ -6,6 +6,7 @@ from pathlib import Path
 import base64
 from typing import List
 from uuid import UUID, uuid4
+from logging import Logger
 
 from core.config import cfg_obj
 
@@ -26,8 +27,9 @@ from .galery_exceptions import (
 
 
 class GaleryRepository:
-    def __init__(self, db: Connection) -> None:
+    def __init__(self, db: Connection, logger: Logger) -> None:
         self.db = db
+        self.logger = logger
 
     async def get_photos(self, limit: int, offset: int) -> List[GaleryPublication]:
         stmt = """SELECT 
@@ -113,8 +115,7 @@ LIMIT $2 OFFSET $3;
             raise AuthorNotFound
 
         except Exception as e:
-            # TODO: change to logger
-            print(e, type(e))
+            self.logger.error(f"{e}, {type(e)=}")
             raise e
 
     async def get_photos_requests(
@@ -172,8 +173,7 @@ LIMIT $2 OFFSET $3;
             raise e
 
         except Exception as e:
-            # TODO: change to logger
-            print(e, type(e))
+            self.logger.error(f"{e}, {type(e)=}")
             raise e
 
     async def delete_publication(self, publishing_id: str) -> bool:
@@ -182,8 +182,7 @@ LIMIT $2 OFFSET $3;
                 "DELETE FROM galery WHERE publishing_id=$1", publishing_id
             )
         except Exception as e:
-            # TODO: change to logger
-            print(e)
+            self.logger.error(f"{e}, {type(e)=}")
             return False
 
     async def delete_publication_photo(self, path: str) -> None:
@@ -201,8 +200,7 @@ LIMIT $2 OFFSET $3;
 
             remaining = int(remaining)
             if remaining == 0:
-                # TODO: change to logger
-                print(
+                self.logger.info(
                     f"Deleted publication: {deleted_from}, cause there are no more photos"
                 )
                 await self.delete_publication(publishing_id=deleted_from)
@@ -218,6 +216,5 @@ LIMIT $2 OFFSET $3;
             raise e
 
         except Exception as e:
-            # TODO: change to logger
-            print(e, type(e))
+            self.logger.error(f"{e}, {type(e)=}")
             raise e

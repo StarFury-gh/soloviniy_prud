@@ -104,6 +104,7 @@ LIMIT $2 OFFSET $3;
             await tx.commit()
 
         except Exception as e:
+            # TODO: change to logger
             print(e)
             await tx.rollback()
 

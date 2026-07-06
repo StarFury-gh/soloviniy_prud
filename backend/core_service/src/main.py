@@ -3,23 +3,32 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
+
 from uvicorn import run
 
 from contextlib import asynccontextmanager
 
-from api import users_router, stories_router, events_router, galery_router
+from core.logger import get_logger
+from api import (
+    users_router,
+    stories_router,
+    events_router,
+    galery_router,
+    partners_router,
+)
 
 from core.db.postgres import create_pg_pool, init_admin
 from core.config import cfg_obj
+
+logger = get_logger(__name__)
 
 
 def __init_images_dir():
     from os import makedirs
 
-    # TODO: Change to logger
-    print(f"Initializing upload dir: {cfg_obj.UPLOAD_DIR}")
+    logger.debug(f"Initializing upload dir: {cfg_obj.UPLOAD_DIR}")
     makedirs(cfg_obj.UPLOAD_DIR, exist_ok=True)
-    print("Upload dir initialized.")
+    logger.debug("Upload dir initialized.")
 
 
 __init_images_dir()
@@ -66,6 +75,7 @@ app.include_router(users_router)
 app.include_router(stories_router)
 app.include_router(events_router)
 app.include_router(galery_router)
+app.include_router(partners_router)
 
 if __name__ == "__main__":
     run(

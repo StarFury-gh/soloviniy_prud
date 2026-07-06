@@ -1,6 +1,7 @@
 from fastapi import Depends, Header
 
 from core.db.postgres import get_pg_connection
+from core.logger import get_logger
 
 
 from .users_schemas import AuthUserResponse
@@ -15,8 +16,9 @@ def get_repository(db=Depends(get_pg_connection)) -> UsersRepository:
 
 def get_service(
     repo: UsersRepository = Depends(get_repository),
+    logger=Depends(lambda: get_logger("UsersService")),
 ) -> UsersService:
-    return UsersService(repo)
+    return UsersService(repo, logger=logger)
 
 
 async def auth_required(

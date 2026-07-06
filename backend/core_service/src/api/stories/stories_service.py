@@ -39,6 +39,7 @@ class StoriesService:
             )
 
             if story is not None:
+                # TODO: change to logger
                 print(f"Saving photos for story: #{story.id}")
                 # Запускаем фоновую задачу для сохранения изображений
                 asyncio.create_task(
@@ -76,6 +77,7 @@ class StoriesService:
             return {"updated": result}
 
         except Exception as e:
+            # TODO: change to logger
             print(e)
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,

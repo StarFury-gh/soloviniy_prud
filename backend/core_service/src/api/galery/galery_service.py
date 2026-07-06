@@ -53,6 +53,7 @@ class GaleryService:
                 status_code=status.HTTP_404_NOT_FOUND, detail="Publication not found"
             )
         except Exception as e:
+            # TODO: change to logger
             print(e)
             return HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -68,6 +69,7 @@ class GaleryService:
                 status_code=status.HTTP_404_NOT_FOUND, detail="Photo not found"
             )
         except Exception as e:
+            # TODO: change to logger
             print(e)
             return HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,

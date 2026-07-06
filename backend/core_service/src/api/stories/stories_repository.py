@@ -7,6 +7,7 @@ from typing import List
 import base64
 from pathlib import Path
 from uuid import uuid4
+from logging import Logger
 
 from core.config import cfg_obj
 
@@ -26,7 +27,7 @@ from .stories_schemas import (
 
 
 class StoriesRepository:
-    def __init__(self, db: Connection) -> None:
+    def __init__(self, db: Connection, logger: Logger) -> None:
         """
         Инициализация репозитория.
 
@@ -34,6 +35,7 @@ class StoriesRepository:
         """
         self.db = db
         self.pool: Pool | None = None
+        self.logger = logger
 
     def set_pool(self, pool: Pool) -> None:
         """
@@ -108,8 +110,7 @@ class StoriesRepository:
                         tag_id,
                     )
                 except ForeignKeyViolationError:
-                    # TODO: change to logger
-                    print(f"Tag with id #{tag_id} is not exists.")
+                    self.logger.error(f"Tag with id #{tag_id} is not exists.")
 
             result = Story(
                 id=created_story_id,
@@ -129,8 +130,7 @@ class StoriesRepository:
             raise UserNotFound
 
         except Exception as e:
-            # TODO: change to logger
-            print(f"Saving story error: {e}")
+            self.logger.error(f"Saving story error: {e}")
             await tx.rollback()
 
     async def save_story_images_background(
@@ -182,8 +182,7 @@ class StoriesRepository:
 
                     saved_images.append(filename)
 
-                    # TODO: change to logger
-                    print(f"Saved image: {filename} for story #{story_id}")
+                    self.logger.info(f"Saved image: {filename} for story #{story_id}")
 
                 await tx.commit()
                 return saved_images
@@ -193,8 +192,9 @@ class StoriesRepository:
                 await tx.rollback()
             raise
         except Exception as e:
-            # TODO: change to logger
-            print(f"Error saving image for post #{story_id}: {e} - {type(e)}")
+            self.logger.error(
+                f"Error saving image for post #{story_id}: {e} - {type(e)}"
+            )
             if tx:
                 await tx.rollback()
             return None
@@ -374,8 +374,7 @@ GROUP BY s.id;""",
     async def delete_story_images(self, story_id: int) -> List[str]:
         images = await self.get_story_images(story_id=story_id)
         if images == []:
-            # TODO: change to logger
-            print(f"#{story_id} has no images")
+            self.logger.info(f"#{story_id} has no images")
             return []
 
         deleted = []
@@ -386,8 +385,7 @@ GROUP BY s.id;""",
                 image_path.unlink()
                 deleted.append(image)
             else:
-                # TODO: change to logger
-                print(f"Cannot find: {image_path}")
+                self.logger.error(f"Cannot find: {image_path}")
 
         return deleted
 
@@ -397,6 +395,5 @@ GROUP BY s.id;""",
             await self.db.execute("DELETE FROM stories WHERE id=$1", story_id)
             return deleted_images
         except Exception as e:
-            # TODO: change to logger
-            print(e, type(e))
+            self.logger.error(f"{e}, {type(e)=}")
             return []

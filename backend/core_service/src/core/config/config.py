@@ -6,7 +6,7 @@ class Config:
     def __init__(self) -> None:
         load_dotenv()
 
-        self.ENV_TYPE = getenv("ENV_TYPE")
+        self.ENV_TYPE = getenv("ENV_TYPE") or "dev"
 
         if self.ENV_TYPE != "prod":
             self.PG_HOST = "localhost"
