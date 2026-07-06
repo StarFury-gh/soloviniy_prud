@@ -50,11 +50,13 @@ function IdentifyPage() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.items}>
-        <IdentifyPlantForm
-          onRemoveImage={handleRemoveImage}
-          onIdentify={handlePlantIdentify}
-        />
+      <div className={styles.inner}>
+        <div className={styles.items}>
+          <IdentifyPlantForm
+            onRemoveImage={handleRemoveImage}
+            onIdentify={handlePlantIdentify}
+          />
+        </div>
         <div className={styles["predictions-list"]}>
           {loading && <Spinner />}
           {predictions?.map((prediction, index) => (

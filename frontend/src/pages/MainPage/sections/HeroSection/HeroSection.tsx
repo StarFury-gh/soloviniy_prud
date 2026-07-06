@@ -32,13 +32,6 @@ function HeroSection({ onNavigate }: HeroSectionProps) {
           >
             Стать частью сообщества
           </Button>
-          <Button
-            variant="outline"
-            size="lg"
-            onClick={() => onNavigate("development")}
-          >
-            План развития
-          </Button>
         </div>
       </div>
 
