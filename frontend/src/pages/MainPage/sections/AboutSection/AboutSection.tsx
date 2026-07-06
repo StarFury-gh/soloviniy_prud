@@ -23,12 +23,12 @@ function AboutSection() {
     {
       icon: "🏛",
       title: "Культурное место",
-      desc: "Краткое описание...",
+      desc: "уникальный народный парк Владимира, созданный руками самих жителей из заброшенного пустыря",
     },
     {
       icon: "🌊",
       title: "Чистая вода",
-      desc: "Что-то тут тоже...",
+      desc: "В рамках текущего благоустройства на пруду бурят артезианскую скважину глубиной 180 метров",
     },
   ];
 
@@ -40,8 +40,8 @@ function AboutSection() {
             <img src={splash} alt="Соловьиный пруд — вид с берега" />
           </div>
           <div className={styles.badge}>
-            <span className={styles.badgeValue}>100%</span>
-            <span className={styles.badgeLabel}>чисто</span>
+            <span className={styles.badgeValue}>11,4</span>
+            <span className={styles.badgeLabel}>тысячи кубических метров</span>
           </div>
         </div>
 

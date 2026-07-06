@@ -16,6 +16,7 @@ import {
 } from "../../components/profile/admin";
 
 import { API_URL, LS_ACCESS_TOKEN } from "../../constants";
+import CreatePartnerForm from "../../components/profile/admin/CreatePartnerForm";
 
 interface UserInfo {
   id: string;
@@ -84,6 +85,10 @@ function UserProfile() {
             tabName: "photoRequests",
             title: "Заявки фотогалереи",
           },
+          {
+            tabName: "addPartner",
+            title: "Добавить партнёра",
+          },
         ]
       : []),
   ].filter(Boolean) as Array<MenuItem>;
@@ -99,6 +104,7 @@ function UserProfile() {
     eventsList: <AdminEventsList />,
     galery: <AddToGaleryForm />,
     photoRequests: <PhotoRequestsList />,
+    addPartner: <CreatePartnerForm />,
   };
 
   useEffect(() => {

@@ -9,6 +9,7 @@ import {
   StoriesPage,
   EventsPage,
   GaleryPage,
+  PartnersPage,
 } from "./pages";
 import LoginForm from "./components/LoginForm";
 import RegisterForm from "./components/RegisterForm";
@@ -31,6 +32,7 @@ function App() {
         <Route path="/stories" element={<StoriesPage />}></Route>
         <Route path="/events" element={<EventsPage />}></Route>
         <Route path="/galery" element={<GaleryPage />}></Route>
+        <Route path="/partners" element={<PartnersPage />}></Route>
       </Routes>
     </Router>
   );

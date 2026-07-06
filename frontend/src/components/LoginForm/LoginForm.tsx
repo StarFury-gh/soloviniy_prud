@@ -42,7 +42,6 @@ function LoginForm() {
       <div className={styles.authWrap}>
         <div className={styles.authCard}>
           <div className={styles.authLogo}>
-            <span className={styles.authIcon}>СП</span>
             <h2 className={styles.authTitle}>Вход в аккаунт</h2>
             <p className={styles.authSubtitle}>
               Войдите в личный кабинет, чтобы добавлять истории, фотографии и

@@ -51,6 +51,7 @@ function StoriesPage() {
         {stories.map((story) => {
           return (
             <StoryCard
+              key={story.id}
               title={story.title}
               author={story.author}
               storyTags={story.tags}

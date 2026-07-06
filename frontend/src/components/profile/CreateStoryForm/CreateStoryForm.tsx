@@ -115,13 +115,13 @@ function CreateStoryForm() {
     }
 
     setTimeout(() => {
-      setIsSubmitting(false);
       setTitle("");
       setText("");
       setPhotos([]);
       setTags([]);
       setSelectedTag("");
     }, 0);
+    setIsSubmitting(false);
   };
 
   return (

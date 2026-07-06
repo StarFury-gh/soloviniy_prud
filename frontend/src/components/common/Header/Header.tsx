@@ -10,6 +10,7 @@ const navItems: { label: string; page: string }[] = [
   { label: "Истории", page: "stories" },
   { label: "События", page: "events" },
   { label: "Фотогалерея", page: "galery" },
+  { label: "Партнёры", page: "partners" },
 ];
 
 interface HeaderProps {

@@ -1,9 +1,11 @@
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import styles from "./Footer.module.css";
 
 function Footer() {
   const currentYear = new Date().getFullYear();
+
+  const navigate = useNavigate();
 
   return (
     <footer className={styles.footer}>
@@ -34,45 +36,7 @@ function Footer() {
               <button onClick={() => console.log("home")}>Как добраться</button>
             </li>
             <li>
-              <button onClick={() => console.log("home")}>Фотогалерея</button>
-            </li>
-          </ul>
-        </div>
-
-        <div className={styles.col}>
-          <h4>Развитие</h4>
-          <ul>
-            <li>
-              <button onClick={() => console.log("development")}>
-                Проекты
-              </button>
-            </li>
-            <li>
-              <button onClick={() => console.log("development")}>
-                Голосование
-              </button>
-            </li>
-            <li>
-              <button onClick={() => console.log("development")}>
-                Дорожная карта
-              </button>
-            </li>
-            <li>
-              <button onClick={() => console.log("development")}>Бюджет</button>
-            </li>
-          </ul>
-        </div>
-
-        <div className={styles.col}>
-          <h4>Полезное</h4>
-          <ul>
-            <li>
-              <Link to={"identify"}>Распознаватель растений</Link>
-            </li>
-            <li>
-              <Link to={"identify/admin"}>
-                Список зарегистрированных растений
-              </Link>
+              <button onClick={() => navigate("galery")}>Фотогалерея</button>
             </li>
           </ul>
         </div>
@@ -81,17 +45,13 @@ function Footer() {
           <h4>Сообщникам</h4>
           <ul>
             <li>
-              <button onClick={() => console.log("login")}>
-                Личный кабинет
-              </button>
+              <button onClick={() => navigate("login")}>Личный кабинет</button>
             </li>
             <li>
-              <button onClick={() => console.log("events")}>Мерпориятия</button>
+              <button onClick={() => navigate("events")}>Мерпориятия</button>
             </li>
             <li>
-              <button onClick={() => console.log("profile")}>
-                Сообщить о проблеме
-              </button>
+              <button onClick={() => navigate("register")}>Регистрация</button>
             </li>
             <li>
               <a href="#">Правила сообщества</a>
@@ -99,7 +59,6 @@ function Footer() {
           </ul>
         </div>
       </div>
-
       <div className={styles.bottom}>
         <span className={styles.copyright}>
           {currentYear} Соловьиный пруд — Владимир. Открытый проект сообщества.

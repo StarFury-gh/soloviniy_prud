@@ -45,7 +45,6 @@ function RegisterForm() {
       <div className={styles.authWrap}>
         <div className={styles.authCard}>
           <div className={styles.authLogo}>
-            <span className={styles.authIcon}>СП</span>
             <h2 className={styles.authTitle}>Регистрация</h2>
             <p className={styles.authSubtitle}>
               Создайте аккаунт, чтобы добавлять истории, фотографии и сообщать о

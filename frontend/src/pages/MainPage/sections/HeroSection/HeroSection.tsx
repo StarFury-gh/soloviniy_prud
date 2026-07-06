@@ -16,7 +16,8 @@ function HeroSection({ onNavigate }: HeroSectionProps) {
         <div className={styles.eyebrow}>Владимир · Достопримечательность</div>
         <h1 className={styles.headline}>
           Соловьиный пруд —<br />
-          <em>живое сердце</em> города
+          <em>живое сердце</em> <br />
+          города Владимира
         </h1>
         <p className={styles.subtitle}>
           Уникальный природный и исторический ландшафт XVIII века в самом центре

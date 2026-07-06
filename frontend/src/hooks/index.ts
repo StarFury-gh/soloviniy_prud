@@ -5,9 +5,10 @@ import useEvents from "./useEvents/";
 import useGalery from "./useGalery";
 import useStories from "./useStories";
 import usePhotoRequests from "./usePhotoRequests";
+import usePartners from "./usePartners";
 
 /**
- * Модуль хуков для работы с различными аспекта��и приложения.
+ * Модуль хуков для работы с различными аспектами приложения.
  *
  * @module hooks
  *
@@ -18,10 +19,11 @@ import usePhotoRequests from "./usePhotoRequests";
  * - `useStories` — управление заявками на истории
  * - `useStoryTags` — получение списка доступных рубрик для историй
  * - `usePhotoRequests` — получение и управление заявками на фотографии
+ * - `usePartners` - получение списка партёнров
  *
  * @example
  * ```tsx
- * import { useAuth, useEvents, useStories, useStoryTags, usePhotoRequests } from '@/hooks';
+ * import { useAuth, useEvents, useStories, useStoryTags, usePhotoRequests } from 'hooks';
  *
  * // Использование хуков в компоненте
  * const authStatus = useAuth();
@@ -40,4 +42,5 @@ export {
   useGalery,
   useStories,
   usePhotoRequests,
+  usePartners,
 };

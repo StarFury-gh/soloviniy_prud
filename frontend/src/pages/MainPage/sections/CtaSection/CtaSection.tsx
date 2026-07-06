@@ -14,8 +14,8 @@ function CtaSection({ onNavigate }: CtaSectionProps) {
           Станьте частью сообщества Соловьиного пруда
         </h2>
         <p className={styles.description}>
-          1 247 жителей уже помогают сохранять это место. Присоединяйтесь —
-          записывайте часы, голосуйте за проекты и сообщайте о проблемах.
+          Жители уже помогают сохранять это место. Присоединяйтесь — записывайте
+          часы, голосуйте за проекты и сообщайте о проблемах.
         </p>
         <div className={styles.buttonContainer}>
           <Button
@@ -27,17 +27,6 @@ function CtaSection({ onNavigate }: CtaSectionProps) {
             }}
           >
             Зарегистрироваться
-          </Button>
-          <Button
-            variant="outline"
-            size="lg"
-            onClick={() => {
-              onNavigate("development");
-              window.scrollTo({ top: 0, behavior: "smooth" });
-            }}
-            className={styles.outlineButton}
-          >
-            Смотреть план
           </Button>
         </div>
       </div>
