@@ -43,7 +43,6 @@ RUN python3 saver.py
 
 # Copy application code
 COPY src/ ./src/
-COPY models/ ./models/
 COPY translations.db .
 
 # Set permissions

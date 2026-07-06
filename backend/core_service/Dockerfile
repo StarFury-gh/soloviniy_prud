@@ -16,12 +16,12 @@ COPY --from=builder /root/.local /root/.local
 
 ENV PATH=/root/.local/bin:$PATH
 
-COPY .env .env
+# COPY .env .env
 COPY src/ ./src/
 COPY saved.tar.gz saved.tar.gz
-COPY .env_example .
+COPY .env_example .env
 
-RUN mkdir saved && tar -xzvf saved.tar.gz && cat .env_example > .env
+RUN mkdir saved && tar -xzvf saved.tar.gz
 
 CMD ["python3", "src/main.py"]
 
