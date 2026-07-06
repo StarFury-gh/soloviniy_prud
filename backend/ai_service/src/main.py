@@ -8,6 +8,8 @@ from core.config import cfg_obj
 
 from api.plants import plants_router
 
+MAX_FILE_WEIGHT = 20 * 1024 * 1024
+
 logging.basicConfig(
     level=logging.INFO, format="%(asctime)s - %(levelname)s - %(name)s - %(message)s"
 )
@@ -35,4 +37,5 @@ if __name__ == "__main__":
         host=cfg_obj.SERVER_HOST,
         port=cfg_obj.SERVER_PORT,
         reload=cfg_obj._ENV_TYPE != "prod",
+        limit_max_requests=MAX_FILE_WEIGHT,
     )

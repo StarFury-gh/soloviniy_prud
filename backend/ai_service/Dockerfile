@@ -37,13 +37,14 @@ RUN groupadd -r appgroup && useradd -r -g appgroup appuser
 COPY --from=builder /usr/local/lib/python3.11/site-packages /usr/local/lib/python3.11/site-packages
 COPY --from=builder /usr/local/bin /usr/local/bin
 
+# Save model - используем Python скрипт с токеном из ENV
+COPY saver.py saver.py
+RUN python3 saver.py
+
 # Copy application code
 COPY src/ ./src/
 COPY models/ ./models/
 COPY translations.db .
-
-# Save model - используем Python скрипт с токеном из ENV
-RUN python3 src/saver.py
 
 # Set permissions
 RUN chown -R appuser:appgroup /app && \

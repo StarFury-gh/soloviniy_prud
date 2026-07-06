@@ -18,6 +18,10 @@ ENV PATH=/root/.local/bin:$PATH
 
 COPY .env .env
 COPY src/ ./src/
+COPY saved.tar.gz saved.tar.gz
+COPY .env_example .
+
+RUN mkdir saved && tar -xzvf saved.tar.gz && cat .env_example > .env
 
 CMD ["python3", "src/main.py"]
 
