@@ -66,3 +66,15 @@ CREATE TABLE galery_photos (
     path VARCHAR(255) PRIMARY KEY,
     publishing_id VARCHAR(255) REFERENCES galery(publishing_id)
 );
+
+-- Партнёры
+CREATE TABLE partners (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    name VARCHAR(255) NOT NULL,
+    description TEXT NOT NULL
+);
+
+CREATE TABLE partners_photos (
+    path VARCHAR(255) PRIMARY KEY,
+    partner_id UUID REFERENCES partners(id)
+);
