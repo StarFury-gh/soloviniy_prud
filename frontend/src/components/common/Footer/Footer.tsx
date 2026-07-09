@@ -48,7 +48,7 @@ function Footer() {
               <button onClick={() => navigate("login")}>Личный кабинет</button>
             </li>
             <li>
-              <button onClick={() => navigate("events")}>Мерпориятия</button>
+              <button onClick={() => navigate("events")}>Мероприятия</button>
             </li>
             <li>
               <button onClick={() => navigate("register")}>Регистрация</button>
