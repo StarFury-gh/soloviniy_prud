@@ -1,10 +1,15 @@
-from fastapi import HTTPException, status
+from fastapi import HTTPException, status, UploadFile
 
 from logging import Logger
+import mimetypes
+import os
 
 from .partners_repository import PartnersRepository
 from .partners_schemas import CreatePartnerDTO, UpdatePartnerDTO
 from .partners_exceptions import IncorrectImageType
+
+ALLOWED_MIME_TYPES = ["application/pdf", "application/x-pdf"]
+ALLOWED_EXTENSIONS = [".pdf"]
 
 
 class PartnersService:
@@ -25,6 +30,9 @@ class PartnersService:
 
             self.logger.info(f"Created partner: {created.id}")
 
+            if created:
+                await self.repo.update_partner_doc(id=created.id)
+
             return {"created": created}
 
         except IncorrectImageType:
@@ -44,3 +52,21 @@ class PartnersService:
 
     async def update_partner(self, partner_id: str, body: UpdatePartnerDTO):
         pass
+
+    # async def update_partner_doc(self, partner_id: str, document: UploadFile):
+    #     if document is not None:
+
+    #         filename = document.filename or ""
+    #         _, extension = os.path.splittext(filename)
+    #         if extension.lower() not in ALLOWED_EXTENSIONS:
+    #             raise HTTPException(
+    #                 status_code=status.HTTP_400_BAD_REQUEST,
+    #                 detail=f"Incorrect file extension, must be: {ALLOWED_EXTENSIONS}, given: {extension}",
+    #             )
+
+    #         content_type = document.content_type or ""
+    #         if content_type not in ALLOWED_MIME_TYPES:
+    #             raise HTTPException(
+    #                 status_code=status.HTTP_400_BAD_REQUEST,
+    #                 detail=f"Incorrect file MIME type, must be: {ALLOWED_EXTENSIONS}, given: {content_type}",
+    #             )

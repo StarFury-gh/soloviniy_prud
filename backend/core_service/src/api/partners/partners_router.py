@@ -1,11 +1,11 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, UploadFile
 
 from api.shared import Pagination
 from api.users.users_dependencies import admin_required
 
 from .partners_service import PartnersService
 from .partners_dependencies import get_service
-from .partners_schemas import CreatePartnerDTO, UpdatePartnerDTO
+from .partners_schemas import CreatePartnerDTO
 
 partners_router = APIRouter(prefix="/partners", tags=["partners"])
 
@@ -22,7 +22,7 @@ async def get_all_partners(
 
 @partners_router.post("/new")
 async def create_partner(
-    body: CreatePartnerDTO,
+    body: CreatePartnerDTO = Depends(),
     service: PartnersService = Depends(get_service),
     _=Depends(admin_required),
 ):

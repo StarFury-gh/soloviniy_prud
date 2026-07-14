@@ -1,3 +1,5 @@
+from fastapi import UploadFile
+
 import aiofiles
 
 from uuid import UUID, uuid4
@@ -108,4 +110,7 @@ LIMIT $1 OFFSET $2
         pass
 
     async def update_partner(self, partner_id: str):
+        pass
+
+    async def update_partner_doc(self, partner_id: str, file: UploadFile) -> None:
         pass
