@@ -4,9 +4,16 @@ from logging import Logger
 import mimetypes
 import os
 
+from api.users.users_schemas import AuthUserResponse
+
 from .partners_repository import PartnersRepository
-from .partners_schemas import CreatePartnerDTO, UpdatePartnerDTO
-from .partners_exceptions import IncorrectImageType
+from .partners_schemas import (
+    CreatePartnerDTO,
+    UpdatePartnerDTO,
+    CreatePartnerRequestDTO,
+)
+from .partners_exceptions import IncorrectImageType, PartnerAlreadyExists
+from api.shared import Pagination
 
 ALLOWED_MIME_TYPES = ["application/pdf", "application/x-pdf"]
 ALLOWED_EXTENSIONS = [".pdf"]
@@ -41,7 +48,7 @@ class PartnersService:
             )
 
         except Exception as e:
-            self.logger.error(f"Creating partner error: {e} - {type(e)}")
+            self.logger.error(f"create_partner error: {e} - {type(e)}")
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 detail="Internal server error",
@@ -68,5 +75,47 @@ class PartnersService:
     #         if content_type not in ALLOWED_MIME_TYPES:
     #             raise HTTPException(
     #                 status_code=status.HTTP_400_BAD_REQUEST,
-    #                 detail=f"Incorrect file MIME type, must be: {ALLOWED_EXTENSIONS}, given: {content_type}",
+    #                 detail=f"Incorrect file MIME type, must be: {ALLOWED_EXTENSIONS}, given: {content_type}"
     #             )
+
+    async def get_partners_requests(self, pagination: Pagination, status: str):
+        requests = await self.repo.get_partners_requests(
+            limit=pagination.limit, offset=pagination.offset, status=status
+        )
+
+        return {"requests": requests}
+
+    async def create_partner_request(
+        self, body: CreatePartnerRequestDTO, user: AuthUserResponse
+    ):
+        try:
+            created = await self.repo.create_partner_request(body=body, user=user)
+
+            return {"created": created}
+
+        except PartnerAlreadyExists:
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT,
+                detail=f"Partner with name '{body.name}' already exists",
+            )
+
+        except Exception as e:
+            self.logger.error(f"create_partner_request: {e} - {type(e)}")
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail="Internal server error",
+            )
+
+    async def update_partner_request_status(self, partner_id: str, new_status: str):
+        try:
+            await self.repo.update_partner_request_status(
+                partner_id=partner_id, new_status=new_status
+            )
+            return {"updated": True}
+
+        except Exception as e:
+            self.logger.error(f"create_partner_request: {e} - {type(e)}")
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail="Internal server error",
+            )
