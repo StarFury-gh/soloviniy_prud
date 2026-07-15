@@ -3,14 +3,11 @@ interface Socials {
   url: string;
 }
 
-export interface Partner {
+export interface PartnerRequest {
   id: string;
   name: string;
   description: string;
   photos: Array<string>;
   socials: Array<Socials>;
-}
-
-export interface GetPartnersServerResponse {
-  partners: Array<Partner>;
+  created_at: string;
 }

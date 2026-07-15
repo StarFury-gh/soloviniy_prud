@@ -5,6 +5,7 @@ import StoriesRequestsList from "./StoriesRequestsList";
 import AdminEventsList from "./AdminEventsList";
 import PhotoRequest from "./PhotoRequest";
 import PhotoRequestsList from "./PhotoRequestsList";
+import PartnersRequestsList from "./PartnersRequestsList";
 
 export {
   RegisteredPlantsList,
@@ -14,4 +15,5 @@ export {
   AdminEventsList,
   PhotoRequest,
   PhotoRequestsList,
+  PartnersRequestsList,
 };
