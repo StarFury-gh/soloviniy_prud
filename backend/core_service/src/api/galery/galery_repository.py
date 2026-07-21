@@ -88,6 +88,7 @@ LIMIT $2 OFFSET $3;
             )
             # Saving photos for galery publication
             for photo in photos:
+                # TODO: Save as WEBP
                 if not photo.startswith("data:image"):
                     raise IncorrectImageType
 

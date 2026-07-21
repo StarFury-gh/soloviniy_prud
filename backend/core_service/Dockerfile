@@ -27,4 +27,4 @@ CMD ["python3", "src/main.py"]
 
 # Health check for FastAPI application
 HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
-    CMD python -c "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')" || exit 1
+    CMD "nc -z localhost 8000 || exit 1"

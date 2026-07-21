@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, Query
+from fastapi import APIRouter, Depends, Query, UploadFile
 
 from api.shared import Pagination
 from api.users.users_dependencies import admin_required, auth_required
@@ -25,6 +25,17 @@ async def get_all_partners(
     )
 
 
+@partners_router.get("/representatives")
+async def get_partners_by_rep(
+    auth=Depends(auth_required),
+    service: PartnersService = Depends(get_service),
+    pagination: Pagination = Depends(Pagination),
+):
+    return await service.get_partners_by_rep(
+        auth=auth, limit=pagination.limit, offset=pagination.offset
+    )
+
+
 @partners_router.post("/new")
 async def create_partner(
     body: CreatePartnerDTO = Depends(),
@@ -40,7 +51,7 @@ async def delete_partner(
     service: PartnersService = Depends(get_service),
     _=Depends(admin_required),
 ):
-    pass
+    return await service.delete_partner(partner_id=partner_id)
 
 
 @partners_router.patch("/{partner_id}")
@@ -86,7 +97,10 @@ async def create_partner_request(
 @partners_router.post("/add_doc/{partner_id}")
 async def add_partner_document(
     partner_id: str,
+    document: UploadFile,
     service: PartnersService = Depends(get_service),
     user=Depends(auth_required),
 ):
-    pass
+    return await service.add_partner_document(
+        partner_id=partner_id, document=document, user=user
+    )

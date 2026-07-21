@@ -6,6 +6,7 @@ from asyncpg import Connection
 from asyncpg.exceptions import UniqueViolationError
 
 from uuid import UUID, uuid4
+from pathlib import Path
 from typing import List
 import base64
 from logging import Logger
@@ -21,7 +22,12 @@ from .partners_schemas import (
     PartnerRequest,
     PartnerRepresentative,
 )
-from .partners_exceptions import IncorrectImageType, PartnerAlreadyExists
+from .partners_exceptions import (
+    IncorrectImageType,
+    PartnerAlreadyExists,
+    PartnerNotFound,
+    UserIsNotRepresentative,
+)
 
 
 class PartnersRepository:
@@ -30,6 +36,7 @@ class PartnersRepository:
         self.logger = logger
 
     async def _save_photo_file(self, img: str) -> str | None:
+        # TODO: save as WEBP
         try:
             if not img.startswith("data:image"):
                 raise IncorrectImageType
@@ -75,7 +82,16 @@ class PartnersRepository:
 
     async def get_all_partners(self, limit: int, offset: int) -> List[Partner]:
         records = await self.db.fetch(
-            "SELECT id, name, description, trusted, status, created_at FROM partners WHERE status=$1 LIMIT $2 OFFSET $3",
+            """SELECT 
+id, 
+name, 
+description, 
+trusted, 
+status, 
+created_at 
+FROM partners 
+WHERE status=$1 
+LIMIT $2 OFFSET $3""",
             PartnerRequestStatus.APPROVED.value,
             limit,
             offset,
@@ -87,6 +103,56 @@ class PartnersRepository:
 
         for record in dict_records:
             partner_id = record.get("id")
+            photos = await self._get_partners_photos(partner_id=partner_id)
+            docs = await self._get_partners_docs(partner_id=partner_id)
+            reps = await self.get_partner_representatives(partner_id=partner_id)
+            socials = await self.get_partner_socials(partner_id=partner_id)
+
+            record.update({"photos": photos})
+            record.update({"docs": docs})
+            record.update({"representatives": reps})
+            record.update({"socials": socials})
+
+            result.append(PartnerRequest(**record))
+
+        return result
+
+    async def get_partners_by_rep(
+        self, user_id: str | UUID, limit: int, offset: int
+    ) -> List[Partner]:
+
+        partners_id = await self.db.fetch(
+            """SELECT pr.partner_id 
+FROM partners_reps pr
+JOIN partners p ON p.id = pr.partner_id
+WHERE pr.user_id = $1 
+  AND p.status = $2
+LIMIT $3 OFFSET $4;""",
+            str(user_id),
+            PartnerRequestStatus.APPROVED.value,
+            limit,
+            offset,
+        )
+
+        partners_id = [partner.get("partner_id", None) for partner in partners_id]
+
+        result = []
+
+        for partner_id in partners_id:
+            record = await self.db.fetchrow(
+                """SELECT 
+id, 
+name, 
+description, 
+trusted, 
+status, 
+created_at 
+FROM partners 
+WHERE id=$1""",
+                partner_id,
+            )
+
+            record = dict(record)
             photos = await self._get_partners_photos(partner_id=partner_id)
             docs = await self._get_partners_docs(partner_id=partner_id)
             reps = await self.get_partner_representatives(partner_id=partner_id)
@@ -124,8 +190,69 @@ class PartnersRepository:
 
         return created_partner
 
-    async def delete_partner(self, partner_id: str):
-        pass
+    async def delete_partner(self, partner_id: str) -> bool:
+        """
+        Удаляет партнера и все связанные данные:
+        - Удаляет фотографии из файловой системы и БД
+        - Удаляет документы из файловой системы и БД
+        - Удаляет социальные сети
+        - Удаляет представителей
+        - Удаляет партнера из БД
+        """
+        try:
+            # Проверяем, существует ли партнер
+            partner_exists = await self.db.fetchval(
+                "SELECT id FROM partners WHERE id=$1", partner_id
+            )
+            if partner_exists is None:
+                raise PartnerNotFound
+
+            # Получаем список фотографий
+            photos = await self._get_partners_photos(partner_id=partner_id)
+            # Удаляем файлы фотографий
+            for photo in photos:
+                photo_path = Path(f"{cfg_obj.UPLOAD_DIR}/{photo}")
+                if photo_path.exists():
+                    photo_path.unlink()
+
+            # Удаляем записи фотографий из БД
+            await self.db.execute(
+                "DELETE FROM partners_photos WHERE partner_id=$1", partner_id
+            )
+
+            # Получаем список документов
+            docs = await self._get_partners_docs(partner_id=partner_id)
+            # Удаляем файлы документов
+            for doc in docs:
+                doc_path = Path(f"{cfg_obj.UPLOAD_DIR}/{doc}")
+                if doc_path.exists():
+                    doc_path.unlink()
+
+            # Удаляем записи документов из БД
+            await self.db.execute(
+                "DELETE FROM partners_docs WHERE partner_id=$1", partner_id
+            )
+
+            # Удаляем социальные сети
+            await self.db.execute(
+                "DELETE FROM partners_socials WHERE partner_id=$1", partner_id
+            )
+
+            # Удаляем представителей
+            await self.db.execute(
+                "DELETE FROM partners_reps WHERE partner_id=$1", partner_id
+            )
+
+            # Удаляем партнера
+            await self.db.execute("DELETE FROM partners WHERE id=$1", partner_id)
+
+            return True
+
+        except PartnerNotFound:
+            raise
+        except Exception as e:
+            self.logger.error(f"delete_partner error: {e} - {type(e)}")
+            raise e
 
     async def update_partner(self, partner_id: str):
         pass
@@ -261,3 +388,59 @@ class PartnersRepository:
         except Exception as e:
             self.logger.error(f"update_partner_request_status error: {e} - {type(e)}")
             raise e
+
+    async def _check_is_representative(
+        self, user_id: str | UUID, partner_id: str | UUID
+    ) -> bool:
+        record = await self.db.fetchval(
+            "SELECT user_id FROM partners_reps WHERE partner_id=$1 AND user_id=$2",
+            partner_id,
+            user_id,
+        )
+
+        if record is None:
+            return False
+
+        return True
+
+    async def _change_trusted_status(
+        self, partner_id: str | UUID, new_status: bool
+    ) -> None:
+        await self.db.execute(
+            "UPDATE partners SET trusted=$1 WHERE id=$2", new_status, partner_id
+        )
+
+    async def add_partner_document(
+        self, partner_id: str | UUID, document: UploadFile, user_id: str | UUID
+    ) -> str:
+        is_rep = await self._check_is_representative(
+            user_id=user_id, partner_id=partner_id
+        )
+        if not is_rep:
+            raise UserIsNotRepresentative
+
+        # Save doc as file
+        file_id = uuid4()
+        filename = f"{file_id}.pdf"
+        filepath = Path(f"{cfg_obj.UPLOAD_DIR}/{filename}")
+
+        async with aiofiles.open(filepath, "wb") as buffer:
+            content = await document.read()
+            await buffer.write(content)
+
+        # Save doc as DB record
+        try:
+            await self.db.execute(
+                "INSERT INTO partners_docs (path, partner_id) VALUES ($1, $2)",
+                filename,
+                str(partner_id),
+            )
+        except Exception as e:
+            if filepath.exists():
+                filepath.unlink()
+            self.logger.error(f"Failed to save document to DB: {e}")
+            raise
+
+        await self._change_trusted_status(partner_id=partner_id, new_status=True)
+
+        return filename

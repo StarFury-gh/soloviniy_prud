@@ -105,7 +105,7 @@ class StoriesRepository:
             for tag_id in tags_ids:
                 try:
                     await self.db.execute(
-                        "INSERT INTO stories_tags (story_id, tag_id) VALUEs($1, $2)",
+                        "INSERT INTO stories_tags (story_id, tag_id) VALUES ($1, $2)",
                         created_story_id,
                         tag_id,
                     )
@@ -157,6 +157,7 @@ class StoriesRepository:
                 saved_images = []
                 for image in images:
                     # TODO: Move to separated function
+                    # TODO: Save as WEBP
                     if not image.startswith("data:image"):
                         raise IncorrectImageType
 

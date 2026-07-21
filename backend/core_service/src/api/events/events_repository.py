@@ -79,6 +79,7 @@ LIMIT $2 OFFSET $3;
             created_event = Event(**dict(event))
 
             if banner:
+                # TODO: save as WEBP
                 if not banner.startswith("data:image"):
                     raise IncorrectImageType
 
