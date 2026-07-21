@@ -8,7 +8,9 @@ from uvicorn import run
 
 from contextlib import asynccontextmanager
 
-from core.logger import get_logger
+from core.logger import get_logger, LOGGING_CONFIG
+
+
 from api import (
     users_router,
     stories_router,
@@ -83,4 +85,5 @@ if __name__ == "__main__":
         # Если dev, то для быстрого обновления при сохранении
         # (в проде не нужно, т.к. понижает производительность)
         reload=cfg_obj.ENV_TYPE != "prod",
+        log_config=LOGGING_CONFIG,
     )
