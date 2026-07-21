@@ -3,7 +3,7 @@ import { STATIC_API_URL } from "../../../../constants";
 import Button from "../../../common/Button/Button";
 import styles from "./PartnerRequestCard.module.css";
 
-import { delete_icon } from "../../../../icons";
+import { clip_icon, delete_icon } from "../../../../icons";
 
 interface Socials {
   social: string;
@@ -23,12 +23,14 @@ interface PartnerRequestCardProps {
   request: PartnerRequest;
   onAccept: (id: string) => void;
   onReject: (id: string) => void;
+  onDelete: (id: string) => void;
 }
 
 function PartnerRequestCard({
   request,
   onAccept,
   onReject,
+  onDelete,
 }: PartnerRequestCardProps) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [showFullDescription, setShowFullDescription] = useState(false);
@@ -150,8 +152,18 @@ function PartnerRequestCard({
         <Button variant="danger" onClick={() => onReject(request.id)}>
           Отклонить
         </Button>
-        <button className={styles.deleteButton}>
+        <button
+          onClick={() => onDelete(request.id)}
+          className={styles.deleteButton}
+        >
           <img src={delete_icon} alt="Удалить" className={styles.deleteIcon} />
+        </button>
+        <button className={styles.addDocButton}>
+          <img
+            src={clip_icon}
+            className={styles.clipIcon}
+            alt="Добавить док-т"
+          />
         </button>
       </div>
     </div>

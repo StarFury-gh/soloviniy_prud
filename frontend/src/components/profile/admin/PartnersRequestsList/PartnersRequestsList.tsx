@@ -4,7 +4,7 @@ import { Button } from "../../../common";
 
 import { usePartnersRequests } from "../../../../hooks";
 
-import { API_URL } from "../../../../constants";
+import { API_URL, LS_ACCESS_TOKEN } from "../../../../constants";
 
 import PartnerRequestCard from "../PartnerRequestCard";
 import styles from "./PartnersRequestsList.module.css";
@@ -49,6 +49,23 @@ function PartnersRequestsList() {
     setHiddenRequests(new Set());
     // setPage(1);
     setFindStatus(status);
+  };
+
+  const handleRequestDelete = async (id: string) => {
+    const url = `${API_URL}/partners/${id}`;
+    const token = localStorage.getItem(LS_ACCESS_TOKEN);
+    const response = await fetch(url, {
+      method: "DELETE",
+      headers: {
+        Authorization: token || "",
+      },
+    });
+
+    if (response.ok) {
+      console.log("Deleted successfully");
+    } else {
+      console.error("Deleting partner error:", response.statusText);
+    }
   };
 
   const visibleRequests = partnersRequests.filter(
@@ -100,6 +117,7 @@ function PartnersRequestsList() {
                   onReject={(id) => {
                     changeRequestStatus(id, "rejected");
                   }}
+                  onDelete={handleRequestDelete}
                 />
               );
             })}

@@ -9,6 +9,7 @@ export interface Partner {
   description: string;
   photos: Array<string>;
   socials: Array<Socials>;
+  trusted: boolean;
 }
 
 export interface GetPartnersServerResponse {

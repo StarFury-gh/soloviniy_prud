@@ -26,6 +26,7 @@ function PartnersPage() {
             name={partner.name}
             description={partner.description}
             photos={partner.photos}
+            trusted={partner.trusted}
           />
         ))}
       </div>

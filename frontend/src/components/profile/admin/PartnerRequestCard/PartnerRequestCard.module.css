@@ -225,3 +225,27 @@
   width: 20px;
   height: 20px;
 }
+
+.addDocButton {
+  aspect-ratio: 1/1;
+  width: 40px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-light);
+  padding: 0.25rem;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.addDocButton:hover {
+  background-color: var(--accent-light);
+}
+
+.clipIcon {
+  width: 20px;
+  height: 20px;
+}

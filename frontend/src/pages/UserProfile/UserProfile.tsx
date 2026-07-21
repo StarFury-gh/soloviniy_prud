@@ -6,6 +6,7 @@ import {
   CreateStoryForm,
   AddToGaleryForm,
   CreatePartnerRequest,
+  MyPartners,
 } from "../../components/profile/";
 import {
   RegisteredPlantsList,
@@ -60,6 +61,10 @@ function UserProfile() {
     {
       tabName: "addPartnerRequest",
       title: "Стать партнёром",
+    },
+    {
+      tabName: "myPartners",
+      title: "Мои партнёры",
     },
     // {
     //   tabName: "issues",
@@ -117,6 +122,7 @@ function UserProfile() {
     addPartner: <CreatePartnerForm />,
     addPartnerRequest: <CreatePartnerRequest />,
     partnersRequests: <PartnersRequestsList />,
+    myPartners: <MyPartners />,
   };
 
   useEffect(() => {

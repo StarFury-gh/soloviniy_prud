@@ -4,6 +4,8 @@ import guess_plant from "/guess_plant.svg";
 import upload_image from "/upload_image.svg";
 import delete_icon from "/delete.svg";
 import edit_icon from "/edit.svg";
+import clip_icon from "/clip.svg";
+import check_icon from "/check_icon.svg";
 
 export {
   identify_icon,
@@ -12,4 +14,6 @@ export {
   upload_image,
   delete_icon,
   edit_icon,
+  clip_icon,
+  check_icon,
 };

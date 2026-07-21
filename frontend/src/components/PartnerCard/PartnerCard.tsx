@@ -1,5 +1,8 @@
+import { useState, useRef } from "react";
 import { STATIC_API_URL } from "../../constants";
 import styles from "./PartnerCard.module.css";
+
+import { clip_icon, delete_icon, check_icon } from "../../icons";
 
 interface Socials {
   social: string;
@@ -12,15 +15,52 @@ interface PartnerCardProps {
   description: string;
   photos: Array<string>;
   socials: Array<Socials>;
+  trusted?: boolean;
+  editable?: boolean;
+  onSendDoc?: (doc: File | null, partnerId: string) => void;
 }
 
 function PartnerCard(props: PartnerCardProps) {
-  const { name, description, photos, socials } = props;
+  const { name, description, photos, socials, editable } = props;
+  const [file, setFile] = useState<File | null>(null);
+  const [showSuccess, setShowSuccess] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleClipButtonClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFile = e.target.files?.[0];
+    if (selectedFile) {
+      setFile(selectedFile);
+    }
+  };
+
+  const handleRemoveFile = () => {
+    setFile(null);
+    setShowSuccess(false);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+  };
+
+  const handleSendDoc = () => {
+    if (!editable && props.onSendDoc) {
+      alert("Действие недоступно");
+      return;
+    } else if (props.onSendDoc) {
+      props.onSendDoc(file, props.id);
+      setShowSuccess(true);
+    }
+  };
 
   return (
     <div className={styles.card}>
       <div className={styles.content}>
-        <h2 className={styles.name}>{name}</h2>
+        <h2 className={styles.name}>
+          {name} {props.trusted ? <img src={check_icon} /> : null}
+        </h2>
         <p className={styles.description}>{description}</p>
 
         {socials.length > 0 && (
@@ -59,6 +99,59 @@ function PartnerCard(props: PartnerCardProps) {
           </div>
         </div>
       )}
+      {editable && !props.trusted ? (
+        <div className={styles.editContainer}>
+          <input
+            type="file"
+            ref={fileInputRef}
+            onChange={handleFileChange}
+            style={{ display: "none" }}
+            accept="application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+          />
+          {!file ? (
+            <button
+              onClick={handleClipButtonClick}
+              className={styles.addDocButton}
+            >
+              <img
+                src={clip_icon}
+                className={styles.clipIcon}
+                alt="Добавить документ"
+              />
+              <span className={styles.addDocText}>Добавить документ</span>
+            </button>
+          ) : (
+            <div className={styles.fileContainerWrapper}>
+              <div className={styles.fileContainer}>
+                <span className={styles.fileName}>{file.name}</span>
+                <button
+                  onClick={handleRemoveFile}
+                  className={styles.removeFileButton}
+                >
+                  <img
+                    src={delete_icon}
+                    className={styles.deleteIcon}
+                    alt="Удалить"
+                  />
+                </button>
+              </div>
+              <button className={styles.sendButton} onClick={handleSendDoc}>
+                Отправить
+              </button>
+            </div>
+          )}
+          {showSuccess && (
+            <div className={styles.successMessage}>
+              <img
+                src="/check-circle.svg"
+                alt="Успех"
+                className={styles.successIcon}
+              />
+              <span className={styles.successText}>Файл успешно загружен</span>
+            </div>
+          )}
+        </div>
+      ) : null}
     </div>
   );
 }
