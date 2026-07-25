@@ -12,10 +12,11 @@ interface GaleryPublicationProps {
   publication_id: string;
   author: PublicationAuthor;
   photos: Array<string>;
+  description?: string;
 }
 
 function GaleryPublication(props: GaleryPublicationProps) {
-  const { author, photos } = props;
+  const { author, photos, description } = props;
   const [selectedPhoto, setSelectedPhoto] = useState<string | null>(null);
 
   const authorName = `${author.name} ${author.surname}`;
@@ -40,6 +41,7 @@ function GaleryPublication(props: GaleryPublicationProps) {
         <div className={styles.header}>
           <span className={styles.author}>{authorName}</span>
         </div>
+        {description && <div className={styles.description}>{description}</div>}
         <div className={styles.photosGallery}>
           {photos.length > 0 ? (
             photos.map((photo, index) => (

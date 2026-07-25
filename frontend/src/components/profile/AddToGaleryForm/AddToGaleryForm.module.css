@@ -209,3 +209,37 @@
   opacity: 0.5;
   cursor: not-allowed;
 }
+
+.descriptionContainer {
+  width: 100%;
+  margin-top: 0.5rem;
+}
+
+.descriptionInput {
+  width: 100%;
+  min-height: 80px;
+  padding: 0.75rem;
+  background-color: var(--background);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  color: var(--foreground);
+  resize: vertical;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.descriptionInput:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(156, 163, 175, 0.2);
+}
+
+.descriptionInput:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.descriptionInput::placeholder {
+  color: var(--muted-foreground);
+}
