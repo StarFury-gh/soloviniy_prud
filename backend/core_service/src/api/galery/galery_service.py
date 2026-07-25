@@ -26,7 +26,10 @@ class GaleryService:
             )
         try:
             saved = await self.repo.add_photos(
-                photos=photos, user_id=authorization.id, user_role=authorization.role
+                photos=photos,
+                user_id=authorization.id,
+                user_role=authorization.role,
+                description=body.description,
             )
             return {"saved": saved, "status": True}
 
