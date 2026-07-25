@@ -10,4 +10,5 @@ export interface PartnerRequest {
   photos: Array<string>;
   socials: Array<Socials>;
   created_at: string;
+  docs: Array<string>;
 }

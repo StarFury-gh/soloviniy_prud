@@ -63,6 +63,7 @@ function PartnersRequestsList() {
 
     if (response.ok) {
       console.log("Deleted successfully");
+      setHiddenRequests((prev) => new Set(prev).add(id));
     } else {
       console.error("Deleting partner error:", response.statusText);
     }

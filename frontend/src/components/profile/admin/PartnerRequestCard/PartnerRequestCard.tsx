@@ -3,7 +3,9 @@ import { STATIC_API_URL } from "../../../../constants";
 import Button from "../../../common/Button/Button";
 import styles from "./PartnerRequestCard.module.css";
 
-import { clip_icon, delete_icon } from "../../../../icons";
+import { clip_icon, delete_icon, check_icon } from "../../../../icons";
+
+import { Link } from "react-router-dom";
 
 interface Socials {
   social: string;
@@ -17,6 +19,7 @@ interface PartnerRequest {
   photos: Array<string>;
   socials: Array<Socials>;
   created_at: string;
+  docs: Array<string>;
 }
 
 interface PartnerRequestCardProps {
@@ -24,6 +27,7 @@ interface PartnerRequestCardProps {
   onAccept: (id: string) => void;
   onReject: (id: string) => void;
   onDelete: (id: string) => void;
+  onSendDoc?: (doc: File | null, partnerId: string) => void;
 }
 
 function PartnerRequestCard({
@@ -31,33 +35,44 @@ function PartnerRequestCard({
   onAccept,
   onReject,
   onDelete,
+  onSendDoc,
 }: PartnerRequestCardProps) {
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [file, setFile] = useState<File | null>(null);
+  const [showSuccess, setShowSuccess] = useState(false);
   const [showFullDescription, setShowFullDescription] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const { name, description, socials, photos, created_at } = request;
-
-  const handleNextImage = () => {
-    setCurrentImageIndex((prev) => (prev + 1) % photos.length);
-  };
-
-  const handlePrevImage = () => {
-    setCurrentImageIndex((prev) => (prev - 1 + photos.length) % photos.length);
-  };
+  const { name, description, socials, photos, docs } = request;
 
   const handleClipButtonClick = () => {
+    console.log("clicked");
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
       fileInputRef.current.click();
     }
   };
 
-  const formattedDate = new Date(created_at).toLocaleDateString("ru-RU", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  });
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFile = e.target.files?.[0];
+    if (selectedFile) {
+      setFile(selectedFile);
+    }
+  };
+
+  const handleRemoveFile = () => {
+    setFile(null);
+    setShowSuccess(false);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+  };
+
+  const handleSendDoc = () => {
+    if (onSendDoc) {
+      onSendDoc(file, request.id);
+      setShowSuccess(true);
+    }
+  };
 
   const truncatedDescription =
     description && description.length > 150
@@ -65,68 +80,22 @@ function PartnerRequestCard({
       : description;
 
   return (
-    <div className={styles.partnerRequest}>
-      <div className={styles.header}>
-        <h3 className={styles.title}>{name}</h3>
-        <span className={styles.date}>{formattedDate}</span>
-      </div>
-
-      {photos.length > 0 && (
-        <div className={styles.imageSlider}>
-          <div className={styles.imageContainer}>
-            <img
-              src={`${STATIC_API_URL}/${photos[currentImageIndex]}`}
-              alt={name}
-              className={styles.sliderImage}
-            />
-          </div>
-          {photos.length > 1 && (
-            <>
-              <button
-                onClick={handlePrevImage}
-                className={styles.sliderButton}
-                disabled={currentImageIndex === 0}
-              >
-                {"<"}
-              </button>
-              <button
-                onClick={handleNextImage}
-                className={styles.sliderButton}
-                disabled={currentImageIndex === photos.length - 1}
-              >
-                {">"}
-              </button>
-            </>
-          )}
-          {photos.length > 1 && (
-            <div className={styles.imageIndicators}>
-              {photos.map((_, index) => (
-                <span
-                  key={index}
-                  className={`${styles.indicator} ${
-                    index === currentImageIndex ? styles.active : ""
-                  }`}
-                />
-              ))}
-            </div>
-          )}
-        </div>
-      )}
-
+    <div className={styles.card}>
       <div className={styles.content}>
-        <div className={styles.descriptionContainer}>
-          <p className={styles.description}>
-            {showFullDescription ? description : truncatedDescription}
-            {description && description.length > 150 && (
-              <button
-                onClick={() => setShowFullDescription(!showFullDescription)}
-                className={styles.readMoreButton}
-              >
-                {showFullDescription ? "Скрыть" : "Читать далее"}
-              </button>
-            )}
-          </p>
-        </div>
+        <h2 className={styles.name}>
+          {name} <img src={check_icon} />
+        </h2>
+        <p className={styles.description}>
+          {showFullDescription ? description : truncatedDescription}
+          {description && description.length > 150 && (
+            <button
+              onClick={() => setShowFullDescription(!showFullDescription)}
+              className={styles.readMoreButton}
+            >
+              {showFullDescription ? "Скрыть" : "Читать далее"}
+            </button>
+          )}
+        </p>
 
         {socials.length > 0 && (
           <div className={styles.socials}>
@@ -140,14 +109,45 @@ function PartnerRequestCard({
                     rel="noopener noreferrer"
                     className={styles.socialLink}
                   >
-                    {social.social}
+                    {social.social === "Other" ? "Другое" : social.social}
                   </a>
                 </li>
               ))}
             </ul>
           </div>
         )}
+
+        {docs.length > 0 && (
+          <div className={styles.docs}>
+            <h4>Партнёр загрузил документы:</h4>
+            <ul>
+              {docs.map((doc, idx) => {
+                return (
+                  <li key={doc}>
+                    <Link to={`/docs/${doc}`}>Документ {idx + 1}</Link>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        )}
       </div>
+
+      {photos.length > 0 && (
+        <div className={styles.photos}>
+          <div className={styles.photosGrid}>
+            {photos.map((photo, index) => (
+              <div key={index} className={styles.photoItem}>
+                <img
+                  src={`${STATIC_API_URL}/${photo}`}
+                  alt={`Фото партнера ${index + 1}`}
+                  className={styles.photo}
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       <div className={styles.actions}>
         <Button
@@ -166,13 +166,57 @@ function PartnerRequestCard({
         >
           <img src={delete_icon} alt="Удалить" className={styles.deleteIcon} />
         </button>
-        <button className={styles.addDocButton} onClick={handleClipButtonClick}>
-          <img
-            src={clip_icon}
-            className={styles.clipIcon}
-            alt="Добавить док-т"
+        <div className={styles.editContainer}>
+          <input
+            type="file"
+            ref={fileInputRef}
+            onChange={handleFileChange}
+            style={{ display: "none" }}
+            accept="application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
           />
-        </button>
+          {!file ? (
+            <button
+              onClick={() => handleClipButtonClick()}
+              className={styles.addDocButton}
+            >
+              <img
+                src={clip_icon}
+                className={styles.clipIcon}
+                alt="Добавить документ"
+              />
+              <span className={styles.addDocText}>Добавить документ</span>
+            </button>
+          ) : (
+            <div className={styles.fileContainerWrapper}>
+              <div className={styles.fileContainer}>
+                <span className={styles.fileName}>{file.name}</span>
+                <button
+                  onClick={handleRemoveFile}
+                  className={styles.removeFileButton}
+                >
+                  <img
+                    src={delete_icon}
+                    className={styles.deleteIcon}
+                    alt="Удалить"
+                  />
+                </button>
+              </div>
+              <button className={styles.sendButton} onClick={handleSendDoc}>
+                Отправить
+              </button>
+            </div>
+          )}
+          {showSuccess && (
+            <div className={styles.successMessage}>
+              <img
+                src="/check-circle.svg"
+                alt="Успех"
+                className={styles.successIcon}
+              />
+              <span className={styles.successText}>Файл успешно загружен</span>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

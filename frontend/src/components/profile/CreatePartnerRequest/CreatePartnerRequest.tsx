@@ -11,21 +11,16 @@ interface Social {
   url: string;
 }
 
-interface CreatePartnerRequestBody {
-  name: string;
-  description: string;
-  photos: string[];
-  socials: Social[];
-}
-
 function CreatePartnerRequest() {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [photos, setPhotos] = useState<string[]>([]);
   const [socials, setSocials] = useState<Social[]>([{ social: "VK", url: "" }]);
+  const [document, setDocument] = useState<File | null>(null);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const documentInputRef = useRef<HTMLInputElement>(null);
 
   const handlePhotoChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
@@ -69,6 +64,17 @@ function CreatePartnerRequest() {
     setSocials((prev) => prev.filter((_, i) => i !== index));
   };
 
+  const handleDocumentChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (files && files.length > 0) {
+      setDocument(files[0]);
+    }
+  };
+
+  const removeDocument = () => {
+    setDocument(null);
+  };
+
   const handleSubmit = async () => {
     if (!name || !description) {
       setError("Заполните все обязательные поля");
@@ -77,12 +83,15 @@ function CreatePartnerRequest() {
     setError("");
     setSuccess("");
 
-    const requestBody: CreatePartnerRequestBody = {
-      name,
-      description,
-      photos,
-      socials,
-    };
+    const bodyFormData = new FormData();
+
+    bodyFormData.append("name", name);
+    bodyFormData.append("description", description);
+    bodyFormData.append("photos", JSON.stringify(photos));
+    bodyFormData.append("socials", JSON.stringify(socials));
+    if (document) {
+      bodyFormData.append("document", document);
+    }
 
     const url = `${API_URL}/partners/requests/new`;
     const token = localStorage.getItem(LS_ACCESS_TOKEN);
@@ -90,9 +99,8 @@ function CreatePartnerRequest() {
       method: "POST",
       headers: {
         Authorization: token || "",
-        "Content-type": "application/json",
       },
-      body: JSON.stringify(requestBody),
+      body: bodyFormData,
     });
 
     if (response.ok) {
@@ -103,6 +111,10 @@ function CreatePartnerRequest() {
         setDescription("");
         setPhotos([]);
         setSocials([{ social: "VK", url: "" }]);
+        setDocument(null);
+        if (documentInputRef.current) {
+          documentInputRef.current.value = "";
+        }
       }, 3000);
     } else {
       const msg = await response.text();
@@ -111,12 +123,12 @@ function CreatePartnerRequest() {
   };
 
   const previewImages = photos.map((photo, index) => (
-    <div key={index} className={styles.photoPreview}>
-      <img src={photo} alt="Preview" className={styles.previewImage} />
+    <div key={index} className={styles.photoItem}>
+      <img src={photo} alt="Preview" className={styles.photoThumb} />
       <button
         type="button"
         onClick={() => handleRemovePhoto(index)}
-        className={styles.removePhotoButton}
+        className={styles.removePhotoBtn}
       >
         ×
       </button>
@@ -153,69 +165,105 @@ function CreatePartnerRequest() {
   ));
 
   return (
-    <div className={styles.container}>
-      <h2 className={styles.title}>Заявка на партнёрство</h2>
-      <p className={styles.subtitle}>
-        Заполните форму, чтобы стать партнёром проекта
-      </p>
-
-      <div className={styles.form}>
-        {error && <div className={styles.errorMessage}>{error}</div>}
-        {success && <div className={styles.successMessage}>{success}</div>}
-
-        <Input
-          type="text"
-          label="Полное название организации"
-          placeholder="Например: Эко-Технологии ООО"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          required
-        />
-
-        <Input
-          as="textarea"
-          label="Описание организации"
-          placeholder="Расскажите о вашей организации, её миссии и целях"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          required
-        />
-
-        <div className={styles.photosSection}>
-          <label className={styles.label}>Фотографии</label>
-          <p className={styles.photosHint}>
-            Загрузите до 5 фотографий (jpg, png)
+    <div className={styles.page}>
+      <div className={styles.wrap}>
+        <div className={styles.formCard}>
+          <h2 className={styles.formTitle}>Заявка на партнёрство</h2>
+          <p className={styles.formDesc}>
+            Заполните форму, чтобы стать партнёром проекта
           </p>
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept="image/*"
-            multiple
-            onChange={handlePhotoChange}
-            className={styles.fileInput}
+
+          {error && <div className={styles.errorMessage}>{error}</div>}
+          {success && <div className={styles.successMessage}>{success}</div>}
+
+          <Input
+            type="text"
+            label="Полное название организации"
+            placeholder="Например: Эко-Технологии ООО"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
           />
-          <Button
-            variant="secondary"
-            onClick={() => fileInputRef.current?.click()}
-          >
-            Выбрать фотографии
-          </Button>
-          {photos.length > 0 && (
-            <div className={styles.photosPreview}>{previewImages}</div>
-          )}
-        </div>
 
-        <div className={styles.socialsSection}>
-          <label className={styles.label}>Социальные сети</label>
-          {socialInputs}
-          <Button variant="text" onClick={addSocial}>
-            + Добавить соцсеть
+          <Input
+            as="textarea"
+            label="Описание организации"
+            placeholder="Расскажите о вашей организации, её миссии и целях"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            required
+          />
+
+          <div className={styles.formGroup}>
+            <label className={styles.formLabel}>Фотографии</label>
+            <p className={styles.hint}>
+              Загрузите до 5 фотографий (jpg, png)
+            </p>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              multiple
+              onChange={handlePhotoChange}
+              className={styles.fileInput}
+            />
+            <Button
+              variant="secondary"
+              onClick={() => fileInputRef.current?.click()}
+            >
+              Выбрать фотографии
+            </Button>
+            {photos.length > 0 && (
+              <div className={styles.photosGrid}>{previewImages}</div>
+            )}
+          </div>
+
+          <div className={styles.formGroup}>
+            <label className={styles.formLabel}>Документ (не обязательно)</label>
+            <p className={styles.hint}>
+              Загрузите документ (pdf, doc, docx)
+            </p>
+            <input
+              ref={documentInputRef}
+              type="file"
+              accept=".pdf,.doc,.docx"
+              onChange={handleDocumentChange}
+              className={styles.fileInput}
+            />
+            <Button
+              variant="secondary"
+              onClick={() => documentInputRef.current?.click()}
+            >
+              {document ? "Заменить документ" : "Выбрать документ"}
+            </Button>
+            {document && (
+              <div className={styles.documentPreview}>
+                <span>{document.name}</span>
+                <button
+                  type="button"
+                  onClick={removeDocument}
+                  className={styles.removeDocumentButton}
+                >
+                  Удалить
+                </button>
+              </div>
+            )}
+          </div>
+
+          <div className={styles.formGroup}>
+            <label className={styles.formLabel}>
+              Социальные сети (не обязательно)
+            </label>
+            {socialInputs}
+            <Button variant="text" onClick={addSocial}>
+              + Добавить соцсеть
+            </Button>
+          </div>
+
+          <Button variant="primary" fullWidth onClick={handleSubmit}>
+            Отправить заявку
           </Button>
         </div>
-
-        <Button variant="primary" fullWidth onClick={handleSubmit}>
-          Отправить заявку
-        </Button>
       </div>
     </div>
   );
