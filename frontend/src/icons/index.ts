@@ -6,6 +6,10 @@ import delete_icon from "/delete.svg";
 import edit_icon from "/edit.svg";
 import clip_icon from "/clip.svg";
 import check_icon from "/check_icon.svg";
+import bird_icon from "/bird_icon.svg";
+import plant_icon from "/plant_icon.svg";
+import water_icon from "/water_icon.svg";
+import museum_icon from "/museum_icon.svg";
 
 export {
   identify_icon,
@@ -16,4 +20,8 @@ export {
   edit_icon,
   clip_icon,
   check_icon,
+  bird_icon,
+  plant_icon,
+  water_icon,
+  museum_icon,
 };

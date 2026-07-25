@@ -175,6 +175,10 @@
   .card {
     grid-template-columns: 1fr;
   }
+  .tabs {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+  }
   .cardImg {
     height: 240px;
   }

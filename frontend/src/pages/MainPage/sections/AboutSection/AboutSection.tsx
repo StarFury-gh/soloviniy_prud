@@ -1,32 +1,32 @@
-import { useNavigate } from "react-router-dom";
-
 import styles from "./AboutSection.module.css";
 
 import splash from "/splash.jpg";
+import {
+  bird_icon,
+  museum_icon,
+  plant_icon,
+  water_icon,
+} from "../../../../icons";
 
 function AboutSection() {
-  const navigate = useNavigate();
   const facts = [
     {
-      icon: "🦢",
+      icon: bird_icon,
       title: "Птицы",
       desc: "Часто можно увидеть соловьёв и других птиц",
     },
     {
-      icon: "🌳",
-      title: "Нашли незнакомое растение?",
-      desc: "Узнайте как оно называется прямо сейчас!",
-      onClick: () => {
-        navigate("/identify");
-      },
+      icon: plant_icon,
+      title: "Богатая флора",
+      desc: "Разнообразные виды деревьев, кустарников и цветов, окружающих пруд",
     },
     {
-      icon: "🏛",
+      icon: museum_icon,
       title: "Культурное место",
       desc: "уникальный народный парк Владимира, созданный руками самих жителей из заброшенного пустыря",
     },
     {
-      icon: "🌊",
+      icon: water_icon,
       title: "Чистая вода",
       desc: "В рамках текущего благоустройства на пруду бурят артезианскую скважину глубиной 180 метров",
     },
@@ -63,9 +63,9 @@ function AboutSection() {
             собором.
           </p>
           <div className={styles.facts}>
-            {facts.map(({ icon, title, desc, onClick }) => (
-              <div key={title} className={styles.fact} onClick={onClick}>
-                <span className={styles.factIcon}>{icon}</span>
+            {facts.map(({ icon, title, desc }) => (
+              <div key={title} className={styles.fact}>
+                <img className={styles.factIcon} src={icon}></img>
                 <span className={styles.factTitle}>{title}</span>
                 <span className={styles.factDesc}>{desc}</span>
               </div>
