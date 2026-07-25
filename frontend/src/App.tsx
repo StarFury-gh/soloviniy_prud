@@ -10,6 +10,7 @@ import {
   EventsPage,
   GaleryPage,
   PartnersPage,
+  DocPreviewPage,
 } from "./pages";
 import LoginForm from "./components/LoginForm";
 import RegisterForm from "./components/RegisterForm";
@@ -33,6 +34,7 @@ function App() {
         <Route path="/events" element={<EventsPage />}></Route>
         <Route path="/galery" element={<GaleryPage />}></Route>
         <Route path="/partners" element={<PartnersPage />}></Route>
+        <Route path="/docs/:docId" element={<DocPreviewPage />}></Route>
       </Routes>
     </Router>
   );

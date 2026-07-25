@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { STATIC_API_URL } from "../../../../constants";
 import Button from "../../../common/Button/Button";
 import styles from "./PartnerRequestCard.module.css";
@@ -34,6 +34,7 @@ function PartnerRequestCard({
 }: PartnerRequestCardProps) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [showFullDescription, setShowFullDescription] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const { name, description, socials, photos, created_at } = request;
 
@@ -43,6 +44,13 @@ function PartnerRequestCard({
 
   const handlePrevImage = () => {
     setCurrentImageIndex((prev) => (prev - 1 + photos.length) % photos.length);
+  };
+
+  const handleClipButtonClick = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+      fileInputRef.current.click();
+    }
   };
 
   const formattedDate = new Date(created_at).toLocaleDateString("ru-RU", {
@@ -158,7 +166,7 @@ function PartnerRequestCard({
         >
           <img src={delete_icon} alt="Удалить" className={styles.deleteIcon} />
         </button>
-        <button className={styles.addDocButton}>
+        <button className={styles.addDocButton} onClick={handleClipButtonClick}>
           <img
             src={clip_icon}
             className={styles.clipIcon}

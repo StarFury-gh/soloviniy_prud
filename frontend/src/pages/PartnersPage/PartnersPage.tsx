@@ -20,8 +20,9 @@ function PartnersPage() {
       <div className={styles.cards}>
         {partners.map((partner) => (
           <PartnerCard
-            socials={partner.socials}
             key={partner.id}
+            docs={partner.docs}
+            socials={partner.socials}
             id={partner.id}
             name={partner.name}
             description={partner.description}

@@ -14,6 +14,7 @@ export interface Partner {
   description: string;
   photos: Array<string>;
   socials: Array<Socials>;
+  docs: Array<string>;
   trusted: boolean;
 }
 
@@ -76,6 +77,7 @@ function MyPartners() {
         <PartnerCard
           key={partner.id}
           id={partner.id}
+          docs={partner.docs}
           description={partner.description}
           name={partner.name}
           photos={partner.photos}

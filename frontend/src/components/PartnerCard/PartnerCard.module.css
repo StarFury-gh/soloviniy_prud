@@ -29,6 +29,44 @@
   margin: 0;
 }
 
+.docs {
+  margin-top: 1.5rem;
+}
+
+.docs h4 {
+  font-size: 0.875rem;
+  color: var(--text-dark);
+  font-weight: var(--font-weight-medium);
+  margin-bottom: 0.5rem;
+}
+
+.docs ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.docs li {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.docs li:last-child {
+  border-bottom: none;
+}
+
+.docs a {
+  color: var(--primary);
+  text-decoration: none;
+  font-size: 0.875rem;
+  transition: color 0.2s ease;
+}
+
+.docs a:hover {
+  color: var(--accent);
+  text-decoration: underline;
+}
+
 .socials {
   margin-top: 1.5rem;
 }

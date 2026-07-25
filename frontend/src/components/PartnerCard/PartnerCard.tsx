@@ -3,6 +3,7 @@ import { STATIC_API_URL } from "../../constants";
 import styles from "./PartnerCard.module.css";
 
 import { clip_icon, delete_icon, check_icon } from "../../icons";
+import { Link } from "react-router-dom";
 
 interface Socials {
   social: string;
@@ -15,19 +16,24 @@ interface PartnerCardProps {
   description: string;
   photos: Array<string>;
   socials: Array<Socials>;
+  docs: Array<string>;
   trusted?: boolean;
   editable?: boolean;
   onSendDoc?: (doc: File | null, partnerId: string) => void;
 }
 
 function PartnerCard(props: PartnerCardProps) {
-  const { name, description, photos, socials, editable } = props;
+  const { name, description, photos, socials, editable, docs } = props;
   const [file, setFile] = useState<File | null>(null);
   const [showSuccess, setShowSuccess] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleClipButtonClick = () => {
-    fileInputRef.current?.click();
+    console.log("clicked");
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+      fileInputRef.current.click();
+    }
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -82,6 +88,21 @@ function PartnerCard(props: PartnerCardProps) {
             </ul>
           </div>
         )}
+
+        {docs.length > 0 && (
+          <div className={styles.docs}>
+            <h4>Партнёр загрузил документы:</h4>
+            <ul>
+              {docs.map((doc, idx) => {
+                return (
+                  <li key={doc}>
+                    <Link to={`/docs/${doc}`}>Документ {idx + 1}</Link>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        )}
       </div>
 
       {photos.length > 0 && (
@@ -99,7 +120,7 @@ function PartnerCard(props: PartnerCardProps) {
           </div>
         </div>
       )}
-      {editable && !props.trusted ? (
+      {editable ? (
         <div className={styles.editContainer}>
           <input
             type="file"
@@ -110,7 +131,7 @@ function PartnerCard(props: PartnerCardProps) {
           />
           {!file ? (
             <button
-              onClick={handleClipButtonClick}
+              onClick={() => handleClipButtonClick()}
               className={styles.addDocButton}
             >
               <img

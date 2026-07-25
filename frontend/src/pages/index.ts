@@ -6,6 +6,7 @@ import StoriesPage from "./StoriesPage";
 import EventsPage from "./EventsPage";
 import GaleryPage from "./GaleryPage";
 import PartnersPage from "./PartnersPage";
+import DocPreviewPage from "./DocPreviewPage";
 
 export {
   MainPage,
@@ -16,4 +17,5 @@ export {
   EventsPage,
   GaleryPage,
   PartnersPage,
+  DocPreviewPage,
 };
