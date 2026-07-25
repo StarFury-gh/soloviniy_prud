@@ -60,7 +60,8 @@ CREATE TABLE IF NOT EXISTS events_images (
 CREATE TABLE IF NOT EXISTS galery (
     publishing_id VARCHAR(255) PRIMARY KEY,
     author_id UUID REFERENCES users(id),
-    status galery_status NOT NULL
+    status galery_status NOT NULL,
+    description VARCHAR(1023)
 );
 
 CREATE TABLE IF NOT EXISTS galery_photos (
