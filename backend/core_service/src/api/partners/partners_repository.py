@@ -263,6 +263,7 @@ WHERE id=$1""",
     async def _save_partners_socials(
         self, partner_id: UUID | str, socials: List[Social]
     ) -> None:
+        self.logger.info(f"Saving socials for {partner_id}")
         try:
             for social in socials:
 
@@ -274,10 +275,15 @@ WHERE id=$1""",
                 )
 
         except Exception as e:
-            self.logger.error(f"save_partners_socials error: {e} - {type(e)}")
+            self.logger.error(
+                f"save_partners_socials error for {partner_id}: {e} - {type(e)}"
+            )
 
     async def create_partner_request(
-        self, body: CreatePartnerRequestDTO, user: AuthUserResponse
+        self,
+        body: CreatePartnerRequestDTO,
+        user: AuthUserResponse,
+        document: UploadFile | None,
     ) -> Partner:
         create_with_status = (
             PartnerRequestStatus.APPROVED.value
@@ -301,17 +307,24 @@ WHERE id=$1""",
             str(user.id),
         )
 
-        saved_photos = await self._save_partners_images(
-            partner_id=created_partner_id, images=body.photos
-        )
+        if len(body.photos) > 0:
+            await self._save_partners_images(
+                partner_id=created_partner_id, images=body.photos
+            )
 
-        await self._save_partners_socials(created_partner_id, socials=body.socials)
+        if len(body.socials) > 0:
+            await self._save_partners_socials(created_partner_id, socials=body.socials)
+
+        if document is not None:
+            await self.add_partner_document(
+                created_partner_id, document=document, user=user
+            )
 
         return Partner(
             id=created_partner_id,
             name=body.name,
             description=body.description,
-            photos=saved_photos,
+            photos=body.photos,
             socials=body.socials,
         )
 
@@ -411,12 +424,15 @@ WHERE id=$1""",
         )
 
     async def add_partner_document(
-        self, partner_id: str | UUID, document: UploadFile, user_id: str | UUID
+        self, partner_id: str | UUID, document: UploadFile, user: AuthUserResponse
     ) -> str:
+        self.logger.info(f"Saving document for {partner_id}")
+
         is_rep = await self._check_is_representative(
-            user_id=user_id, partner_id=partner_id
+            user_id=user.id, partner_id=partner_id
         )
-        if not is_rep:
+
+        if not is_rep or user.role != USERS_ROLES.ADMIN.value:
             raise UserIsNotRepresentative
 
         # Save doc as file
@@ -438,7 +454,7 @@ WHERE id=$1""",
         except Exception as e:
             if filepath.exists():
                 filepath.unlink()
-            self.logger.error(f"Failed to save document to DB: {e}")
+            self.logger.error(f"Failed to save document to DB for {partner_id}: {e}")
             raise
 
         await self._change_trusted_status(partner_id=partner_id, new_status=True)

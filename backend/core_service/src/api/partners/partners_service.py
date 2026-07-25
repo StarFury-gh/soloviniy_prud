@@ -107,7 +107,7 @@ class PartnersService:
                 )
 
             saved = await self.repo.add_partner_document(
-                partner_id, document, user_id=user.id
+                partner_id, document, user=user
             )
 
             return {"saved": saved}
@@ -125,10 +125,15 @@ class PartnersService:
         return {"requests": requests}
 
     async def create_partner_request(
-        self, body: CreatePartnerRequestDTO, user: AuthUserResponse
+        self,
+        body: CreatePartnerRequestDTO,
+        user: AuthUserResponse,
+        document: UploadFile | None,
     ):
         try:
-            created = await self.repo.create_partner_request(body=body, user=user)
+            created = await self.repo.create_partner_request(
+                body=body, user=user, document=document
+            )
 
             return {"created": created}
 
