@@ -29,22 +29,37 @@ function StoriesPage() {
     });
   };
 
+  const handleResetTags = () => {
+    setSelectedTags([]);
+  };
+
   return (
     <div className={styles.storiesPage}>
       <h1 className={styles.pageTitle}>Истории</h1>
       {availableTags.length > 0 && (
         <div className={styles.tagsSelector}>
-          {availableTags.map((tag) => (
-            <button
-              key={tag.tagId}
-              className={`${styles.tagButton} ${
-                selectedTags.includes(tag.tagId) ? styles.tagButtonActive : ""
-              }`}
-              onClick={() => handleTagToggle(tag.tagId)}
-            >
-              {tag.tagName}
-            </button>
-          ))}
+          <div className={styles.tagsContainer}>
+            {availableTags.map((tag) => (
+              <button
+                key={tag.tagId}
+                className={`${styles.tagButton} ${
+                  selectedTags.includes(tag.tagId) ? styles.tagButtonActive : ""
+                }`}
+                onClick={() => handleTagToggle(tag.tagId)}
+                aria-pressed={selectedTags.includes(tag.tagId)}
+              >
+                {tag.tagName}
+              </button>
+            ))}
+          </div>
+          <Button
+            variant="text"
+            size="sm"
+            onClick={handleResetTags}
+            className={styles.resetButton}
+          >
+            Сбросить
+          </Button>
         </div>
       )}
       <div className={styles.stories}>
