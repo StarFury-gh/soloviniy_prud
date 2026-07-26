@@ -1,4 +1,4 @@
-const ENV_TYPE: string = "dev"; // prod or dev
+const ENV_TYPE: string = "prod"; // prod or dev
 
 let API_URL: string = "CHECK_CONSTANTS";
 let AI_API_URL: string = "CHECK_CONSTANTS";
