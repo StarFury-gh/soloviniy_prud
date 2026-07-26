@@ -64,7 +64,7 @@ class PartnersRepository:
             self.logger.error(f"Saving photo error: {e}. {type(e)=}")
             return None
 
-    async def _save_partners_images(
+    async def __save_base64_photos(
         self, partner_id: str | UUID, images: List[str]
     ) -> List[str]:
         saved = []
@@ -79,6 +79,48 @@ class PartnersRepository:
                 saved.append(file_path)
 
         return saved
+
+    async def __save_uploadfile_photos(
+        self, partner_id: str | UUID, images: List[UploadFile]
+    ):
+        saved = []
+        for image in images:
+            fileid = uuid4()
+
+            filename = f"{fileid}.jpg"
+
+            filepath = f"{cfg_obj.UPLOAD_DIR}/{filename}"
+
+            content = await image.read()
+
+            async with aiofiles.open(filepath, "wb") as buffer:
+                await buffer.write(content)
+
+            await self.db.execute(
+                "INSERT INTO partners_photos (path, partner_id) VALUES ($1, $2)",
+                filename,
+                str(partner_id),
+            )
+
+            saved.append(filename)
+
+        return saved
+
+    async def _save_partners_images(
+        self, partner_id: str | UUID, images: List[str] | List[UploadFile]
+    ) -> List[str]:
+        if len(images) < 1:
+            return []
+        if isinstance(images[0], str):
+            saved = await self.__save_base64_photos(
+                partner_id=partner_id, images=images
+            )
+            return saved
+        else:
+            saved = await self.__save_uploadfile_photos(
+                partner_id=partner_id, images=images
+            )
+            return saved
 
     async def get_all_partners(self, limit: int, offset: int) -> List[Partner]:
         records = await self.db.fetch(
@@ -307,10 +349,9 @@ WHERE id=$1""",
             str(user.id),
         )
 
-        if len(body.photos) > 0:
-            await self._save_partners_images(
-                partner_id=created_partner_id, images=body.photos
-            )
+        saved_photos = await self._save_partners_images(
+            partner_id=created_partner_id, images=body.photos
+        )
 
         if len(body.socials) > 0:
             await self._save_partners_socials(created_partner_id, socials=body.socials)
@@ -324,7 +365,7 @@ WHERE id=$1""",
             id=created_partner_id,
             name=body.name,
             description=body.description,
-            photos=body.photos,
+            photos=saved_photos,
             socials=body.socials,
         )
 

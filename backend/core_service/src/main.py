@@ -1,26 +1,21 @@
-from fastapi import FastAPI
-from fastapi.staticfiles import StaticFiles
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
-
-
-from uvicorn import run
-
 from contextlib import asynccontextmanager
 
-from core.logger import get_logger, LOGGING_CONFIG
-
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
+from fastapi.staticfiles import StaticFiles
+from uvicorn import run
 
 from api import (
-    users_router,
-    stories_router,
     events_router,
     galery_router,
     partners_router,
+    stories_router,
+    users_router,
 )
-
-from core.db.postgres import create_pg_pool, init_admin
 from core.config import cfg_obj
+from core.db.postgres import create_pg_pool, init_admin
+from core.logger import LOGGING_CONFIG, get_logger
 
 logger = get_logger(__name__)
 
@@ -44,13 +39,6 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(lifespan=lifespan)
-
-
-# Health check endpoint
-@app.get("/health")
-async def health_check():
-    return JSONResponse(status_code=200, content={"status": "healthy"})
-
 
 # Раздача статики
 app.mount("/static", StaticFiles(directory=cfg_obj.UPLOAD_DIR))
@@ -76,6 +64,13 @@ app.include_router(stories_router)
 app.include_router(events_router)
 app.include_router(galery_router)
 app.include_router(partners_router)
+
+
+# Health check endpoint
+@app.get("/health")
+async def health_check():
+    return JSONResponse(status_code=200, content={"status": "healthy"})
+
 
 if __name__ == "__main__":
     run(

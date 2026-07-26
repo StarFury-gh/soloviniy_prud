@@ -1,20 +1,19 @@
-from fastapi import APIRouter, Depends, Query, UploadFile, Form, File
-
 import json
-from typing import Optional
+
+from fastapi import APIRouter, Depends, File, Form, Query, UploadFile
 
 from api.shared import Pagination
 from api.users.users_dependencies import admin_required, auth_required
 
-from .partners_service import PartnersService
 from .partners_dependencies import get_service
 from .partners_schemas import (
     CreatePartnerDTO,
     CreatePartnerRequestDTO,
     PartnerRequestStatus,
-    UpdatePartnerStatus,
     Social,
+    UpdatePartnerStatus,
 )
+from .partners_service import PartnersService
 
 partners_router = APIRouter(prefix="/partners", tags=["partners"])
 
@@ -91,19 +90,20 @@ async def update_partner_request_status(
 
 @partners_router.post("/requests/new")
 async def create_partner_request(
+    photos: list[UploadFile] = None,
     name: str = Form(...),
     description: str = Form(...),
-    photos: str = Form(...),
     socials: str = Form(...),
-    document: Optional[UploadFile] = File(None),
+    document: UploadFile | None = File(None),
     service: PartnersService = Depends(get_service),
     user=Depends(auth_required),
 ):
-    photos_list = json.loads(photos)
     socials_list = [Social(**item) for item in json.loads(socials)]
 
+    photos = [] if photos is None else photos
+
     body = CreatePartnerRequestDTO(
-        name=name, description=description, photos=photos_list, socials=socials_list
+        name=name, description=description, photos=photos, socials=socials_list
     )
     return await service.create_partner_request(body=body, user=user, document=document)
 

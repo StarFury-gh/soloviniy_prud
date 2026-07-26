@@ -1,3 +1,4 @@
+from fastapi import UploadFile, File
 from pydantic import BaseModel
 from typing import List
 from uuid import UUID
@@ -19,7 +20,7 @@ class Social(BaseModel):
 class BasePartner(BaseModel):
     name: str
     description: str
-    photos: List[str]
+    photos: List[str] | list
     socials: List[Social]
 
 
