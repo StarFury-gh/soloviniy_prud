@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { STATIC_API_URL } from "../../constants";
-import Button from "../common/Button";
 import styles from "./StoryCard.module.css";
+
+import { left_arrow_icon, right_arrow_icon } from "../../icons";
 
 interface StoryAuthor {
   name: string;
@@ -22,7 +23,7 @@ function StoryCard(props: StoryCardProps) {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isExpanded, setIsExpanded] = useState(false);
 
-  const maxContentLength = 100;
+  const maxContentLength = 250;
   const shouldShowReadMore = content.length > maxContentLength;
   const displayedContent = isExpanded
     ? content
@@ -73,7 +74,7 @@ function StoryCard(props: StoryCardProps) {
             onClick={handlePrevSlide}
             disabled={images.length <= 1}
           >
-            {"<"}
+            <img src={left_arrow_icon} alt="<" />
           </button>
           <div className={styles.sliderInner}>
             {images.map((image, index) => (
@@ -96,7 +97,7 @@ function StoryCard(props: StoryCardProps) {
             onClick={handleNextSlide}
             disabled={images.length <= 1}
           >
-            {">"}
+            <img src={right_arrow_icon} alt=">" />
           </button>
 
           {images.length > 1 && (
@@ -118,13 +119,12 @@ function StoryCard(props: StoryCardProps) {
       <div className={styles.content}>
         <p>{displayedContent}</p>
         {shouldShowReadMore && (
-          <Button
-            variant="text"
-            onClick={() => setIsExpanded(!isExpanded)}
+          <button
             className={styles.readMoreButton}
+            onClick={() => setIsExpanded(!isExpanded)}
           >
-            {isExpanded ? "Свернуть" : "Читать далее"}
-          </Button>
+            {isExpanded ? "Свернуть" : "Показать ещё"}
+          </button>
         )}
       </div>
     </div>

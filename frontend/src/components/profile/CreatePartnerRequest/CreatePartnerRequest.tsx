@@ -14,7 +14,7 @@ interface Social {
 function CreatePartnerRequest() {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  const [photos, setPhotos] = useState<string[]>([]);
+  const [photos, setPhotos] = useState<File[]>([]);
   const [socials, setSocials] = useState<Social[]>([{ social: "VK", url: "" }]);
   const [document, setDocument] = useState<File | null>(null);
   const [error, setError] = useState("");
@@ -25,18 +25,11 @@ function CreatePartnerRequest() {
   const handlePhotoChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (files) {
-      const newPhotos: string[] = [];
+      const newPhotos: File[] = [];
       for (let i = 0; i < files.length; i++) {
-        const file = files[i];
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          if (e.target?.result) {
-            newPhotos.push(e.target.result as string);
-            setPhotos((prev) => [...prev, e.target?.result as string]);
-          }
-        };
-        reader.readAsDataURL(file);
+        newPhotos.push(files[i]);
       }
+      setPhotos((prev) => [...prev, ...newPhotos]);
     }
   };
 
@@ -87,7 +80,9 @@ function CreatePartnerRequest() {
 
     bodyFormData.append("name", name);
     bodyFormData.append("description", description);
-    bodyFormData.append("photos", JSON.stringify(photos));
+    for (let i = 0; i < photos.length; i++) {
+      bodyFormData.append("photos", photos[i]);
+    }
     bodyFormData.append("socials", JSON.stringify(socials));
     if (document) {
       bodyFormData.append("document", document);
@@ -124,7 +119,11 @@ function CreatePartnerRequest() {
 
   const previewImages = photos.map((photo, index) => (
     <div key={index} className={styles.photoItem}>
-      <img src={photo} alt="Preview" className={styles.photoThumb} />
+      <img
+        src={URL.createObjectURL(photo)}
+        alt="Preview"
+        className={styles.photoThumb}
+      />
       <button
         type="button"
         onClick={() => handleRemovePhoto(index)}

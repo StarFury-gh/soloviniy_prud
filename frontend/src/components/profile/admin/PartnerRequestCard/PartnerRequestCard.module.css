@@ -38,6 +38,7 @@
   font-size: var(--text-size);
   color: var(--text-dark);
   line-height: 1.6;
+  white-space: pre-line;
 }
 
 .readMoreButton {

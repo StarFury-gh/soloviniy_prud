@@ -206,6 +206,22 @@ function CreateStoryForm() {
               placeholder="Расскажите подробнее..."
               value={text}
               onChange={(e) => setText(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && e.shiftKey) {
+                  e.preventDefault();
+                  const textarea = e.target as HTMLTextAreaElement;
+                  const value = textarea.value;
+                  const start = textarea.selectionStart;
+                  const end = textarea.selectionEnd;
+                  const newValue = value.substring(0, start) + "\n" + value.substring(end);
+                  setText(newValue);
+                  setTimeout(() => {
+                    textarea.selectionStart = textarea.selectionEnd = start + 1;
+                  }, 0);
+                } else if (e.key === "Enter" && !e.shiftKey) {
+                  e.preventDefault();
+                }
+              }}
             />
           </div>
 

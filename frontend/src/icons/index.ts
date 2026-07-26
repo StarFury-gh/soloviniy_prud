@@ -10,6 +10,8 @@ import bird_icon from "/bird_icon.svg";
 import plant_icon from "/plant_icon.svg";
 import water_icon from "/water_icon.svg";
 import museum_icon from "/museum_icon.svg";
+import left_arrow_icon from "/left_arrow_icon.svg";
+import right_arrow_icon from "/right_arrow_icon.svg";
 
 export {
   identify_icon,
@@ -24,4 +26,6 @@ export {
   plant_icon,
   water_icon,
   museum_icon,
+  left_arrow_icon,
+  right_arrow_icon,
 };
