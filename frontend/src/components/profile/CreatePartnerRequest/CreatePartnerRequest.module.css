@@ -1,0 +1,301 @@
+.page {
+  width: 100%;
+  min-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.wrap {
+  width: 100%;
+  max-width: 1200px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.formCard {
+  background-color: white;
+  border-radius: 1rem;
+  padding: 1.75rem;
+  border: 1px solid var(--border);
+}
+
+.formTitle {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--foreground);
+  margin: 0 0 0.375rem;
+}
+
+.formDesc {
+  font-size: 0.875rem;
+  color: var(--muted-foreground);
+  margin: 0 0 1.5rem;
+}
+
+.formRow {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.formGroup {
+  margin-bottom: 1rem;
+}
+
+.formLabel {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--foreground);
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.requiredMarker {
+  color: var(--destructive);
+}
+
+.hint {
+  font-size: 0.8125rem;
+  color: var(--muted-foreground);
+  line-height: 1.4;
+  margin-top: 0.25rem;
+}
+
+.photosSection {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.photosHint {
+  font-size: 0.8125rem;
+  color: var(--muted-foreground);
+  line-height: 1.4;
+}
+
+.fileInput {
+  display: none;
+}
+
+.photosGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.photoItem {
+  position: relative;
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 2px solid var(--pond-200);
+}
+
+.photoThumb {
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+  display: block;
+}
+
+.removePhotoBtn {
+  position: absolute;
+  top: 0.25rem;
+  right: 0.25rem;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background-color: rgba(192, 57, 43, 0.9);
+  color: white;
+  border: none;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease;
+}
+
+.removePhotoBtn:hover {
+  background-color: rgba(192, 57, 43, 1);
+}
+
+.socialsSection {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.socialInput {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+}
+
+.socialSelect {
+  flex-shrink: 0;
+  width: 100px;
+  padding: 0.625rem 0.875rem;
+  font-family: var(--font-body);
+  font-size: 0.9375rem;
+  font-weight: 400;
+  color: var(--foreground);
+  background-color: var(--card);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  outline: none;
+  cursor: pointer;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.socialSelect:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(82, 183, 136, 0.2);
+}
+
+.socialSelect:disabled {
+  background-color: var(--muted);
+  color: var(--muted-foreground);
+  cursor: not-allowed;
+}
+
+.removeSocialButton {
+  flex-shrink: 0;
+  width: 70px;
+  padding: 0.625rem 0.875rem;
+  background-color: var(--destructive);
+  color: white;
+  border: none;
+  border-radius: var(--radius);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.removeSocialButton:hover {
+  background-color: #a93226;
+}
+
+.documentSection {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.documentPreview {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  background-color: var(--card);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  font-size: 0.9375rem;
+  color: var(--foreground);
+}
+
+.removeDocumentButton {
+  padding: 0.25rem 0.5rem;
+  background-color: var(--destructive);
+  color: white;
+  border: none;
+  border-radius: var(--radius);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.removeDocumentButton:hover {
+  background-color: #a93226;
+}
+
+.successMessage {
+  padding: 1rem 1.25rem;
+  border-radius: var(--radius);
+  background-color: var(--pond-50);
+  border: 1px solid var(--pond-200);
+  color: var(--pond-700);
+  font-weight: 500;
+  margin-bottom: 1rem;
+}
+
+.errorMessage {
+  padding: 1rem 1.25rem;
+  border-radius: var(--radius);
+  background-color: var(--destructive);
+  border: 1px solid var(--destructive);
+  color: white;
+  font-weight: 500;
+  margin-bottom: 1rem;
+}
+
+.addSocialButton {
+  padding: 0.625rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--primary);
+  background-color: transparent;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.addSocialButton:hover {
+  border-color: var(--accent);
+  background-color: var(--pond-50);
+}
+
+.addSocialButton:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(82, 183, 136, 0.2);
+  outline: none;
+}
+
+.addSocialButton:disabled {
+  background-color: var(--muted);
+  color: var(--muted-foreground);
+  cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+  .formCard {
+    padding: 1.25rem;
+  }
+
+  .formTitle {
+    font-size: 1.125rem;
+  }
+
+  .photosGrid {
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  }
+
+  .photoThumb {
+    height: 100px;
+  }
+
+  .socialInput {
+    flex-direction: column;
+  }
+
+  .socialSelect {
+    width: 100%;
+  }
+
+  .removeSocialButton {
+    width: 100%;
+  }
+}

@@ -27,8 +27,10 @@ class GaleryPublication(BaseModel):
     publishing_id: str | UUID
     author: GaleryPhotoAuthor
     photos: List[str]
+    description: str | None = None
 
 
 class AddGaleryPhotosDTO(BaseModel):
     # Base64 photos
     photos: List[str]
+    description: str | None = None

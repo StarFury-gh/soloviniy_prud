@@ -12,4 +12,5 @@ export interface GaleryPublication {
   publication_id: string;
   author: PublicationAuthor;
   photos: Array<string>;
+  description: string;
 }

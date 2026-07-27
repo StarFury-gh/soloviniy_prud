@@ -28,6 +28,7 @@ function usePartners(params: usePartnersParams) {
 
     if (response.ok) {
       const data: GetPartnersServerResponse = await response.json();
+      console.log(data);
       setPartners((prev) => [...prev, ...data.partners]);
       setHasMore(data.partners.length >= PAGINATION_LIMIT);
     }

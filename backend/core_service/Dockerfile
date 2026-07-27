@@ -8,6 +8,7 @@ RUN pip install --no-cache-dir --user -r requirements.txt
 
 COPY src/ ./src/
 
+# Runner
 FROM python:3.14-alpine AS runner
 
 WORKDIR /app
@@ -26,5 +27,5 @@ RUN mkdir saved && tar -xzvf saved.tar.gz
 CMD ["python3", "src/main.py"]
 
 # Health check for FastAPI application
-HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
-    CMD python -c "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')" || exit 1
+HEALTHCHECK --interval=10s --timeout=2s --retries=3 \
+  CMD nc -w 1 -z 127.0.0.1 8000 || exit 1

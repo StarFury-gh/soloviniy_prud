@@ -13,6 +13,7 @@ function AddToGaleryForm() {
   const [selectedFiles, setSelectedFiles] = useState<FileWithPreview[]>([]);
   const [originalFiles, setOriginalFiles] = useState<File[]>([]);
   const [isDragging, setIsDragging] = useState(false);
+  const [description, setDescription] = useState<string>("");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const disabled = false;
@@ -124,18 +125,23 @@ function AddToGaleryForm() {
       const url = `${API_URL}/galery/add`;
       const token = localStorage.getItem(LS_ACCESS_TOKEN) || "";
 
+      const bodyData = description
+        ? { photos: base64Files, description }
+        : { photos: base64Files };
+
       const response = await fetch(url, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: token,
         },
-        body: JSON.stringify({ photos: base64Files }),
+        body: JSON.stringify(bodyData),
       });
 
       if (response.ok) {
         setSelectedFiles([]);
         setOriginalFiles([]);
+        setDescription("");
       } else {
         console.error("Failed to upload images:", response.statusText);
         alert("Не удалось загрузить изображения. Попробуйте снова.");
@@ -208,6 +214,16 @@ function AddToGaleryForm() {
             ))}
           </div>
         )}
+
+        <div className={styles.descriptionContainer}>
+          <textarea
+            className={styles.descriptionInput}
+            placeholder="Описание публикации (необязательно)"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            disabled={disabled}
+          />
+        </div>
 
         <Button type="submit" disabled={disabled || selectedFiles.length === 0}>
           Отправить

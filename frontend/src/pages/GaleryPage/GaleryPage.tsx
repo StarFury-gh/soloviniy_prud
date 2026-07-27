@@ -18,14 +18,19 @@ function GaleryPage() {
       <div className={styles.container}>
         <h1 className={styles.title}>Галерея публикаций</h1>
         <div className={styles.galleryGrid}>
-          {publications.map((publication) => (
-            <GaleryPublication
-              key={publication.publication_id}
-              publication_id={publication.publication_id}
-              author={publication.author}
-              photos={publication.photos}
-            />
-          ))}
+          {publications.map((publication) => {
+            const key =
+              publication?.publication_id ?? publications.indexOf(publication);
+            return (
+              <GaleryPublication
+                key={key}
+                publication_id={publication.publication_id}
+                author={publication.author}
+                photos={publication.photos}
+                description={publication.description}
+              />
+            );
+          })}
         </div>
         {isLoading && (
           <div className={styles.loadingMore}>

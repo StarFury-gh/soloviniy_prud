@@ -55,6 +55,14 @@
   font-style: italic;
 }
 
+.description {
+  padding: 1rem 1.25rem;
+  border-top: 1px solid var(--border);
+  color: var(--text-dark);
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
 .modal {
   position: fixed;
   top: 0;

@@ -12,11 +12,11 @@
 
 .authCard {
   background-color: white;
-  border-radius: 1.5rem;
+  border-radius: var(--border-radius-round);
   padding: 2.5rem;
   width: 100%;
   max-width: 420px;
-  box-shadow: 0 8px 40px rgba(45, 106, 79, 0.12);
+  box-shadow: var(--shadow-lg);
   border: 1px solid var(--border);
 }
 
@@ -28,7 +28,7 @@
 .authIcon {
   font-size: 3rem;
   display: block;
-  margin-bottom: 0.5rem;
+  margin-bottom: var(--radius);
 }
 
 .authTitle {
@@ -55,7 +55,7 @@
   text-align: center;
   font-size: 0.8125rem;
   color: var(--muted-foreground);
-  margin: 0.5rem 0;
+  margin: var(--radius) 0;
   position: relative;
 }
 
@@ -84,20 +84,20 @@
 }
 
 .successMessage {
-  background-color: #10b981;
-  color: white;
+  background-color: var(--primary);
+  color: var(--primary-foreground);
   padding: 1rem 1.5rem;
-  border-radius: 0.5rem;
+  border-radius: var(--radius);
   text-align: center;
   font-size: 0.9375rem;
-  font-weight: 500;
+  font-weight: var(--font-weight-medium);
   margin-bottom: 1.25rem;
   animation: fadeIn 0.3s ease-out;
 }
 
 .successMessage::before {
   content: "✓";
-  margin-right: 0.5rem;
+  margin-right: var(--radius);
 }
 
 @keyframes fadeIn {

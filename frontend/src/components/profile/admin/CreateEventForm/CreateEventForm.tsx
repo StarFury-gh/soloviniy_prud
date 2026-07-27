@@ -101,6 +101,7 @@ function CreateEventForm() {
         text: "Ошибка при добавлении события. Попробуйте снова.",
       });
     }
+    setIsSubmitting(false);
   };
 
   return (

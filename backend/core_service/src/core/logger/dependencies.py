@@ -1,12 +1,17 @@
 import logging
 from typing import Optional
 
+from core.config import cfg_obj
+
 INFO = "INFO"
 DEBUG = "DEBUG"
 
 
 def __define_logging_level() -> str:
-    return INFO
+    if cfg_obj.ENV_TYPE == "prod":
+        return INFO
+
+    return DEBUG
 
 
 def get_logger(name: Optional[str] = None) -> logging.Logger:

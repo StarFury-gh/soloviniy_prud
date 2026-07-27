@@ -1,13 +1,31 @@
+from fastapi import UploadFile, File
 from pydantic import BaseModel
 from typing import List
 from uuid import UUID
+from enum import Enum
+from datetime import datetime
 
 
-class Partner(BaseModel):
-    id: str | UUID
+class PartnerRequestStatus(Enum):
+    NEW = "new"
+    APPROVED = "approved"
+    REJECTED = "rejected"
+
+
+class Social(BaseModel):
+    social: str
+    url: str
+
+
+class BasePartner(BaseModel):
     name: str
     description: str
-    photos: List[str]
+    photos: List[str] | list
+    socials: List[Social]
+
+
+class Partner(BasePartner):
+    id: str | UUID
 
 
 class CreatePartnerDTO(BaseModel):
@@ -18,3 +36,25 @@ class CreatePartnerDTO(BaseModel):
 
 class UpdatePartnerDTO(BaseModel):
     pass
+
+
+class CreatePartnerRequestDTO(BasePartner):
+    pass
+
+
+class PartnerRepresentative(BaseModel):
+    id: UUID | str
+    name: str
+    surname: str
+
+
+class UpdatePartnerStatus(BaseModel):
+    new_status: PartnerRequestStatus
+
+
+class PartnerRequest(Partner):
+    status: PartnerRequestStatus
+    representatives: List[PartnerRepresentative]
+    trusted: bool
+    docs: List[str]
+    created_at: datetime

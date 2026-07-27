@@ -21,10 +21,13 @@ function PartnersPage() {
         {partners.map((partner) => (
           <PartnerCard
             key={partner.id}
+            docs={partner.docs}
+            socials={partner.socials}
             id={partner.id}
             name={partner.name}
             description={partner.description}
             photos={partner.photos}
+            trusted={partner.trusted}
           />
         ))}
       </div>

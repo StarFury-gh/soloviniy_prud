@@ -5,6 +5,8 @@ import {
   IssueReporter,
   CreateStoryForm,
   AddToGaleryForm,
+  CreatePartnerRequest,
+  MyPartners,
 } from "../../components/profile/";
 import {
   RegisteredPlantsList,
@@ -13,6 +15,7 @@ import {
   StoriesRequestsList,
   AdminEventsList,
   PhotoRequestsList,
+  PartnersRequestsList,
 } from "../../components/profile/admin";
 
 import { API_URL, LS_ACCESS_TOKEN } from "../../constants";
@@ -55,6 +58,14 @@ function UserProfile() {
       tabName: "galery",
       title: "Добавить фотографии",
     },
+    {
+      tabName: "addPartnerRequest",
+      title: "Стать партнёром",
+    },
+    {
+      tabName: "myPartners",
+      title: "Мои партнёры",
+    },
     // {
     //   tabName: "issues",
     //   title: "Проблемы",
@@ -85,9 +96,13 @@ function UserProfile() {
             tabName: "photoRequests",
             title: "Заявки фотогалереи",
           },
+          // {
+          //   tabName: "addPartner",
+          //   title: "Добавить партнёра",
+          // },
           {
-            tabName: "addPartner",
-            title: "Добавить партнёра",
+            tabName: "partnersRequests",
+            title: "Заявки на партнёрство",
           },
         ]
       : []),
@@ -105,6 +120,9 @@ function UserProfile() {
     galery: <AddToGaleryForm />,
     photoRequests: <PhotoRequestsList />,
     addPartner: <CreatePartnerForm />,
+    addPartnerRequest: <CreatePartnerRequest />,
+    partnersRequests: <PartnersRequestsList />,
+    myPartners: <MyPartners />,
   };
 
   useEffect(() => {

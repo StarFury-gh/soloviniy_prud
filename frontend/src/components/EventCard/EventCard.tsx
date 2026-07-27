@@ -16,7 +16,7 @@ interface EventCardProps {
 function EventCard(props: EventCardProps) {
   const [isExpanded, setIsExpanded] = useState(false);
 
-  const maxContentLength = 100;
+  const maxContentLength = 300;
   const shouldShowReadMore = props.description.length > maxContentLength;
   const displayedDescription = isExpanded
     ? props.description

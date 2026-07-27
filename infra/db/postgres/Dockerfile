@@ -4,6 +4,7 @@ ENV POSTGRES_USER=postgres
 ENV POSTGRES_PASSWORD=postgres
 ENV POSTGRES_DB=soloviniy_prud
 
+# COPY ./init.sql /docker-entrypoint-initdb.d/
 COPY ./dump.sql /docker-entrypoint-initdb.d/
 
 EXPOSE 5432

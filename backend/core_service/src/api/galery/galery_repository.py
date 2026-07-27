@@ -35,6 +35,7 @@ class GaleryRepository:
         stmt = """SELECT 
     g.publishing_id,
     g.author_id,
+    g.description,
     u.name,
     u.surname,
     ARRAY_AGG(gp.path) AS photos
@@ -64,13 +65,18 @@ LIMIT $2 OFFSET $3;
                 publishing_id=record_as_dict.get("publishing_id"),
                 author=author,
                 photos=record_as_dict.get("photos"),
+                description=record_as_dict.get("description"),
             )
             result.append(galery_publication)
 
         return result
 
     async def add_photos(
-        self, photos: List[str], user_id: UUID | str, user_role: str | USERS_ROLES
+        self,
+        photos: List[str],
+        user_id: UUID | str,
+        user_role: str | USERS_ROLES,
+        description: str | None,
     ) -> List[str] | None:
         saved = []
         publishing_status = GaleryPublicationStatus.NEW.value
@@ -81,13 +87,15 @@ LIMIT $2 OFFSET $3;
             # TODO: Add to transaction
             # Saving galery publication
             await self.db.execute(
-                "INSERT INTO galery (author_id, publishing_id, status) VALUES ($1, $2, $3)",
+                "INSERT INTO galery (author_id, publishing_id, status, description) VALUES ($1, $2, $3, $4)",
                 user_id,
                 publishing_id,
                 publishing_status,
+                description,
             )
             # Saving photos for galery publication
             for photo in photos:
+                # TODO: Save as WEBP
                 if not photo.startswith("data:image"):
                     raise IncorrectImageType
 
