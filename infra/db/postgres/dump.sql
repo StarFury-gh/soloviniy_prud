@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict GNsRbIaMLdDkqddcPnfIgAXdWXk26UnoJNeqjNu7av3oLTpNDd6mrh00sM30Wa6
+\restrict GH1eW69dBG9hgFOrIjnRJRM9rREBejHKeDHWM0SOhaYO0CYEBXezvn1WabK4eaX
 
 -- Dumped from database version 15.18 (Debian 15.18-1.pgdg13+1)
 -- Dumped by pg_dump version 15.18 (Debian 15.18-1.pgdg13+1)
@@ -447,9 +447,6 @@ COPY public.partners_socials (partner_id, social, url) FROM stdin;
 9f9bf222-8082-41ed-9da9-0b47c986ded0	VK	https://vk.ru/bps.vladimir33
 3e09d1d0-7d45-4b95-b762-709b698e8b15	VK	https://vk.com/veles33
 b70b6a97-0e0e-4cd6-80d7-f00389e4815b	VK	https://vk.com/instituteeit
-a07de85e-1f05-4efd-ab1e-9465bcdba35b	VK	
-d4826576-ebca-4e66-aa03-f52b649485e3	VK	
-a92ef60a-d1cf-4b3b-97fa-cb35ac6a64b8	VK	
 \.
 
 
@@ -720,5 +717,5 @@ ALTER TABLE ONLY public.stories
 -- PostgreSQL database dump complete
 --
 
-\unrestrict GNsRbIaMLdDkqddcPnfIgAXdWXk26UnoJNeqjNu7av3oLTpNDd6mrh00sM30Wa6
+\unrestrict GH1eW69dBG9hgFOrIjnRJRM9rREBejHKeDHWM0SOhaYO0CYEBXezvn1WabK4eaX
 
