@@ -15,7 +15,7 @@ function CreatePartnerRequest() {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [photos, setPhotos] = useState<File[]>([]);
-  const [socials, setSocials] = useState<Social[]>([{ social: "VK", url: "" }]);
+  const [socials, setSocials] = useState<Social[]>([]);
   const [document, setDocument] = useState<File | null>(null);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
@@ -68,22 +68,47 @@ function CreatePartnerRequest() {
     setDocument(null);
   };
 
+  const clearEmptySocials = () => {
+    const result = [];
+
+    for (const social of socials) {
+      if (!(social.url.trim() === "")) {
+        result.push(social);
+      }
+    }
+
+    return result;
+  };
+
   const handleSubmit = async () => {
     if (!name || !description) {
       setError("Заполните все обязательные поля");
       return;
     }
+
+    if (socials.length > 0) {
+      const hasIncompleteSocial = socials.some(
+        (s) => !s.social?.trim() || !s.url?.trim(),
+      );
+      if (hasIncompleteSocial) {
+        setError("Заполните все поля социальных сетей");
+        return;
+      }
+    }
+
     setError("");
     setSuccess("");
 
     const bodyFormData = new FormData();
+
+    const filteredSocials = clearEmptySocials();
 
     bodyFormData.append("name", name);
     bodyFormData.append("description", description);
     for (let i = 0; i < photos.length; i++) {
       bodyFormData.append("photos", photos[i]);
     }
-    bodyFormData.append("socials", JSON.stringify(socials));
+    bodyFormData.append("socials", JSON.stringify(filteredSocials));
     if (document) {
       bodyFormData.append("document", document);
     }
@@ -195,9 +220,7 @@ function CreatePartnerRequest() {
 
           <div className={styles.formGroup}>
             <label className={styles.formLabel}>Фотографии</label>
-            <p className={styles.hint}>
-              Загрузите до 5 фотографий (jpg, png)
-            </p>
+            <p className={styles.hint}>Загрузите до 5 фотографий (jpg, png)</p>
             <input
               ref={fileInputRef}
               type="file"
@@ -218,10 +241,10 @@ function CreatePartnerRequest() {
           </div>
 
           <div className={styles.formGroup}>
-            <label className={styles.formLabel}>Документ (не обязательно)</label>
-            <p className={styles.hint}>
-              Загрузите документ (pdf, doc, docx)
-            </p>
+            <label className={styles.formLabel}>
+              Документ (не обязательно)
+            </label>
+            <p className={styles.hint}>Загрузите документ (pdf, doc, docx)</p>
             <input
               ref={documentInputRef}
               type="file"
