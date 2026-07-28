@@ -31,14 +31,22 @@ function LoginForm() {
         headers: { "Content-type": "application/json" },
       });
       if (response.ok) {
-        const { access_token } = await response.json();
-        localStorage.setItem(LS_ACCESS_TOKEN, access_token);
+        const data = await response.json();
+
+        if (data && data.access_token !== null) {
+          alert(JSON.stringify(data));
+          localStorage.setItem(LS_ACCESS_TOKEN, data.access_token);
+          window.location.href = "/profile";
+          return;
+        }
+
         setStep("verify");
       } else {
         const data = await response.json().catch(() => ({}));
         setError(data.detail || "Ошибка при авторизации.");
       }
-    } catch {
+    } catch (e) {
+      console.error("handleLogin error:", e);
       setError("Ошибка сети.");
     }
   };

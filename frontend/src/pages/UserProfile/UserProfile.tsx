@@ -171,8 +171,8 @@ function UserProfile() {
         <aside className={styles.sidebar}>
           <div className={styles.userCard}>
             <div className={styles.avatar}>
-              {userInfo?.name.split(" ")[0][0]}
-              {userInfo?.name.split(" ")[1][0]}
+              {userInfo?.name[0]}
+              {/* {userInfo?.name.split(" ")[1][0]} */}
             </div>
             <p className={styles.userName}>{userInfo?.name}</p>
             <p className={styles.userRole}>{ruRole}</p>
