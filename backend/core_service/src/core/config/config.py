@@ -33,6 +33,8 @@ class Config:
         self.ADMIN_PASSWORD = getenv("ADMIN_PASSWORD")
         self.ADMIN_SURNAME = getenv("ADMIN_SURNAME")
 
+        self.SMTP_SECRET_CODE = getenv("SMTP_SECRET_CODE")
+
         self.UPLOAD_DIR = "./saved"
 
 

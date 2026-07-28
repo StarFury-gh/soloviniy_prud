@@ -1,9 +1,10 @@
 from fastapi import UploadFile
-
-import aiofiles
-
 from asyncpg import Connection
 from asyncpg.exceptions import UniqueViolationError
+from PIL import Image
+from io import BytesIO
+
+import aiofiles
 
 from uuid import UUID, uuid4
 from pathlib import Path
@@ -35,92 +36,36 @@ class PartnersRepository:
         self.db: Connection = db
         self.logger = logger
 
-    async def _save_photo_file(self, img: str) -> str | None:
-        # TODO: save as WEBP
-        try:
-            if not img.startswith("data:image"):
-                raise IncorrectImageType
+    async def __save_image_as_WEBP(self, image: UploadFile) -> str:
+        content = await image.read()
+        content = BytesIO(content)
 
-            if "," in img:
-                img = img.split(",")[1]
+        img = Image.open(content)
+        img.convert("RGB")
 
-            img_data_base64 = base64.b64decode(img)
+        fileid = uuid4()
+        filename = f"{fileid}.webp"
+        filepath = f"{cfg_obj.UPLOAD_DIR}/{filename}"
 
-            fileid = uuid4()
+        img.save(filepath, "webp")
 
-            filename = f"{fileid}.jpg"
+        return filename
 
-            filepath = f"{cfg_obj.UPLOAD_DIR}/{filename}"
+    async def _save_partners_image(self, images: List[str | UploadFile]) -> List[str]:
+        if issubclass(UploadFile, type(images)):
+            saved_filename = await self.__save_image_as_WEBP(images)
+            return [saved_filename]
 
-            async with aiofiles.open(filepath, "wb") as buffer:
-                await buffer.write(img_data_base64)
-
-            return filename
-
-        except IncorrectImageType as e:
-            raise e
-
-        except Exception as e:
-            self.logger.error(f"Saving photo error: {e}. {type(e)=}")
-            return None
-
-    async def __save_base64_photos(
-        self, partner_id: str | UUID, images: List[str]
-    ) -> List[str]:
-        saved = []
-        for image in images:
-            file_path = await self._save_photo_file(img=image)
-            if file_path is not None:
-                await self.db.execute(
-                    "INSERT INTO partners_photos (path, partner_id) VALUES ($1, $2)",
-                    file_path,
-                    str(partner_id),
-                )
-                saved.append(file_path)
-
-        return saved
-
-    async def __save_uploadfile_photos(
-        self, partner_id: str | UUID, images: List[UploadFile]
-    ):
-        saved = []
-        for image in images:
-            fileid = uuid4()
-
-            filename = f"{fileid}.jpg"
-
-            filepath = f"{cfg_obj.UPLOAD_DIR}/{filename}"
-
-            content = await image.read()
-
-            async with aiofiles.open(filepath, "wb") as buffer:
-                await buffer.write(content)
-
-            await self.db.execute(
-                "INSERT INTO partners_photos (path, partner_id) VALUES ($1, $2)",
-                filename,
-                str(partner_id),
-            )
-
-            saved.append(filename)
-
-        return saved
-
-    async def _save_partners_images(
-        self, partner_id: str | UUID, images: List[str] | List[UploadFile]
-    ) -> List[str]:
         if len(images) < 1:
             return []
-        if isinstance(images[0], str):
-            saved = await self.__save_base64_photos(
-                partner_id=partner_id, images=images
-            )
-            return saved
-        else:
-            saved = await self.__save_uploadfile_photos(
-                partner_id=partner_id, images=images
-            )
-            return saved
+
+        saved = []
+
+        for image in images:
+            saved_filename = await self.__save_image_as_WEBP(image)
+            saved.append(saved_filename)
+
+        return saved
 
     async def get_all_partners(self, limit: int, offset: int) -> List[Partner]:
         records = await self.db.fetch(
@@ -208,29 +153,6 @@ WHERE id=$1""",
             result.append(PartnerRequest(**record))
 
         return result
-
-    async def create_partner(
-        self, name: str, description: str, photos: List[str]
-    ) -> Partner:
-        created_partner_id = await self.db.fetchval(
-            "INSERT INTO partners (name, description, status) VALUES ($1, $2, $3) RETURNING id",
-            name,
-            description,
-            PartnerRequestStatus.APPROVED.value,
-        )
-
-        saved_images = await self._save_partners_images(
-            partner_id=created_partner_id, images=photos
-        )
-
-        created_partner = Partner(
-            id=created_partner_id,
-            name=name,
-            description=description,
-            photos=saved_images,
-        )
-
-        return created_partner
 
     async def delete_partner(self, partner_id: str) -> bool:
         """
@@ -349,9 +271,15 @@ WHERE id=$1""",
             str(user.id),
         )
 
-        saved_photos = await self._save_partners_images(
-            partner_id=created_partner_id, images=body.photos
-        )
+        saved_photos = []
+
+        for photo in body.photos:
+            filename = await self._save_partners_image(photo)
+            saved_photos.append(filename)
+
+        # saved_photos = await self._save_partners_images(
+        #     partner_id=created_partner_id, images=body.photos
+        # )
 
         if len(body.socials) > 0:
             await self._save_partners_socials(created_partner_id, socials=body.socials)
