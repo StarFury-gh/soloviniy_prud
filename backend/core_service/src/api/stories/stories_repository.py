@@ -220,7 +220,6 @@ class StoriesRepository:
     s.created_at,
     s.updated_at,
     (SELECT name FROM users WHERE id = s.author_id) AS name,
-    (SELECT surname FROM users WHERE id = s.author_id) AS surname,
     COALESCE(array_agg(DISTINCT si.path) FILTER (WHERE si.path IS NOT NULL), '{}') AS images,
     COALESCE(array_agg(DISTINCT at.name) FILTER (WHERE at.name IS NOT NULL), '{}') AS tags
 FROM 

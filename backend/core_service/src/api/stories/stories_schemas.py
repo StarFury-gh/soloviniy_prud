@@ -34,7 +34,6 @@ class Story(BaseModel):
 class StoryAuthor(BaseModel):
     id: UUID | str
     name: str
-    surname: str
 
 
 class ReadableStory(BaseModel):
