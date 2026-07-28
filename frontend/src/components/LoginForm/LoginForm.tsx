@@ -6,34 +6,74 @@ import { API_URL, LS_ACCESS_TOKEN } from "../../constants";
 import { Button, Input } from "../common";
 import styles from "./LoginForm.module.css";
 
+type FormStep = "login" | "verify";
+
 function LoginForm() {
+  const [step, setStep] = useState<FormStep>("login");
+
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [loginError, setLoginError] = useState("");
-  const [message, setMessage] = useState("");
+  const [verificationCode, setVerificationCode] = useState("");
+
+  const [error, setError] = useState("");
 
   const handleLogin = async () => {
-    if (!email || !password) {
-      setLoginError("Заполните все поля");
+    setError("");
+    if (!email) {
+      setError("Заполните все поля");
       return;
     }
-    setLoginError("");
-    const url = `${API_URL}/users/login`;
-    const body = JSON.stringify({ email, password });
-    const response = await fetch(url, {
-      method: "POST",
-      body,
-      headers: { "Content-type": "application/json" },
-    });
-    if (response.ok) {
-      const { access_token } = await response.json();
-      localStorage.setItem(LS_ACCESS_TOKEN, access_token);
-      setMessage("Вы успешно вошли в аккаунт!");
-      setTimeout(() => {
-        window.location.href = "/profile";
-      }, 2500);
-    } else {
-      setLoginError("Ошибка при авторизации.");
+    try {
+      const url = `${API_URL}/users/login`;
+      const body = JSON.stringify({ email });
+      const response = await fetch(url, {
+        method: "POST",
+        body,
+        headers: { "Content-type": "application/json" },
+      });
+      if (response.ok) {
+        const { access_token } = await response.json();
+        localStorage.setItem(LS_ACCESS_TOKEN, access_token);
+        setStep("verify");
+      } else {
+        const data = await response.json().catch(() => ({}));
+        setError(data.detail || "Ошибка при авторизации.");
+      }
+    } catch {
+      setError("Ошибка сети.");
+    }
+  };
+
+  const handleVerify = async () => {
+    setError("");
+    if (!verificationCode) {
+      setError("Введите код");
+      return;
+    }
+    try {
+      const body = JSON.stringify({
+        email: email,
+        code: verificationCode,
+      });
+      console.log(body);
+      const response = await fetch(`${API_URL}/users/verify`, {
+        method: "POST",
+        body,
+        headers: {
+          "Content-type": "application/json",
+        },
+      });
+      if (response.ok) {
+        const data = await response.json();
+        if (data.status) {
+          localStorage.setItem(LS_ACCESS_TOKEN, data.access_token);
+          console.log("Verified successfully");
+          window.location.href = "/profile";
+        } else {
+          alert(data.message);
+        }
+      }
+    } catch {
+      setError("Ошибка при проверке кода.");
     }
   };
 
@@ -42,44 +82,67 @@ function LoginForm() {
       <div className={styles.authWrap}>
         <div className={styles.authCard}>
           <div className={styles.authLogo}>
-            <h2 className={styles.authTitle}>Вход в аккаунт</h2>
+            <h2 className={styles.authTitle}>
+              {step === "login" ? "Вход в аккаунт" : "Подтверждение"}
+            </h2>
             <p className={styles.authSubtitle}>
-              Войдите в личный кабинет, чтобы добавлять истории, фотографии и
-              сообщать о проблемах
+              {step === "login"
+                ? "Войдите в личный кабинет, чтобы добавлять истории и сообщать о проблемах"
+                : "Введите код, который мы отправили на вашу почту"}
             </p>
           </div>
-          <div className={styles.authForm}>
-            {message && <div className={styles.successMessage}>{message}</div>}
-            <Input
-              type="email"
-              label="Электронная почта"
-              placeholder="volunteer@example.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-            <Input
-              type="password"
-              label="Пароль"
-              placeholder="- - - - - - - -"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              error={loginError}
-              required
-            />
-            <Button variant="primary" fullWidth onClick={handleLogin}>
-              Войти
-            </Button>
-            <div className={styles.authDivider}>или</div>
 
-            <p className={styles.authNote}>
-              Ещё нет аккаунта?{" "}
-              <b>
-                <Link className={styles.authNoteLink} to="/register">
-                  Зарегистрируйтесь
-                </Link>
-              </b>
-            </p>
+          <div className={styles.authForm}>
+            {step === "login" && (
+              <>
+                <Input
+                  type="email"
+                  label="Электронная почта"
+                  placeholder="volunteer@example.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                />
+
+                {error && <p className={styles.fieldError}>{error}</p>}
+                <Button variant="primary" fullWidth onClick={handleLogin}>
+                  Войти
+                </Button>
+                <div className={styles.authDivider}>или</div>
+                <p className={styles.authNote}>
+                  Ещё нет аккаунта?{" "}
+                  <b>
+                    <Link className={styles.authNoteLink} to="/register">
+                      Зарегистрируйтесь
+                    </Link>
+                  </b>
+                </p>
+              </>
+            )}
+
+            {step === "verify" && (
+              <>
+                <Input
+                  type="text"
+                  label="Код подтверждения"
+                  placeholder="Введите код"
+                  value={verificationCode}
+                  onChange={(e) => setVerificationCode(e.target.value)}
+                  required
+                />
+                {error && <p className={styles.fieldError}>{error}</p>}
+                <Button variant="primary" fullWidth onClick={handleVerify}>
+                  Подтвердить
+                </Button>
+                <button
+                  className={styles.backLink}
+                  onClick={() => setStep("login")}
+                  type="button"
+                >
+                  ← Вернуться ко входу
+                </button>
+              </>
+            )}
           </div>
         </div>
       </div>
