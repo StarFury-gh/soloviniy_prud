@@ -19,7 +19,6 @@ from .users_repository import UsersRepository
 from .users_schemas import (
     LoginUserDTO,
     RegisterUserDTO,
-    CreateAdminDTO,
     USERS_ROLES,
     AuthUserResponse,
     VerifyUserDTO,
@@ -101,13 +100,19 @@ class UsersService:
             if not existence:
                 raise UserNotFound
 
+            user = await self.repo.get_admin(email=body.email)
+            if user:
+                payload = {"id": str(user.id), "email": user.email, "role": user.role}
+                jwt = self.__encode_jwt(payload=payload)
+                return {"status": True, "access_token": f"Bearer {jwt}"}
+
             code = self.__generate_verification_code()
             await self._save_code_for_user(email=body.email, code=code)
             await self._send_verification_email(
                 body.email, code=code, type=VerificationEmailType.LOGIN.value
             )
 
-            return {"status": True}
+            return {"status": True, "access_token": None}
 
         except UserNotFound:
             raise HTTPException(
@@ -178,16 +183,11 @@ class UsersService:
                 detail="Internal server error",
             )
 
-    async def create_admin(self, body: CreateAdminDTO):
-        hashed_password = self.__get_hash(body.password)
-
+    async def create_admin(self, body: RegisterUserDTO):
         try:
             await self.repo.create_admin(
                 email=body.email,
-                password=hashed_password,
                 name=body.name,
-                surname=body.surname,
-                avatar=body.avatar,
             )
         except UserAlreadyExists:
             self.logger.debug("Admin already exists.")

@@ -49,20 +49,6 @@ class UsersRepository:
             "INSERT INTO verification (email, code) VALUES ($1, $2)", email, code
         )
 
-    async def login_user(self, email: str, password: str) -> User:
-        user = await self.db.fetchrow(
-            "SELECT id, name, surname, role, avatar FROM users WHERE email=$1 AND password=$2",
-            email,
-            password,
-        )
-
-        if user is not None:
-            user = dict(user)
-            user["id"] = str(user.get("id"))
-            return User(**user, email=email, password=password)
-
-        raise UserNotFound
-
     async def get_all_users(self) -> List[User]:
         users = await self.db.fetch("SELECT * FROM users")
         users = [User(**(dict(user))) for user in users]
@@ -109,14 +95,11 @@ class UsersRepository:
         except UniqueViolationError:
             raise UserAlreadyExists
 
-    async def create_admin(
-        self, email: str, password: str, name: str, surname: str, avatar: str
-    ) -> User:
+    async def create_admin(self, email: str, name: str) -> User:
         try:
             new_user_id = await self.db.fetchval(
                 "INSERT INTO users (email, name, role) VALUES ($1, $2, $3)",
                 email,
-                password,
                 name,
                 USERS_ROLES.ADMIN.value,
             )
@@ -143,3 +126,15 @@ class UsersRepository:
         await self.db.execute(
             "UPDATE users SET verified=$1 WHERE email=$2", True, email
         )
+
+    async def get_admin(self, email: str) -> User:
+        user = await self.db.fetchrow(
+            "SELECT id, name, email, role FROM users WHERE email=$1 AND role=$2",
+            email,
+            USERS_ROLES.ADMIN.value,
+        )
+
+        if user is not None:
+            return User(**dict(user))
+
+        return None

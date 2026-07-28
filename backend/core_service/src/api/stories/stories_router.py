@@ -19,11 +19,13 @@ from .stories_dependencies import get_service
 stories_router = APIRouter(prefix="/stories", tags=["stories"])
 
 
+# TODO: Move to tags module
 @stories_router.get("/tags")
 async def get_all_tags(service: StoriesService = Depends(get_service)):
     return await service.get_all_tags()
 
 
+# TODO: Move to tags module
 @stories_router.post("/new_tag")
 async def create_tag(
     body: CreateStoryTagDTO,
