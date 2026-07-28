@@ -26,15 +26,6 @@ class User(BaseModel):
     role: str
 
 
-class GetUser(BaseModel):
-    id: str | UUID
-    email: str
-    name: str
-    surname: str
-    avatar: str | None  # Путь
-    role: str
-
-
 class USERS_ROLES(Enum):
     ADMIN = "admin"
     USER = "user"

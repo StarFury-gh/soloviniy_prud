@@ -250,7 +250,6 @@ LIMIT $2 OFFSET $3;
             author = StoryAuthor(
                 id=story_as_dict.get("author_id"),
                 name=story_as_dict.get("name"),
-                surname=story_as_dict.get("surname"),
             )
             result.append(FullStory(**story_as_dict, author=author))
 
@@ -278,7 +277,6 @@ LIMIT $2 OFFSET $3;
     s.content,
     s.created_at,
     (SELECT name FROM users WHERE id = s.author_id) AS name,
-    (SELECT surname FROM users WHERE id = s.author_id) AS surname,
     COALESCE(array_agg(DISTINCT si.path) FILTER (WHERE si.path IS NOT NULL), '{}') AS images,
     COALESCE(array_agg(DISTINCT at.name) FILTER (WHERE at.name IS NOT NULL), '{}') AS tags
 FROM 
@@ -308,7 +306,6 @@ LIMIT $2 OFFSET $3;
             author = StoryAuthor(
                 id=record_as_dict.get("author_id"),
                 name=record_as_dict.get("name"),
-                surname=record_as_dict.get("surname"),
             )
             story = ReadableStory(author=author, **record_as_dict)
 
@@ -335,7 +332,6 @@ LIMIT $2 OFFSET $3;
     s.content,
     s.created_at,
     (SELECT name FROM users WHERE id = s.author_id) AS name,
-    (SELECT surname FROM users WHERE id = s.author_id) AS surname,
     COALESCE(array_agg(DISTINCT si.path) FILTER (WHERE si.path IS NOT NULL), '{}') AS images,
     COALESCE(array_agg(DISTINCT at.name) FILTER (WHERE at.name IS NOT NULL), '{}') AS tags
 FROM 
@@ -354,7 +350,6 @@ GROUP BY
         author = StoryAuthor(
             id=updated_story.get("author_id"),
             name=updated_story.get("name"),
-            surname=updated_story.get("surname"),
         )
         story = ReadableStory(author=author, **updated_story)
 

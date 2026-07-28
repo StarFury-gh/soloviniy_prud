@@ -4,7 +4,7 @@ from asyncpg.exceptions import UniqueViolationError
 from typing import List
 
 from .users_exceptions import UserAlreadyExists, UserNotFound
-from .users_schemas import User, USERS_ROLES, GetUser
+from .users_schemas import User, USERS_ROLES
 
 
 class UsersRepository:
@@ -61,39 +61,6 @@ class UsersRepository:
             return user.get("role")
 
         raise UserNotFound
-
-    async def register_user(
-        self,
-        email: str,
-        password: str,
-        name: str,
-        surname: str,
-        role: str,
-        avatar_path: str | None,
-    ) -> User:
-        try:
-            new_user_id = await self.db.fetchval(
-                "INSERT INTO users (email, password, name, surname, role, avatar) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id",
-                email,
-                password,
-                name,
-                surname,
-                role,
-                avatar_path,
-            )
-
-            return User(
-                email=email,
-                password=password,
-                name=name,
-                surname=surname,
-                id=str(new_user_id),
-                role=role,
-                avatar=avatar_path,
-            )
-
-        except UniqueViolationError:
-            raise UserAlreadyExists
 
     async def create_admin(self, email: str, name: str) -> User:
         try:

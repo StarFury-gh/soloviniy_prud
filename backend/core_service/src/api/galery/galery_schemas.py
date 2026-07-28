@@ -14,7 +14,6 @@ class GaleryPublicationStatus(Enum):
 class GaleryPhotoAuthor(BaseModel):
     id: str | UUID
     name: str
-    surname: str
 
 
 class GaleryPhoto(BaseModel):

@@ -51,21 +51,11 @@ class PartnersRepository:
 
         return filename
 
-    async def _save_partners_image(self, images: List[str | UploadFile]) -> List[str]:
-        if issubclass(UploadFile, type(images)):
-            saved_filename = await self.__save_image_as_WEBP(images)
-            return [saved_filename]
+    async def _save_partners_image(self, image: UploadFile) -> str:
 
-        if len(images) < 1:
-            return []
+        saved_filename = await self.__save_image_as_WEBP(image)
 
-        saved = []
-
-        for image in images:
-            saved_filename = await self.__save_image_as_WEBP(image)
-            saved.append(saved_filename)
-
-        return saved
+        return saved_filename
 
     async def get_all_partners(self, limit: int, offset: int) -> List[Partner]:
         records = await self.db.fetch(
@@ -275,6 +265,11 @@ WHERE id=$1""",
 
         for photo in body.photos:
             filename = await self._save_partners_image(photo)
+            await self.db.execute(
+                "INSERT INTO partners_photos (path, partner_id) VALUES ($1, $2)",
+                filename,
+                created_partner_id,
+            )
             saved_photos.append(filename)
 
         # saved_photos = await self._save_partners_images(
@@ -315,7 +310,7 @@ WHERE id=$1""",
         self, partner_id: str
     ) -> List[PartnerRepresentative]:
         records = await self.db.fetch(
-            "SELECT u.id, u.name, u.surname FROM users AS u JOIN partners_reps ON partners_reps.user_id=u.id WHERE partners_reps.partner_id=$1",
+            "SELECT u.id, u.name FROM users AS u JOIN partners_reps ON partners_reps.user_id=u.id WHERE partners_reps.partner_id=$1",
             partner_id,
         )
 

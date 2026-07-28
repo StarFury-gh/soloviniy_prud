@@ -45,7 +45,6 @@ class CreatePartnerRequestDTO(BasePartner):
 class PartnerRepresentative(BaseModel):
     id: UUID | str
     name: str
-    surname: str
 
 
 class UpdatePartnerStatus(BaseModel):
