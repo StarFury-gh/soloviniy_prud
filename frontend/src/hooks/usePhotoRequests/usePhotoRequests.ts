@@ -5,7 +5,6 @@ import { API_URL, LS_ACCESS_TOKEN } from "../../constants";
 export interface PhotoRequestAuthor {
   id: string;
   name: string;
-  surname: string;
 }
 
 export interface PhotoRequestInfo {

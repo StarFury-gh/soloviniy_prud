@@ -1,7 +1,6 @@
 interface StoryAuthor {
   id: string;
   name: string;
-  surname: string;
 }
 
 export interface Story {

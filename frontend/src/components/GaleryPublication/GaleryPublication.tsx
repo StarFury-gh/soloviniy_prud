@@ -5,7 +5,6 @@ import styles from "./GaleryPublication.module.css";
 interface PublicationAuthor {
   id: string;
   name: string;
-  surname: string;
 }
 
 interface GaleryPublicationProps {
@@ -18,8 +17,6 @@ interface GaleryPublicationProps {
 function GaleryPublication(props: GaleryPublicationProps) {
   const { author, photos, description } = props;
   const [selectedPhoto, setSelectedPhoto] = useState<string | null>(null);
-
-  const authorName = `${author.name} ${author.surname}`;
 
   const handlePhotoClick = (photo: string) => {
     setSelectedPhoto(`${STATIC_API_URL}/${photo}`);
@@ -39,7 +36,7 @@ function GaleryPublication(props: GaleryPublicationProps) {
     <>
       <div className={styles.galleryCard}>
         <div className={styles.header}>
-          <span className={styles.author}>{authorName}</span>
+          <span className={styles.author}>{author.name}</span>
         </div>
         {description && <div className={styles.description}>{description}</div>}
         <div className={styles.photosGallery}>

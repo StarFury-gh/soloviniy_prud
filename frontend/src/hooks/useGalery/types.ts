@@ -1,7 +1,6 @@
 interface PublicationAuthor {
   id: string;
   name: string;
-  surname: string;
 }
 
 export interface GetPhotosServerResponse {

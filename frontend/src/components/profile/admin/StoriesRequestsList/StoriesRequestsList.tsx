@@ -136,7 +136,7 @@ function StoriesRequestsList() {
                 <StoryRequest
                   key={req.id}
                   id={req.id}
-                  author={req.author.name + " " + req.author.surname}
+                  author={req.author.name}
                   title={req.title}
                   content={req.content}
                   images={req.images}

@@ -1,6 +1,5 @@
 export interface StoryAuthor {
   name: string;
-  surname: string;
 }
 
 /**

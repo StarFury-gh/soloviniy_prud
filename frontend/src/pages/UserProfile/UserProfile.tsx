@@ -25,7 +25,6 @@ interface UserInfo {
   id: string;
   email: string;
   name: string;
-  surname: string;
   role: string;
 }
 
