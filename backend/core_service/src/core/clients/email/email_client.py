@@ -8,18 +8,18 @@ from core.logger import get_logger
 
 class EmailClient:
     def __init__(self):
-        self.__sender_email = cfg_obj.EMAIL
+        self.__sender_email = cfg_obj.EMAIL_SENDER
         self.__app_password = cfg_obj.SMTP_SECRET_CODE
         self.logger = get_logger("EmailClient")
 
-    def send_email(self, receiver: str, message: str, subject: str) -> None:
+    def send_email(self, receiver: str, msg: str, subject: str) -> None:
         message = MIMEMultipart()
 
         message["From"] = self.__sender_email
         message["To"] = receiver
         message["Subject"] = subject
 
-        message.attach(MIMEText(message, "plain"))
+        message.attach(MIMEText(msg, "plain"))
 
         try:
             # Подключение к серверу через SSL на 465 порту

@@ -11,6 +11,44 @@ class UsersRepository:
     def __init__(self, db: Connection) -> None:
         self.db = db
 
+    async def get_user_by_email(self, email: str) -> User | None:
+        user = await self.db.fetchrow(
+            "SELECT id, email, name, role FROM users WHERE email=$1", email
+        )
+
+        if user is None:
+            return None
+
+        user = dict(user)
+
+        return User(**user)
+
+    async def create_temp_user(self, name: str, email: str) -> User:
+        user = await self.db.fetchrow(
+            "INSERT INTO users (name, email, role, verified) VALUES ($1, $2, $3, $4) RETURNING id, email, name, role",
+            name,
+            email,
+            USERS_ROLES.USER.value,
+            False,
+        )
+
+        return User(**dict(user))
+
+    async def get_user_verifications(self, email: str) -> list[str]:
+        codes = await self.db.fetch(
+            "SELECT code FROM verification WHERE email = $1 AND created_at > NOW() - INTERVAL '10 minutes'",
+            email,
+        )
+
+        codes = [dict(code).get("code") for code in codes]
+
+        return codes
+
+    async def save_user_verification_code(self, email: str, code: str):
+        await self.db.execute(
+            "INSERT INTO verification (email, code) VALUES ($1, $2)", email, code
+        )
+
     async def login_user(self, email: str, password: str) -> User:
         user = await self.db.fetchrow(
             "SELECT id, name, surname, role, avatar FROM users WHERE email=$1 AND password=$2",
@@ -76,32 +114,32 @@ class UsersRepository:
     ) -> User:
         try:
             new_user_id = await self.db.fetchval(
-                "INSERT INTO users (email, password, name, surname, role, avatar) VALUES ($1, $2, $3, $4, $5, $6)",
+                "INSERT INTO users (email, name, role) VALUES ($1, $2, $3)",
                 email,
                 password,
                 name,
-                surname,
                 USERS_ROLES.ADMIN.value,
-                avatar,
             )
             return User(
                 id=str(new_user_id),
                 role=USERS_ROLES.ADMIN.value,
                 email=email,
-                password=password,
                 name=name,
-                surname=surname,
-                avatar=avatar,
             )
         except UniqueViolationError:
             raise UserAlreadyExists
 
-    async def get_user_info(self, id: str) -> GetUser:
+    async def get_user_info(self, id: str) -> User:
         user = await self.db.fetchrow(
-            "SELECT id, email, name, surname, role, avatar FROM users WHERE id=$1", id
+            "SELECT id, email, name, role FROM users WHERE id=$1", id
         )
         if user is not None:
             user = dict(user)
-            return GetUser(**user)
+            return User(**user)
 
         raise UserNotFound
+
+    async def verify_user(self, email: str):
+        await self.db.execute(
+            "UPDATE users SET verified=$1 WHERE email=$2", True, email
+        )
