@@ -1,6 +1,5 @@
 import { useNavigate } from "react-router-dom";
 
-import { Footer } from "../../components/common";
 import {
   CtaSection,
   SeasonsSection,
@@ -22,7 +21,6 @@ function MainPage() {
       <AboutSection />
       <SeasonsSection />
       <CtaSection onNavigate={onNavigate} />
-      <Footer />
     </>
   );
 }
