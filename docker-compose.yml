@@ -8,7 +8,12 @@ services:
       - internal
 
   core_service:
-    build: ./backend/core_service
+    build:
+      context: ./backend/core_service
+      dockerfile: Dockerfile
+      args:
+        SMTP_SECRET_CODE: ${SMTP_SECRET_CODE}
+        EMAIL_SENDER: ${EMAIL_SENDER}
     container_name: core_service
     volumes:
       - core_data:/app/saved
