@@ -34,7 +34,6 @@ function LoginForm() {
         const data = await response.json();
 
         if (data && data.access_token !== null) {
-          alert(JSON.stringify(data));
           localStorage.setItem(LS_ACCESS_TOKEN, data.access_token);
           window.location.href = "/profile";
           return;

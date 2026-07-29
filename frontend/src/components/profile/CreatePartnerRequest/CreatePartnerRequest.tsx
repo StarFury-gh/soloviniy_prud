@@ -130,7 +130,7 @@ function CreatePartnerRequest() {
         setName("");
         setDescription("");
         setPhotos([]);
-        setSocials([{ social: "VK", url: "" }]);
+        setSocials([]);
         setDocument(null);
         if (documentInputRef.current) {
           documentInputRef.current.value = "";
