@@ -39,15 +39,6 @@ async def get_partners_by_rep(
     )
 
 
-@partners_router.post("/new")
-async def create_partner(
-    body: CreatePartnerDTO = Depends(),
-    service: PartnersService = Depends(get_service),
-    _=Depends(admin_required),
-):
-    return await service.create_partner(body=body)
-
-
 @partners_router.delete("/{partner_id}")
 async def delete_partner(
     partner_id: str,

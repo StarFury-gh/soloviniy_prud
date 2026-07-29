@@ -4,7 +4,6 @@
 export interface PhotoRequestAuthor {
   id: string;
   name: string;
-  surname: string;
 }
 
 /**

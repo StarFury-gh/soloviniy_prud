@@ -7,7 +7,6 @@ import styles from "./PhotoRequest.module.css";
 interface RequestAuthor {
   id: string;
   name: string;
-  surname: string;
 }
 
 interface PhotoRequest {
@@ -31,7 +30,6 @@ function PhotoRequest(props: PhotoRequestProps) {
   const [photos, setPhotos] = useState(request.photos);
 
   const { author, created_at } = request;
-  const authorName = `${author.name} ${author.surname}`;
 
   const handlePhotoClick = (photo: string) => {
     setSelectedPhoto(`${STATIC_API_URL}/${photo}`);
@@ -51,9 +49,7 @@ function PhotoRequest(props: PhotoRequestProps) {
     if (onDeletePhoto) {
       try {
         await onDeletePhoto(photo);
-        setPhotos((prevPhotos) =>
-          prevPhotos.filter((p) => p !== photo)
-        );
+        setPhotos((prevPhotos) => prevPhotos.filter((p) => p !== photo));
       } catch (error) {
         console.error("Ошибка при удалении фотографии:", error);
       }
@@ -71,16 +67,17 @@ function PhotoRequest(props: PhotoRequestProps) {
   return (
     <div className={styles.photoRequest}>
       <div className={styles.header}>
-        <span className={styles.author}>Автор: {authorName}</span>
-        {formattedDate && (
-          <span className={styles.date}>{formattedDate}</span>
-        )}
+        <span className={styles.author}>Автор: {author.name}</span>
+        {formattedDate && <span className={styles.date}>{formattedDate}</span>}
       </div>
 
       <div className={styles.photosGallery}>
         {photos.length > 0 ? (
           photos.map((photo, index) => (
-            <div key={`${request.publishing_id}-${index}`} className={styles.photoWrapper}>
+            <div
+              key={`${request.publishing_id}-${index}`}
+              className={styles.photoWrapper}
+            >
               <img
                 src={`${STATIC_API_URL}/${photo}`}
                 alt={`Photo ${index + 1}`}

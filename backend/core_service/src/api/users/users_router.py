@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, Header
 
 from .users_service import UsersService
 from .users_dependencies import get_service, admin_required, auth_required
-from .users_schemas import LoginUserDTO, RegisterUserDTO
+from .users_schemas import LoginUserDTO, RegisterUserDTO, VerifyUserDTO
 
 users_router = APIRouter(prefix="/users", tags=["users"])
 
@@ -17,6 +17,13 @@ async def register_user(
     body: RegisterUserDTO, service: UsersService = Depends(get_service)
 ):
     return await service.register_user(body=body)
+
+
+@users_router.post("/verify")
+async def verify_user(
+    body: VerifyUserDTO, service: UsersService = Depends(get_service)
+):
+    return await service.verify_user(body=body)
 
 
 @users_router.get("/auth")

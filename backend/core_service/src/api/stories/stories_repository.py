@@ -1,5 +1,7 @@
 from asyncpg import Connection, Pool
 from asyncpg.exceptions import ForeignKeyViolationError
+from io import BytesIO
+from PIL import Image
 import aiofiles
 
 from typing import List
@@ -133,6 +135,29 @@ class StoriesRepository:
             self.logger.error(f"Saving story error: {e}")
             await tx.rollback()
 
+    async def __save_image_as_webp(self, image: str) -> str:
+        if not image.startswith("data:image"):
+            raise IncorrectImageType
+
+        if "," in image:
+            image = image.split(",")[1]
+
+        content = base64.b64decode(image)
+        content = BytesIO(content)
+
+        img = Image.open(content)
+
+        img.convert("RGB")
+
+        fileid = uuid4()
+
+        filename = f"{fileid}.webp"
+        filepath = f"{cfg_obj.UPLOAD_DIR}/{filename}"
+
+        img.save(filepath, "webp")
+
+        return filename
+
     async def save_story_images_background(
         self, images: List[str], story_id: int
     ) -> List[str | None] | None:
@@ -156,24 +181,7 @@ class StoriesRepository:
 
                 saved_images = []
                 for image in images:
-                    # TODO: Move to separated function
-                    # TODO: Save as WEBP
-                    if not image.startswith("data:image"):
-                        raise IncorrectImageType
-
-                    if "," in image:
-                        image = image.split(",")[1]
-
-                    image_data_base64 = base64.b64decode(image)
-
-                    fileid = uuid4()
-
-                    filename = f"{fileid}.jpg"
-
-                    filepath = f"{cfg_obj.UPLOAD_DIR}/{filename}"
-
-                    async with aiofiles.open(filepath, "wb") as buffer:
-                        await buffer.write(image_data_base64)
+                    filename = await self.__save_image_as_webp(image)
 
                     await connection.execute(
                         "INSERT INTO stories_images (story_id, path) VALUES ($1, $2)",
@@ -212,7 +220,6 @@ class StoriesRepository:
     s.created_at,
     s.updated_at,
     (SELECT name FROM users WHERE id = s.author_id) AS name,
-    (SELECT surname FROM users WHERE id = s.author_id) AS surname,
     COALESCE(array_agg(DISTINCT si.path) FILTER (WHERE si.path IS NOT NULL), '{}') AS images,
     COALESCE(array_agg(DISTINCT at.name) FILTER (WHERE at.name IS NOT NULL), '{}') AS tags
 FROM 
@@ -243,7 +250,6 @@ LIMIT $2 OFFSET $3;
             author = StoryAuthor(
                 id=story_as_dict.get("author_id"),
                 name=story_as_dict.get("name"),
-                surname=story_as_dict.get("surname"),
             )
             result.append(FullStory(**story_as_dict, author=author))
 
@@ -271,7 +277,6 @@ LIMIT $2 OFFSET $3;
     s.content,
     s.created_at,
     (SELECT name FROM users WHERE id = s.author_id) AS name,
-    (SELECT surname FROM users WHERE id = s.author_id) AS surname,
     COALESCE(array_agg(DISTINCT si.path) FILTER (WHERE si.path IS NOT NULL), '{}') AS images,
     COALESCE(array_agg(DISTINCT at.name) FILTER (WHERE at.name IS NOT NULL), '{}') AS tags
 FROM 
@@ -301,7 +306,6 @@ LIMIT $2 OFFSET $3;
             author = StoryAuthor(
                 id=record_as_dict.get("author_id"),
                 name=record_as_dict.get("name"),
-                surname=record_as_dict.get("surname"),
             )
             story = ReadableStory(author=author, **record_as_dict)
 
@@ -328,7 +332,6 @@ LIMIT $2 OFFSET $3;
     s.content,
     s.created_at,
     (SELECT name FROM users WHERE id = s.author_id) AS name,
-    (SELECT surname FROM users WHERE id = s.author_id) AS surname,
     COALESCE(array_agg(DISTINCT si.path) FILTER (WHERE si.path IS NOT NULL), '{}') AS images,
     COALESCE(array_agg(DISTINCT at.name) FILTER (WHERE at.name IS NOT NULL), '{}') AS tags
 FROM 
@@ -347,7 +350,6 @@ GROUP BY
         author = StoryAuthor(
             id=updated_story.get("author_id"),
             name=updated_story.get("name"),
-            surname=updated_story.get("surname"),
         )
         story = ReadableStory(author=author, **updated_story)
 

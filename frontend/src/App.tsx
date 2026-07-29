@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
-import { Header } from "./components/common";
+import { Header, Footer } from "./components/common";
 import {
   MainPage,
   UserProfile,
@@ -36,6 +36,7 @@ function App() {
         <Route path="/partners" element={<PartnersPage />}></Route>
         <Route path="/docs/:docId" element={<DocPreviewPage />}></Route>
       </Routes>
+      <Footer />
     </Router>
   );
 }

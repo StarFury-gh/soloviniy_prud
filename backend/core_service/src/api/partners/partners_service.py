@@ -13,7 +13,6 @@ from .partners_schemas import (
     CreatePartnerRequestDTO,
 )
 from .partners_exceptions import (
-    IncorrectImageType,
     PartnerAlreadyExists,
     PartnerNotFound,
 )
@@ -40,31 +39,6 @@ class PartnersService:
         )
 
         return {"partners": partners}
-
-    async def create_partner(self, body: CreatePartnerDTO):
-        try:
-            created = await self.repo.create_partner(
-                name=body.name, description=body.description, photos=body.photos
-            )
-
-            self.logger.info(f"Created partner: {created.id}")
-
-            if created:
-                await self.repo.update_partner_doc(id=created.id)
-
-            return {"created": created}
-
-        except IncorrectImageType:
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid image"
-            )
-
-        except Exception as e:
-            self.logger.error(f"create_partner error: {e} - {type(e)}")
-            raise HTTPException(
-                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                detail="Internal server error",
-            )
 
     async def delete_partner(self, partner_id: str):
         try:

@@ -6,11 +6,15 @@ CREATE TYPE partner_status AS ENUM ('new', 'approved', 'rejected');
 CREATE TABLE IF NOT EXISTS users (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     email VARCHAR(255) UNIQUE,
-    password VARCHAR(255) NOT NULL,
     name VARCHAR(32) NOT NULL,
-    surname VARCHAR(32) NOT NULL,
-    avatar VARCHAR(255),
-    role user_role NOT NULL
+    role user_role NOT NULL,
+    verified BOOLEAN
+);
+
+CREATE TABLE IF NOT EXISTS verification (
+    email VARCHAR(255) REFERENCES users(email),
+    code VARCHAR(16),
+    created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
 -- Истории
@@ -37,7 +41,8 @@ CREATE TABLE IF NOT EXISTS stories_tags (
 
 CREATE TABLE IF NOT EXISTS stories_images (
     story_id INT REFERENCES stories(id) ON DELETE CASCADE,
-    path VARCHAR(255)
+    path VARCHAR(255),
+    base_code TEXT
 );
 
 -- События
@@ -53,7 +58,8 @@ CREATE TABLE IF NOT EXISTS events (
 
 CREATE TABLE IF NOT EXISTS events_images (
     event_id INT REFERENCES events(id),
-    path VARCHAR(255)
+    path VARCHAR(255),
+    base_code TEXT
 );
 
 -- Фотогалерея
@@ -81,7 +87,8 @@ CREATE TABLE IF NOT EXISTS partners (
 
 CREATE TABLE IF NOT EXISTS partners_photos (
     path VARCHAR(255) PRIMARY KEY,
-    partner_id UUID REFERENCES partners(id)
+    partner_id UUID REFERENCES partners(id),
+    base_code TEXT
 );
 
 CREATE TABLE IF NOT EXISTS partners_docs (

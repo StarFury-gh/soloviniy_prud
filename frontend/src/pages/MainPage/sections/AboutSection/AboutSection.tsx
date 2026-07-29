@@ -1,6 +1,6 @@
 import styles from "./AboutSection.module.css";
 
-import splash from "/splash.jpg";
+import splash from "/splash.webp";
 import {
   bird_icon,
   museum_icon,

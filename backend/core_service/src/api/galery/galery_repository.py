@@ -37,13 +37,12 @@ class GaleryRepository:
     g.author_id,
     g.description,
     u.name,
-    u.surname,
     ARRAY_AGG(gp.path) AS photos
 FROM galery g
 JOIN users u ON g.author_id = u.id
 LEFT JOIN galery_photos gp ON g.publishing_id = gp.publishing_id
 WHERE g.status=$1
-GROUP BY g.publishing_id, g.author_id, u.name, u.surname
+GROUP BY g.publishing_id, g.author_id, u.name
 ORDER BY g.publishing_id
 LIMIT $2 OFFSET $3;
         """
@@ -59,7 +58,6 @@ LIMIT $2 OFFSET $3;
             author = GaleryPhotoAuthor(
                 id=record_as_dict.get("author_id"),
                 name=record_as_dict.get("name"),
-                surname=record_as_dict.get("surname"),
             )
             galery_publication = GaleryPublication(
                 publishing_id=record_as_dict.get("publishing_id"),
@@ -133,13 +131,12 @@ LIMIT $2 OFFSET $3;
     g.publishing_id,
     g.author_id,
     u.name,
-    u.surname,
     ARRAY_AGG(gp.path) AS photos
 FROM galery g
 JOIN users u ON g.author_id = u.id
 LEFT JOIN galery_photos gp ON g.publishing_id = gp.publishing_id
 WHERE g.status=$1
-GROUP BY g.publishing_id, g.author_id, u.name, u.surname
+GROUP BY g.publishing_id, g.author_id, u.name
 ORDER BY g.publishing_id
 LIMIT $2 OFFSET $3;
         """
@@ -153,7 +150,6 @@ LIMIT $2 OFFSET $3;
             author = GaleryPhotoAuthor(
                 id=record_as_dict.get("author_id"),
                 name=record_as_dict.get("name"),
-                surname=record_as_dict.get("surname"),
             )
             galery_publication = GaleryPublication(
                 publishing_id=record_as_dict.get("publishing_id"),

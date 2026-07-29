@@ -6,10 +6,13 @@ asyncpg==0.31.0
 cffi==2.0.0
 click==8.4.1
 cryptography==49.0.0
+dnspython==2.8.0
 dotenv==0.9.9
+email-validator==2.3.0
 fastapi==0.137.2
 h11==0.16.0
 idna==3.18
+pillow==12.3.0
 pycparser==3.0
 pydantic==2.13.4
 pydantic_core==2.46.4

@@ -25,7 +25,6 @@ interface UserInfo {
   id: string;
   email: string;
   name: string;
-  surname: string;
   role: string;
 }
 
@@ -172,15 +171,13 @@ function UserProfile() {
           <div className={styles.userCard}>
             <div className={styles.avatar}>
               {userInfo?.name[0]}
-              {userInfo?.surname[0]}
+              {/* {userInfo?.name.split(" ")[1][0]} */}
             </div>
-            <p className={styles.userName}>
-              {userInfo?.name} {userInfo?.surname}
-            </p>
+            <p className={styles.userName}>{userInfo?.name}</p>
             <p className={styles.userRole}>{ruRole}</p>
-            <div className={styles.userStats}>
+            {/* <div className={styles.userStats}>
               <span className={styles.userStatBadge}>Статистика</span>
-            </div>
+            </div> */}
           </div>
 
           <button

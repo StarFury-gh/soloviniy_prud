@@ -1,4 +1,7 @@
+from fastapi import UploadFile
 from asyncpg import Connection
+from PIL import Image
+from io import BytesIO
 import aiofiles
 
 from datetime import datetime, timezone
@@ -56,6 +59,30 @@ LIMIT $2 OFFSET $3;
 
         return events
 
+    async def __save_image_as_WEBP(self, image: str | UploadFile) -> str:
+
+        if not image.startswith("data:image"):
+            raise IncorrectImageType
+
+        if "," in image:
+            image = image.split(",")[1]
+
+        content = base64.b64decode(image)
+        content = BytesIO(content)
+
+        img = Image.open(content)
+
+        img.convert("RGB")
+
+        fileid = uuid4()
+
+        filename = f"{fileid}.webp"
+        filepath = f"{cfg_obj.UPLOAD_DIR}/{filename}"
+
+        img.save(filepath, "webp")
+
+        return filename
+
     async def create_event(
         self,
         name: str,
@@ -79,34 +106,22 @@ LIMIT $2 OFFSET $3;
             created_event = Event(**dict(event))
 
             if banner:
-                # TODO: save as WEBP
-                if not banner.startswith("data:image"):
-                    raise IncorrectImageType
-
-                if "," in banner:
-                    banner = banner.split(",")[1]
-
-                banner_data_base64 = base64.b64decode(banner)
-
-                fileid = uuid4()
-
-                filename = f"{fileid}.jpg"
-                filepath = f"{cfg_obj.UPLOAD_DIR}/{filename}"
-
-                async with aiofiles.open(filepath, "wb") as buffer:
-                    await buffer.write(banner_data_base64)
+                try:
+                    saved_filename = await self.__save_image_as_WEBP(banner)
+                except Exception as e:
+                    print(f"__save_image_as_WEBP error: {e} - {type(e)=}")
 
                 await self.db.execute(
                     "INSERT INTO events_images (event_id, path) VALUES ($1, $2)",
                     created_event.id,
-                    filename,
+                    saved_filename,
                 )
 
             await tx.commit()
 
         except Exception as e:
             # TODO: change to logger
-            print(e)
+            print(e, type(e))
             await tx.rollback()
 
         return created_event

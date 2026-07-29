@@ -2,11 +2,8 @@ import { useState } from "react";
 import { STATIC_API_URL } from "../../constants";
 import styles from "./StoryCard.module.css";
 
-import { left_arrow_icon, right_arrow_icon } from "../../icons";
-
 interface StoryAuthor {
   name: string;
-  surname: string;
 }
 
 interface StoryCardProps {
@@ -49,9 +46,7 @@ function StoryCard(props: StoryCardProps) {
   return (
     <div className={styles.storyCard}>
       <div className={styles.header}>
-        <span className={styles.author}>
-          {author.name} {author.surname}
-        </span>
+        <span className={styles.author}>{author.name}</span>
         <span className={styles.date}>{formatDate(publishedAt)}</span>
       </div>
 
@@ -74,7 +69,8 @@ function StoryCard(props: StoryCardProps) {
             onClick={handlePrevSlide}
             disabled={images.length <= 1}
           >
-            <img src={left_arrow_icon} alt="<" />
+            {/* <img src={left_arrow_icon} alt="<" /> */}
+            {"<"}
           </button>
           <div className={styles.sliderInner}>
             {images.map((image, index) => (
@@ -97,7 +93,8 @@ function StoryCard(props: StoryCardProps) {
             onClick={handleNextSlide}
             disabled={images.length <= 1}
           >
-            <img src={right_arrow_icon} alt=">" />
+            {/* <img src={right_arrow_icon} alt=">" /> */}
+            {">"}
           </button>
 
           {images.length > 1 && (

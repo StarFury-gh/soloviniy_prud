@@ -4,8 +4,12 @@ import styles from "./Footer.module.css";
 
 function Footer() {
   const currentYear = new Date().getFullYear();
-
   const navigate = useNavigate();
+
+  const navigateTo = (path: string) => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    navigate(path);
+  };
 
   return (
     <footer className={styles.footer}>
@@ -27,16 +31,16 @@ function Footer() {
           <h4>О месте</h4>
           <ul>
             <li>
-              <button onClick={() => console.log("home")}>История пруда</button>
+              <button onClick={() => navigateTo("/")}>История пруда</button>
             </li>
             <li>
-              <button onClick={() => console.log("home")}>Природа</button>
+              <button onClick={() => navigateTo("/")}>Природа</button>
             </li>
             <li>
-              <button onClick={() => console.log("home")}>Как добраться</button>
+              <button onClick={() => navigateTo("/")}>Как добраться</button>
             </li>
             <li>
-              <button onClick={() => navigate("galery")}>Фотогалерея</button>
+              <button onClick={() => navigateTo("galery")}>Фотогалерея</button>
             </li>
           </ul>
         </div>
@@ -45,16 +49,17 @@ function Footer() {
           <h4>Сообщникам</h4>
           <ul>
             <li>
-              <button onClick={() => navigate("login")}>Личный кабинет</button>
+              <button onClick={() => navigateTo("login")}>
+                Личный кабинет
+              </button>
             </li>
             <li>
-              <button onClick={() => navigate("events")}>Мероприятия</button>
+              <button onClick={() => navigateTo("events")}>Мероприятия</button>
             </li>
             <li>
-              <button onClick={() => navigate("register")}>Регистрация</button>
-            </li>
-            <li>
-              <a href="#">Правила сообщества</a>
+              <button onClick={() => navigateTo("register")}>
+                Регистрация
+              </button>
             </li>
           </ul>
         </div>
