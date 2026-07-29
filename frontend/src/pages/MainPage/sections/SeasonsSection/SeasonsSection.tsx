@@ -1,10 +1,10 @@
 import { useState } from "react";
 import styles from "./SeasonsSection.module.css";
 
-import spring from "/spring.jpg";
-import summer from "/summer.jpg";
-import autumn from "/autumn.jpg";
-import winter from "/winter.jpg";
+import spring from "/spring.webp";
+import summer from "/summer.webp";
+import autumn from "/autumn.webp";
+import winter from "/winter.webp";
 
 const seasons = [
   {

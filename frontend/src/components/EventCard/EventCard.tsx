@@ -3,7 +3,7 @@ import { STATIC_API_URL } from "../../constants";
 import Button from "../common/Button";
 import styles from "./EventCard.module.css";
 
-import event_splash from "/event_splash.png";
+import event_splash from "/event_splash.webp";
 
 interface EventCardProps {
   id: number;
