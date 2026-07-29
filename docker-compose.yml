@@ -23,6 +23,9 @@ services:
     networks:
       - internal
 
+    ports:
+      - 8000:8000
+
   frontend:
     build: ./frontend
     container_name: frontend

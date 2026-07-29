@@ -2,12 +2,6 @@ FROM python:3.14-alpine AS builder
 
 WORKDIR /app
 
-ARG SMTP_SECRET_CODE
-ARG EMAIL_SENDER
-
-ENV SMTP_SECRET_CODE=$SMTP_SECRET_CODE
-ENV EMAIL_SENDER=$EMAIL_SENDER
-
 COPY requirements.txt .
 
 RUN pip install --no-cache-dir --user -r requirements.txt
@@ -18,6 +12,12 @@ COPY src/ ./src/
 FROM python:3.14-alpine AS runner
 
 WORKDIR /app
+
+ARG SMTP_SECRET_CODE
+ARG EMAIL_SENDER
+
+ENV SMTP_SECRET_CODE=$SMTP_SECRET_CODE
+ENV EMAIL_SENDER=$EMAIL_SENDER
 
 COPY --from=builder /root/.local /root/.local
 
