@@ -92,6 +92,8 @@ LIMIT $2 OFFSET $3""",
 
             result.append(PartnerRequest(**record))
 
+        result = sorted(result, key=lambda p: p.name, reverse=True)
+
         return result
 
     async def get_partners_by_rep(

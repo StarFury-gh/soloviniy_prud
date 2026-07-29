@@ -13,7 +13,6 @@ from .partners_schemas import (
     CreatePartnerRequestDTO,
 )
 from .partners_exceptions import (
-    IncorrectImageType,
     PartnerAlreadyExists,
     PartnerNotFound,
 )
