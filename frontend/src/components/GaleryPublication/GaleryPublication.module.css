@@ -10,6 +10,7 @@
 
 .galleryCard:hover {
   box-shadow: var(--shadow-lg);
+  transform: translateY(-4px);
 }
 
 .header {
@@ -20,6 +21,26 @@
   border-bottom: 1px solid var(--border);
 }
 
+.authorInfo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.authorAvatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: var(--accent);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: var(--font-weight-medium);
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
 .author {
   font-family: var(--font-display);
   font-size: 1.125rem;
@@ -27,32 +48,13 @@
   color: var(--text-dark);
 }
 
-.photosGallery {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(600px, 1fr));
-  gap: 1rem;
-  padding: 1rem;
-  background-color: var(--background-page);
-}
-
-.photo {
-  width: 100%;
-  aspect-ratio: 4 / 3;
-  object-fit: cover;
-  border-radius: var(--border-radius);
-  transition: transform 0.3s ease;
-  cursor: pointer;
-}
-
-.photo:hover {
-  transform: scale(1.05);
-}
-
-.emptyGallery {
-  padding: 2rem 1.25rem;
-  text-align: center;
+.photoCount {
+  font-size: 0.875rem;
   color: var(--text-light);
-  font-style: italic;
+  background-color: var(--background-page);
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  border: 1px solid var(--border);
 }
 
 .description {
@@ -61,6 +63,107 @@
   color: var(--text-dark);
   font-size: 1rem;
   line-height: 1.5;
+}
+
+/* Masonry Grid вместо column-count */
+.photosGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-auto-rows: 200px;
+  gap: 0.75rem;
+  padding: 1rem;
+  background-color: var(--background-page);
+}
+
+.photoWrapper {
+  position: relative;
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  cursor: pointer;
+  background-color: var(--card);
+  transition: transform 0.3s ease;
+}
+
+.photoWrapper:hover {
+  transform: scale(1.02);
+  box-shadow: var(--shadow-md);
+  z-index: 1;
+}
+
+.photoWrapper:active {
+  transform: scale(0.98);
+}
+
+.photoFeatured {
+  grid-row: span 2;
+  grid-column: span 2;
+}
+
+.photoWide {
+  grid-column: span 2;
+}
+
+.photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  border-radius: var(--border-radius);
+  transition: transform 0.4s ease;
+}
+
+.photoWrapper:hover .photo {
+  transform: scale(1.05);
+}
+
+.photoOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.3);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.photoWrapper:hover .photoOverlay {
+  opacity: 1;
+}
+
+.expandButton {
+  background-color: rgba(255, 255, 255, 0.9);
+  border: none;
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--text-dark);
+  transition: all 0.3s ease;
+  transform: scale(0.8);
+}
+
+.photoWrapper:hover .expandButton {
+  transform: scale(1);
+}
+
+.expandButton:hover {
+  background-color: white;
+  transform: scale(1.1);
+}
+
+.emptyGallery {
+  grid-column: 1 / -1;
+  padding: 4rem 1.25rem;
+  text-align: center;
+  color: var(--text-light);
+  font-style: italic;
 }
 
 .modal {
@@ -75,9 +178,22 @@
   align-items: center;
   justify-content: center;
   padding: 2rem;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 .modalContent {
+  position: relative;
   max-width: 90%;
   max-height: 90vh;
 }
@@ -87,21 +203,98 @@
   max-height: 90vh;
   object-fit: contain;
   border-radius: var(--border-radius);
+  animation: zoomIn 0.3s ease;
+}
+
+@keyframes zoomIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 .closeButton {
   position: absolute;
-  top: 2rem;
-  right: 2rem;
+  top: -3rem;
+  right: 0;
   background: transparent;
   border: none;
   color: white;
-  font-size: 2rem;
   cursor: pointer;
   padding: 0.5rem;
   z-index: 1001;
+  transition: transform 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .closeButton:hover {
   color: var(--accent);
+}
+
+@media (max-width: 1200px) {
+  .photosGrid {
+    grid-template-columns: repeat(3, 1fr);
+    grid-auto-rows: 180px;
+  }
+}
+
+@media (max-width: 768px) {
+  .photosGrid {
+    grid-template-columns: repeat(2, 1fr);
+    grid-auto-rows: 150px;
+    gap: 0.5rem;
+    padding: 0.5rem;
+  }
+
+  .photoFeatured {
+    grid-row: span 1;
+    grid-column: span 1;
+  }
+
+  .photoWide {
+    grid-column: span 1;
+  }
+
+  .header {
+    padding: 0.75rem 1rem;
+  }
+
+  .description {
+    padding: 0.75rem 1rem;
+  }
+
+  .modal {
+    padding: 1rem;
+  }
+
+  .modalImage {
+    max-height: 80vh;
+  }
+
+  .closeButton {
+    top: -2.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .photosGrid {
+    grid-template-columns: 1fr;
+    grid-auto-rows: 200px;
+    gap: 0.5rem;
+    padding: 0.5rem;
+  }
+
+  .author {
+    font-size: 1rem;
+  }
+
+  .photoCount {
+    font-size: 0.75rem;
+  }
 }
