@@ -58,21 +58,20 @@
 }
 
 .description {
+  border-bottom: 1px solid var(--border);
   padding: 1rem 1.25rem;
-  border-top: 1px solid var(--border);
   color: var(--text-dark);
   font-size: 1rem;
   line-height: 1.5;
 }
 
-/* Masonry Grid вместо column-count */
 .photosGrid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   grid-auto-rows: 200px;
   gap: 0.75rem;
   padding: 1rem;
-  background-color: var(--background-page);
+  background-color: var(--card);
 }
 
 .photoWrapper {
